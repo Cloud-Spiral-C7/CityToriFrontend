@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      #map { height: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script type="text/javascript">
+// Yahoo Application API Key
+// http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?lat=35.68381981&lon=139.77456498&appid=dj0zaiZpPUZrSkxYb0pOSUdORiZzPWNvbnN1bWVyc2VjcmV0Jng9MmQ-
+var map, geocoder;
+
+function initMap() {
+  geocoder = new google.maps.Geocoder();
+  map = new google.maps.Map(document.getElementById('map'), {
+    center: {lat: 35.681382, lng: 139.766084},
+    zoom: 12,
+    // maxZoom: 12,
+    // minZoom: 12,
+    disableDefaultUI: true,
+    // mapTypeId: google.maps.MapTypeId.TERRAIN,
+    styles: [
+      {
+        featureType: 'all',
+        elementType: 'labels',
+        stylers: [{ visibility: 'off' }]
+      },
+      {
+        featureType: 'administrative.locality',
+        elementType: 'labels',
+        stylers: [{ visibility: 'on' }]
+      },
+    ]
+  });
+
+  map.addListener('click', function (e) {
+    geocoder.geocode({location: e.latLng}, function (addrs) {
+      console.log(addrs);
+      var pos = new google.maps.LatLng(
+        addrs[0].geometry.location.H,
+        addrs[0].geometry.location.L);
+
+      $.ajax({
+        url: 'http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?lat=' +
+             pos.lat() + '&lon=' + pos.lng() + '&appid=dj0zaiZpPUZrSkxYb0pOSUdORiZzPWNvbnN1bWVyc2VjcmV0Jng9MmQ-&output=json',
+        dataType: 'jsonp',
+        success: function (result) {
+          console.log(result);
+          var titles = result.Feature[0].Property.AddressElement.map(function (ele) {
+            console.log(ele);
+            return ele.Name + ' (' + ele.Kana + ') - ' + ele.Level;
+          });
+          // var kana = result.Feature[0].Property.AddressElement[0].Kana;
+          // var kanji = result.Feature[0].Property.AddressElement[0].Name;
+          var popup = new google.maps.InfoWindow({
+            content: titles.join('<br>'),
+            position: pos
+          });
+          popup.open(map);
+        }
+      });
+    });
+  });
+}
+
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCz-nxKgKLTvgFeMfjBLU_PkcYwpOOULR4&callback=initMap">
+    </script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  </body>
+</html>
