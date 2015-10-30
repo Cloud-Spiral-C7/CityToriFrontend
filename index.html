@@ -9,8 +9,6 @@
   <body>
     <div id="map"></div>
     <script type="text/javascript">
-// Yahoo Application API Key
-// http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?lat=35.68381981&lon=139.77456498&appid=dj0zaiZpPUZrSkxYb0pOSUdORiZzPWNvbnN1bWVyc2VjcmV0Jng9MmQ-
 var map, geocoder;
 
 function initMap() {
@@ -37,35 +35,55 @@ function initMap() {
   });
 
   map.addListener('click', function (e) {
-    geocoder.geocode({location: e.latLng}, function (addrs) {
-      console.log(addrs);
-      var pos = new google.maps.LatLng(
-        addrs[0].geometry.location.H,
-        addrs[0].geometry.location.L);
+    geocoder.geocode({location: e.latLng}, function (addrInfo) {
+      console.log(addrInfo);
+      var pos = e.latLng;
+      var address =
+        addrInfo[0].address_components.reverse().slice(2)
+        .map(function (c) { return c.long_name })
+        .join('');
 
-      $.ajax({
-        url: 'http://reverse.search.olp.yahooapis.jp/OpenLocalPlatform/V1/reverseGeoCoder?lat=' +
-             pos.lat() + '&lon=' + pos.lng() + '&appid=dj0zaiZpPUZrSkxYb0pOSUdORiZzPWNvbnN1bWVyc2VjcmV0Jng9MmQ-&output=json',
-        dataType: 'jsonp',
-        success: function (result) {
-          console.log(result);
-          var titles = result.Feature[0].Property.AddressElement.map(function (ele) {
-            console.log(ele);
-            return ele.Name + ' (' + ele.Kana + ') - ' + ele.Level;
-          });
-          // var kana = result.Feature[0].Property.AddressElement[0].Kana;
-          // var kanji = result.Feature[0].Property.AddressElement[0].Name;
-          var popup = new google.maps.InfoWindow({
-            content: titles.join('<br>'),
-            position: pos
-          });
-          popup.open(map);
-        }
+      analyseMorph(address).done(function (data) {
+        console.log(data);
+        var popup = new google.maps.InfoWindow({
+          content: data.word_list[0].map(function(word) {
+            return word[0] + ',' + katakanaToHiragana(word[2])
+          }).join('<br>'),
+          position: pos
+        });
+        popup.open(map);
       });
     });
   });
 }
 
+/**
+ * 形態素解析を行います。(API: https://labs.goo.ne.jp/api/2015/334/)
+ * @param {String} sentence - 解析対象の文
+ * @returns {Object} - 形態素解析結果
+ */
+function analyseMorph(sentence) {
+  return $.ajax({
+    method: 'post',
+    url: 'https://labs.goo.ne.jp/api/morph',
+    data: {
+      app_id: '6953432d0f5f68bbc04853cf917822f88548ceb4bec7e4e1370058c5cf6cf346',
+      sentence: sentence,
+    },
+    dataType: 'json'
+  });
+}
+
+/** カタカナをひらがなに変換する関数
+ * @param {String} src - カタカナ
+ * @returns {String} - ひらがな
+ */
+function katakanaToHiragana(src) {
+	return src.replace(/[\u30a1-\u30f6]/g, function(match) {
+		var chr = match.charCodeAt(0) - 0x60;
+		return String.fromCharCode(chr);
+	});
+}
     </script>
     <script async defer
       src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCz-nxKgKLTvgFeMfjBLU_PkcYwpOOULR4&callback=initMap">
