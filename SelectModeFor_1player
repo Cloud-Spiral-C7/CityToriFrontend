@@ -1,0 +1,23 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type"
+            content="text/html; charset=UTF-8">
+            <Left> １人プレイモード選択 <br></Left>
+</head>
+  <body>
+    <form>
+      <button>
+        <img src="./img/1player.png" style="width:400px;height:200px"/>
+        <br>１人用
+      </button>
+      <button>
+        <img src="./img/2players.png" style="width:400px;height:200px"/>
+        <br>２人以上
+      </button>
+    </form>
+
+    <div align="left">
+      <input type="button" value="戻る" style="position: absolute; left: 50px; bottom: 50px"/>
+    </div>
+  </body>
+</html>
