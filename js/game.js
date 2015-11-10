@@ -81,21 +81,36 @@ function createInfoWindowContentElement(places) {
   return content;
 }
 
+function callApi(method, url, data) {
+  return $.ajax({
+    type: method,
+    url: url,
+    data: data,
+    dataType: 'json',
+  });
+}
+
+function apiGet(url, data) {
+  return callApi('post', url, data);
+}
+
+function apiPost(url, data) {
+  return callApi('post', url, data);
+}
+
 /**
  * 形態素解析APIを呼び出す (See: https://labs.goo.ne.jp/api/2015/334/)
  * @param {String} sentence - 解析対象の文
  * @returns {Object} - API呼び出し結果
  */
-function callAnalyseMorphAPI(sentence) {
-  return $.ajax({
-    type: 'post',
-    url: 'https://labs.goo.ne.jp/api/morph',
-    data: {
+function callAnalyseMorphApi(sentence) {
+  return apiPost(
+    'https://labs.goo.ne.jp/api/morph',
+    {
       app_id: '6953432d0f5f68bbc04853cf917822f88548ceb4bec7e4e1370058c5cf6cf346',
       sentence: sentence,
-    },
-    dataType: 'json'
-  });
+    }
+  );
 }
 
 /** カタカナをひらがなに変換する
@@ -116,7 +131,7 @@ function katakanaToHiragana(src) {
 function getAvailableWords(places, done) {
   var availableWords = [];
 
-  callAnalyseMorphAPI(places.join('/')).done(function (data) {
+  callAnalyseMorphApi(places.join('/')).done(function (data) {
     console.debug(data);
 
     data.word_list[0].forEach(function (word) {
