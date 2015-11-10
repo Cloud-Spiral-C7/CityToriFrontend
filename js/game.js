@@ -49,7 +49,9 @@ function mapClicked(e) {
 }
 
 function locationNameClicked(e, place) {
-  console.debug(place);
+  api.answersCreate({roomId: util.getQueryParam('roomId')}).done(function (data) {
+    console.debug(data);
+  });
 }
 
 function createLocationLinkElement(place) {
@@ -81,47 +83,21 @@ function createInfoWindowContentElement(places) {
   return content;
 }
 
-function callApi(method, url, data) {
-  return $.ajax({
-    type: method,
-    url: url,
-    data: data,
-    dataType: 'json',
-  });
-}
-
-function apiGet(url, data) {
-  return callApi('post', url, data);
-}
-
-function apiPost(url, data) {
-  return callApi('post', url, data);
-}
-
 /**
  * 形態素解析APIを呼び出す (See: https://labs.goo.ne.jp/api/2015/334/)
  * @param {String} sentence - 解析対象の文
  * @returns {Object} - API呼び出し結果
  */
 function callAnalyseMorphApi(sentence) {
-  return apiPost(
-    'https://labs.goo.ne.jp/api/morph',
-    {
+  return $.ajax({
+    type: 'post',
+    url: 'https://labs.goo.ne.jp/api/morph',
+    data: {
       app_id: '6953432d0f5f68bbc04853cf917822f88548ceb4bec7e4e1370058c5cf6cf346',
       sentence: sentence,
-    }
-  );
-}
-
-/** カタカナをひらがなに変換する
- * @param {String} src - カタカナ
- * @returns {String} - ひらがな
- */
-function katakanaToHiragana(src) {
-	return src.replace(/[\u30a1-\u30f6]/g, function(match) {
-		var chr = match.charCodeAt(0) - 0x60;
-		return String.fromCharCode(chr);
-	});
+    },
+    dataType: 'json',
+  });
 }
 
 /** 地名のリストから
@@ -140,7 +116,7 @@ function getAvailableWords(places, done) {
 
       availableWords.push({
         locationName:  word[0],
-        phonetic: katakanaToHiragana(word[2])
+        phonetic: util.katakanaToHiragana(word[2])
       });
     });
 
