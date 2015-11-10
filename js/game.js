@@ -28,21 +28,57 @@ function initMap() {
 
 function mapClicked(e) {
   geocoder.geocode({location: e.latLng}, function (addrInfo) {
-    console.log(addrInfo);
-    var pos = e.latLng;
-    var address = getAddressPart(addrInfo);
+    console.debug(addrInfo);
 
-    analyseMorph(address).done(function (data) {
-      console.log(data);
+    var availablePlaces = selectAvailablePlaces(addrInfo[0].address_components);
+
+    getAvailableWords(availablePlaces, function (err, places) {
+      console.debug(places);
+
+      var html = places.map(function (place) {
+        return "<a href='#' onClick='locationNameClicked(\"" + place.locationName + "\")'>" + place.locationName +  "</a>"
+      }).join('<br>');
+
       var popup = new google.maps.InfoWindow({
-        content: data.word_list[0].map(function(word) {
-          return word[0] + ',' + katakanaToHiragana(word[2])
-        }).join('<br>'),
-        position: pos
+        content: createInfoWindowContentElement(places),
+        position: e.latLng
       });
       popup.open(map);
     });
   });
+}
+
+function locationNameClicked(e, place) {
+  console.debug(place);
+}
+
+function createLocationLinkElement(place) {
+  var link = document.createElement('a');
+
+  link.innerHTML = place.locationName;
+  link.href = '#';
+  link.dataset.locationName = place.locationName;
+  link.dataset.phonetic = place.phonetic;
+  link.addEventListener('click', function (e) {
+    locationNameClicked(e, place)
+  });
+
+  return link;
+}
+
+function createInfoWindowContentElement(places) {
+  var content = document.createElement('ul');
+
+  places.forEach(function (place) {
+    var listItem = document.createElement('li');
+    var link = createLocationLinkElement(place);
+
+    listItem.appendChild(link);
+    content.appendChild(listItem);
+  });
+
+  console.log(content);
+  return content;
 }
 
 /**
@@ -50,7 +86,7 @@ function mapClicked(e) {
  * @param {String} sentence - 解析対象の文
  * @returns {Object} - API呼び出し結果
  */
-function analyseMorph(sentence) {
+function callAnalyseMorphAPI(sentence) {
   return $.ajax({
     type: 'post',
     url: 'https://labs.goo.ne.jp/api/morph',
@@ -73,29 +109,46 @@ function katakanaToHiragana(src) {
 	});
 }
 
-/** Google Geocorder API で取得した地域情報から住所を取り出す
- * @param {String} addrInfo - Google Geocorder API で取得した地域情報
- * @returns {String} - 住所
- */
-function getAddressPart(addrInfo) {
-  return addrInfo[0].address_components.reverse().slice(2)
-    .map(function (c) { return c.long_name })
-    .join('');
-}
-
-/** 形態素解析で得られた文の単語リストから、しりとりで利用可能な地名リストを取得する
+/** 地名のリストから
  * @param {Array} 形態素解析で得られた文の単語リスト
  * @returns {Array} しりとりで利用可能な地名リスト
  */
-function getAvailableWords(wordList) {
+function getAvailableWords(places, done) {
   var availableWords = [];
 
-  wordList.forEach(function (word) {
-    var text = word[0];
-    var klass = word[1];
-    var kana = katakanaToHiragana(word[2]);
+  callAnalyseMorphAPI(places.join('/')).done(function (data) {
+    console.debug(data);
 
-    if (klass == '名詞接尾辞' || klass == 'Number' || Klass == 'kanji') return;
+    data.word_list[0].forEach(function (word) {
+      var type = word[1];
+      if (type != '名詞') return;
 
+      availableWords.push({
+        locationName:  word[0],
+        phonetic: katakanaToHiragana(word[2])
+      });
+    });
+
+    done(null, availableWords);
   });
+}
+
+/** 住所のコンポーネントリストから、地名しりとりに利用可能な地名のみを選択
+ * @param {Array} 住所のコンポーネントリスト
+ * @returns {Array} しりとりで利用可能な地名リスト
+ */
+function selectAvailablePlaces(addrComponents) {
+  var availablePlaces = [];
+
+  addrComponents.forEach(function (component) {
+    if (component.types[0] === 'postal_code') return;
+    if (component.types[0] === 'country') return;
+    if (component.types[0] === 'sublocality_level_2') return;
+    if (component.types[0] === 'sublocality_level_3') return;
+    if (component.types[0] === 'sublocality_level_4') return;
+
+    availablePlaces.push(component.long_name);
+  });
+
+  return availablePlaces.reverse();
 }
