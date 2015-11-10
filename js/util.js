@@ -2,18 +2,19 @@ var util = {
   callApi: function (method, path, data) {
     return $.ajax({
       type: method,
-      url: 'http://' + location.hostname + ':8080/citytori/api' + url,
+      url: 'http://' + location.hostname + ':8080/citytori/api' + path,
       data: data,
       dataType: 'json',
+      contentType: 'application/json'
     });
   },
 
   apiGet: function (path, data) {
-    return callApi('post', url, data);
+    return util.callApi('post', path, data);
   },
 
   apiPost: function (path, data) {
-    return callApi('post', url, data);
+    return util.callApi('post', path, data);
   },
 
   /**

@@ -1,8 +1,6 @@
-var map, geocoder;
-
-function initMap() {
-  geocoder = new google.maps.Geocoder();
-  map = new google.maps.Map(document.getElementById('map'), {
+Game = function (element) {
+  this.geocoder = new google.maps.Geocoder();
+  this.map = new google.maps.Map(element, {
     center: {lat: 35.681382, lng: 139.766084},
     zoom: 12,
     // maxZoom: 12,
@@ -23,38 +21,38 @@ function initMap() {
     ]
   });
 
-  map.addListener('click', mapClicked);
-}
+  this.map.addListener('click', this.mapClicked.bind(this));
+};
 
-function mapClicked(e) {
-  geocoder.geocode({location: e.latLng}, function (addrInfo) {
+Game.prototype.mapClicked = function (e) {
+  var that = this;
+
+  this.geocoder.geocode({location: e.latLng}, function (addrInfo) {
     console.debug(addrInfo);
 
-    var availablePlaces = selectAvailablePlaces(addrInfo[0].address_components);
+    var availablePlaces = that.selectAvailablePlaces(addrInfo[0].address_components);
 
-    getAvailableWords(availablePlaces, function (err, places) {
+    that.getAvailableWords(availablePlaces, function (err, places) {
       console.debug(places);
 
-      var html = places.map(function (place) {
-        return "<a href='#' onClick='locationNameClicked(\"" + place.locationName + "\")'>" + place.locationName +  "</a>"
-      }).join('<br>');
-
       var popup = new google.maps.InfoWindow({
-        content: createInfoWindowContentElement(places),
+        content: that.createInfoWindowContentElement(places),
         position: e.latLng
       });
-      popup.open(map);
+
+      popup.open(that.map);
     });
   });
-}
+};
 
-function locationNameClicked(e, place) {
+Game.prototype.locationNameClicked = function (e, place) {
   api.answersCreate({roomId: util.getQueryParam('roomId')}).done(function (data) {
     console.debug(data);
   });
-}
+};
 
-function createLocationLinkElement(place) {
+Game.prototype.createLocationLinkElement = function (place) {
+  var that = this;
   var link = document.createElement('a');
 
   link.innerHTML = place.locationName;
@@ -62,18 +60,19 @@ function createLocationLinkElement(place) {
   link.dataset.locationName = place.locationName;
   link.dataset.phonetic = place.phonetic;
   link.addEventListener('click', function (e) {
-    locationNameClicked(e, place)
+    that.locationNameClicked(e, place)
   });
 
   return link;
-}
+};
 
-function createInfoWindowContentElement(places) {
+Game.prototype.createInfoWindowContentElement = function (places) {
+  var that = this;
   var content = document.createElement('ul');
 
   places.forEach(function (place) {
     var listItem = document.createElement('li');
-    var link = createLocationLinkElement(place);
+    var link = that.createLocationLinkElement(place);
 
     listItem.appendChild(link);
     content.appendChild(listItem);
@@ -81,14 +80,14 @@ function createInfoWindowContentElement(places) {
 
   console.log(content);
   return content;
-}
+};
 
 /**
  * 形態素解析APIを呼び出す (See: https://labs.goo.ne.jp/api/2015/334/)
  * @param {String} sentence - 解析対象の文
  * @returns {Object} - API呼び出し結果
  */
-function callAnalyseMorphApi(sentence) {
+Game.prototype.callAnalyseMorphApi = function (sentence) {
   return $.ajax({
     type: 'post',
     url: 'https://labs.goo.ne.jp/api/morph',
@@ -98,16 +97,16 @@ function callAnalyseMorphApi(sentence) {
     },
     dataType: 'json',
   });
-}
+};
 
 /** 地名のリストから
  * @param {Array} 形態素解析で得られた文の単語リスト
  * @returns {Array} しりとりで利用可能な地名リスト
  */
-function getAvailableWords(places, done) {
+Game.prototype.getAvailableWords = function (places, done) {
   var availableWords = [];
 
-  callAnalyseMorphApi(places.join('/')).done(function (data) {
+  this.callAnalyseMorphApi(places.join('/')).done(function (data) {
     console.debug(data);
 
     data.word_list[0].forEach(function (word) {
@@ -122,13 +121,13 @@ function getAvailableWords(places, done) {
 
     done(null, availableWords);
   });
-}
+};
 
 /** 住所のコンポーネントリストから、地名しりとりに利用可能な地名のみを選択
  * @param {Array} 住所のコンポーネントリスト
  * @returns {Array} しりとりで利用可能な地名リスト
  */
-function selectAvailablePlaces(addrComponents) {
+Game.prototype.selectAvailablePlaces = function (addrComponents) {
   var availablePlaces = [];
 
   addrComponents.forEach(function (component) {
