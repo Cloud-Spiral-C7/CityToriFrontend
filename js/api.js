@@ -1,5 +1,5 @@
 var api = {
-  answersCreate: function (params) {
-    return util.apiPost('/rooms/' + params.roomId + '/answers');
+  answersCreate: function (params, data) {
+    return util.apiPost('/rooms/' + params.roomId + '/answers', data);
   }
 };

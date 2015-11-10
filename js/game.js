@@ -46,7 +46,13 @@ Game.prototype.mapClicked = function (e) {
 };
 
 Game.prototype.locationNameClicked = function (e, place) {
-  api.answersCreate({roomId: util.getQueryParam('roomId')}).done(function (data) {
+  api.answersCreate(
+    { roomId: util.getQueryParam('roomId') },
+    {
+      locationName: place.locationName,
+      phonetic: place.phonetic,
+      userId: util.getQueryParam('userId')
+    }).done(function (data) {
     console.debug(data);
   });
 };
