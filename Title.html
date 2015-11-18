@@ -1,0 +1,31 @@
+<html>
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <Left> City Tori <br></Left>
+  <script type="text/javascript">
+  function sendData(){
+    var userName = encodeURIComponent(document.forms["TitleForm"].elements["name"].value);
+    var data = { name: userName};
+    var xhr = new XMLHttpRequest();
+    xhr.open('POST','http://ec2-52-192-98-128.ap-northeast-1.compute.amazonaws.com/citytori/api/session');
+    xhr.onreadystatechange = processResponse;
+    xhr.setRequestHeader('Content-Type','application/json');
+    var json_data = JSON.stringify(data);
+    xhr.send(json_data);
+    function processResponse() {
+      if (xhr.readyState===4 && xhr.status===200) {
+          var data = JSON.parse(xhr.responseText);
+          document.getElementById("result01").innerHTML = "Result:" + data.userId;
+      }
+    }
+  }
+  </script>
+
+</head>
+  <body>
+    <form action="#" name="TitleForm">
+      <p>ユーザー名<input type="text" name="name"></p>
+      <p><input type="button" onclick="sendData()" value="Start"></p>
+    </form>
+  </body>
+</html>
