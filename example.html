@@ -1,0 +1,80 @@
+<html>
+
+<head>
+<script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript">
+	function register(){
+		var name = $("#textbox1").val();
+		$.ajax({
+			type:"post",
+			url:"http://ec2-52-192-98-128.ap-northeast-1.compute.amazonaws.com/citytori/api/session",
+			data:JSON.stringify({"name":name}),	//Stringが望ましい？
+			contentType:"application/json",	//リクエストの形式
+			dataType:"json",				//レスポンスの形式
+			success:function(data){
+				console.log(data);
+				$("#textarea1").text(data.userId);
+			},
+			error:function(){
+				console.log("error");
+			},
+			complete:function(){
+				console.log("finsih");
+			}
+		});
+	}
+</script>
+<style type="text/css">
+<!--
+body {
+	color: #333333;
+	width: 600px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 3ex;
+	margin-bottom: 3em;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+h1 {
+	font-size: 120%;
+	color: #FFFFFF;
+	background-color: #006699;
+	text-align: center;
+	padding: 5px;
+}
+h2 {
+	font-size: 110%;
+	color: #00496C;
+	padding: 1em;
+}
+p {
+	padding: 1em;
+	margin-right: 2em;
+	margin-left: 2em;
+	margin-bottom: 1em;
+	border: 0px solid #CC9966;
+	font-size: 0.97em;
+	line-height: 170%;
+}
+-->
+</style>
+</head>
+
+<body>
+	<h1>
+		タイトル画面
+	</h1>
+	<form name="form">
+		<input id="button1" type="button" value="登録" onclick="register()">
+		<input id="textbox1" type="text" value="a">
+	</form>
+	<h2>１章</h2>
+	<p>
+	いえええいえいえいえいえいあいあいああああああああああああああああああああんおおおおおおおおおおおお:おおおん
+	<div id="textarea1">はろー</div>
+	</p>
+</body>
+
+</html>

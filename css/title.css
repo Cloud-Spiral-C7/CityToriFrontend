@@ -1,0 +1,182 @@
+html{
+	font-family: "m+1medium";
+}
+
+body{
+	background-color: rgb(153,204,255);
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+
+div#container{
+	position: relative;
+	height: auto;
+	height: 100%;
+	min-height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+div#header-bk{
+	background-image: url(../img/header.png);
+	background-repeat: repeat-x;
+	background-size: 1000px;
+	width: 100px;
+	height: 100px;
+}
+
+div#header{
+	padding-left: 30px;
+	padding-top:  10px;
+	color: white;
+	text-align: right;
+	font-family: "m+1medium", serifi;
+	font-size: 200%;
+}
+
+a{
+	color: white;
+	text-decoration: none;
+}
+
+div#main{
+	background-image: url("../img/background.png");
+	background-repeat: repeat-x;
+	background-size: contain;
+	background-position: center;
+	width: 100%;
+	height: 100px;
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+
+div#main_cloud{
+	background-image: url("../img/background_cloud.png");
+	background-repeat: repeat-x;
+	background-size: contain;
+	background-position: center;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+}
+
+div#main_bird{
+	background-image: url("../img/background_bird.png");
+	background-repeat: repeat-x;
+	background-size: contain;
+	background-position: center;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+}
+
+div#main_in{
+	width: 100px;
+	height: 100%;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	
+	position: relative;
+}
+
+div#blank1{
+	width: 100%;
+	height: 10%;
+}
+
+div#titlelogo{
+	background-image: url("../img/titlelogo.png");
+	background-repeat: no-repeat;
+	background-size: 50%;
+	background-position: center;
+	width: 100%;
+	height: 40%;
+}
+
+div#registerform{
+	background-image: url("../img/registerform.png");
+	background-repeat: no-repeat;
+	background-size: 50%;
+	background-position: center;
+	width: 100%;
+	height: 40%;
+	
+	text-align: center;	
+}
+
+input#name{
+	width: 34%;
+	height: 16%;
+	font-family: "m+1medium";
+	font-size: 1.0rem;
+	text-align: center;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10;
+	position: relative;
+	top: 38%;
+	overflow: hidden;
+	outline : none;
+}
+
+button#register_on{
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background: url("../img/registerbutton_on.png");
+	background-position: center;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	width: 35%;
+	height: 25%;
+	position: relative;
+	top: 40%;
+	overflow: hidden;
+	outline: none;
+}
+
+button#register_off{
+	padding: 0;
+	margin : 0;
+	border : 0;
+	background:url("../img/registerbutton_off.png");
+	background-position: center;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	width: 35%;
+	height: 8%;
+	cursor: pointer;	
+	position: absolute;
+	top: 73.3%;
+	right: 32.5%;
+	overflow: hidden;
+	outline: none;
+}
+
+div#footer-bk{
+	background-color: rgb(153,153,153);
+	width: 100%;
+	height: 100px;
+	position: absolute;
+	bottom: 0px;
+}
+
+div#footer{
+	text-align: center;
+	color: white;
+	margin: auto;
+	padding-top: 20px;
+}
+
+@font-face{
+	font-family: "m+1medium";
+	src: url("../font/mplus-1p-medium.ttf");
+}
