@@ -21,8 +21,26 @@ Game = function (element) {
     ]
   });
 
+  this.popup = undefined;
   this.map.addListener('click', this.mapClicked.bind(this));
+  this.answerChain = [{phonetic: "おおさか", locationName: "大阪"}];
+  this.currentTheme = this.answerChain[this.answerChain.length - 1];
+  this.placeTheme = document.querySelector('#js-place-theme');
+  this.placeYours = document.querySelector('#js-place-yours');
 };
+
+Object.defineProperties(Game.prototype, {
+  'currentTheme': {
+    get: function () { return this._currentTheme; },
+    set: function (value) {
+      this._currentTheme = value;
+      document.querySelector('#js-place-theme > .name')
+        .innerHTML = value.locationName;
+      document.querySelector('#js-place-theme > .phonetic')
+        .innerHTML = value.phonetic;
+    }
+  }
+});
 
 Game.prototype.mapClicked = function (e) {
   var that = this;
@@ -35,26 +53,28 @@ Game.prototype.mapClicked = function (e) {
     that.getAvailableWords(availablePlaces, function (err, places) {
       console.debug(places);
 
-      var popup = new google.maps.InfoWindow({
+      that.popup = new google.maps.InfoWindow({
         content: that.createInfoWindowContentElement(places),
         position: e.latLng
       });
 
-      popup.open(that.map);
+      that.popup.open(that.map);
     });
   });
 };
 
 Game.prototype.locationNameClicked = function (e, place) {
-  api.answersCreate(
-    { roomId: util.getQueryParam('roomId') },
-    {
-      locationName: place.locationName,
-      phonetic: place.phonetic,
-      userId: util.getQueryParam('userId')
-    }).done(function (data) {
-    console.debug(data);
-  });
+  this.popup.close();
+  this.answer(place);
+  // api.answersCreate(
+  //   { roomId: util.getQueryParam('roomId') },
+  //   {
+  //     locationName: place.locationName,
+  //     phonetic: place.phonetic,
+  //     userId: util.getQueryParam('userId')
+  //   }).done(function (data) {
+  //   console.debug(data);
+  // });
 };
 
 Game.prototype.createLocationLinkElement = function (place) {
@@ -74,18 +94,36 @@ Game.prototype.createLocationLinkElement = function (place) {
 
 Game.prototype.createInfoWindowContentElement = function (places) {
   var that = this;
-  var content = document.createElement('ul');
+  var content = document.createElement('div');
+  var list = document.createElement('ul');
+  var p = document.createElement('p');
+
+  content.appendChild(p);
+  p.innerHTML = '回答を選んでください。';
+  p.style.fontWeight = 'bold';
 
   places.forEach(function (place) {
     var listItem = document.createElement('li');
     var link = that.createLocationLinkElement(place);
 
     listItem.appendChild(link);
-    content.appendChild(listItem);
+    list.appendChild(listItem);
   });
 
-  console.log(content);
+  content.appendChild(list);
+
   return content;
+};
+
+Game.prototype.answer = function (place) {
+  var last = this.answerChain[this.answerChain.length - 1];
+
+  if (!last.phonetic.endsWith(place.phonetic[0])) return false;
+
+  this.answerChain.push(place);
+  this.currentTheme = place;
+
+  return true;
 };
 
 /**

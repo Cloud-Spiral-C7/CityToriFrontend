@@ -1,13 +1,23 @@
 <!DOCTYPE html>
 <html>
   <head>
-    <style type="text/css">
-      html, body { height: 100%; margin: 0; padding: 0; }
-      #map { height: 100%; }
-    </style>
+    <meta charset="utf-8">
+    <title>シティとり</title>
+    <link rel="stylesheet" href="./css/game_single_play.css">
   </head>
   <body>
-    <div id="map"></div>
+    <div class="container">
+      <div class="map" id="map"></div>
+      <div class="navigation">
+        <h2>現在のお題</h2>
+        <div id="js-place-theme" class="place">
+          <div class="name">有楽 (町)</div>
+          <div class="phonetic">ゆうらく (ちょう)</div>
+        </div>
+      </div>
+    </div>
+
+
     <script src="/js/util.js"></script>
     <script src="/js/api.js"></script>
     <script src="/js/game.js"></script>
