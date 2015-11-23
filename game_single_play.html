@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <style type="text/css">
+      html, body { height: 100%; margin: 0; padding: 0; }
+      #map { height: 100%; }
+    </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <script src="/js/util.js"></script>
+    <script src="/js/api.js"></script>
+    <script src="/js/game.js"></script>
+    <script>
+      function initMap() {
+        new Game(document.getElementById('map'));
+      }
+    </script>
+    <script async defer
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCz-nxKgKLTvgFeMfjBLU_PkcYwpOOULR4&callback=initMap">
+    </script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+  </body>
+</html>
