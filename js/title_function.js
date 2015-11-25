@@ -59,7 +59,7 @@ function transition_to_selectsinglemode(){
 	fadein($("#timeattackicon"));
 	$("#main_in").append("<div id=\"settingform\"><input type=\"number\" id=\"wordnum\" step=5 min=5 max=50 value=10 /><br><button id=\"setting\" /></div>");
 	fadein($("#settingform"));
-
+	$("#description").text("目標しりとり数を入力してね？")
 }
 
 // transition to selectmultimode
