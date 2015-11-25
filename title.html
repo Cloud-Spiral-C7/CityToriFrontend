@@ -1,10 +1,12 @@
 <html>
 
 <head>
+<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
 <title>citytori</title>
 <link rel="stylesheet" type="text/css" href="css/title.css" media="all">
 <script type="text/javascript" src="js/jquery-2.1.4.min.js"></script>
 <script type="text/javascript" src="js/jquery.cookie.js"></script>
+<script type="text/javascript" src="js/jquery.easing.1.3.js"></script>
 <script type="text/javascript" src="js/title_layout.js"></script>
 <script type="text/javascript">
 
@@ -17,31 +19,47 @@
 	<div id="container">
 		<div id="header-bk">
 			<div id="header">
-				<a id="linktwitter" href="http://www.twitter.com">t</a>
-				<a id="linkfacebook" href="http://www.facebook.com">f</a>
-				<a id="linkgoogle+" href="http://www.plus.google.com">g+</a>
+				<div id="description">
+					自分の名前を入力してゲームを始めよう！
+				</div>
+				<div id="links">
+					<a id="linktwitter" href="http://www.twitter.com/share?text=now playing citytori ! @Cloud Spiral (@v@) http://ec2-52-68-181-106.ap-northeast-1.compute.amazonaws.com/title.html">t</a>
+					<a id="linkfacebook" href="http://www.facebook.com">f</a>
+					<a id="linkgoogle+" href="http://www.plus.google.com">g+</a>
+				</div>
 		</div>
 		</div>
 		<div id="main">
 		<div id="main_cloud"></div>
 		<div id="main_bird"></div>
 		<div id="main_in">
-			<div id="blank1"></div>
 			<div id="titlelogo"></div>
 			<div id="registerform">
 				<input type="text" id="name" /><br>
 				<button id="register_on" />
 				<button id="register_off" />
 			</div>
+<!--
+			<div id="timeattackicon"></div>
+			<div id="settingform">
+				<input type="number" id="wordnum" step=5 min=5 max=50 value=10 /><br>
+				<button id="setting" />
+			</div>
+-->
 		</div>
 		</div>
 		<div id="footer-bk">
 			<div id="footer">
-				Copyright 2015 CloudSpiral Team C7
+				2015 CloudSpiral Team C7<br>
+				（Google Chrome 推奨）
 			</div>
 		</div>
 	</div>
 </div>
 <script type="text/javascript" src="js/title_function.js"></script>
+
+<audio id="sound_button" preload="auto">
+	<source src="sound/button.mp3" type="audio/mp3">
+</audio>
 </body>
 </html>

@@ -1,0 +1,145 @@
+<html>
+
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
+	<script src="js/jquery-2.1.4.min.js"></script>
+	<script type="text/javascript">
+
+		function register(){
+			var name = $("#name").val();
+			$.ajax({
+				type:"post",
+				url:"http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/session",
+				data:JSON.stringify({"name":name}),
+				contentType:"application/json",
+				dataType:"json",
+				success:function(data){
+					console.log(data);
+					$("#userId").text(data.userId);
+				},
+				error:function(){
+					console.log("error");
+				}
+			});
+		};
+
+		$(document).on("click", "#register", function(){
+			register();
+		});
+
+
+		function makeroom(){
+			var userId = $("#userId").text();
+			var name = $("#name").val();
+			var gameMode = $("#gamemode").val();
+			var wordNum = parseInt($("#wordnum").val());
+			var limitTime =  parseInt($("#limittime").val());
+			$.ajax({
+				type:"post",
+				url:"http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/rooms",
+				data:JSON.stringify({"userId":userId,"name":name,"gameMode":gameMode,"wordNum":wordNum,"limitTime":limitTime}),
+				contentType:"application/json",
+				dataType:"json",
+				success:function(data){
+					console.log(data);
+					$("#roomId").text(data.id);
+				},
+				error:function(){
+					console.log("error");
+				}
+			});
+		};
+
+		$(document).on("click", "#makeroom", function(){
+			makeroom();
+		});
+
+		$(document).on("click", "#sendranking", function(){
+			var userId = $("#userId").text();
+			var roomId = $("#roomId").text();
+			var resultTime = parseFloat($("#resulttime").val());
+			$.ajax({
+				url: "http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/ranks",
+				data: {
+					userId: userId,
+					roomId: roomId,
+					resultTime: resultTime,
+				},
+				success: function(json){
+					var arraySize = Object.keys(json.ranking).length;
+					for (var i = 0; i < arraySize; i++) {
+						$('#ranking').append('' + (i + 1) + '位 ' + json.ranking[i].name + ' ' + json.ranking[i].score + '</br>');
+					}
+				},
+				error: function(){
+					console.log("error");
+				}
+			});
+		});
+
+		$(document).on("click", "#closeroom", function(){
+			var roomId = $("#roomId").text();
+			$.ajax({
+				url: "http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/rooms/" + roomId + "/close",
+				success: function(json){
+					console.log("success");
+				},
+				error: function(){
+					console.log("error");
+				}
+			});
+		});
+
+		register();
+		setTimeout(function(){
+			makeroom();
+			},100
+		);
+
+
+	</script>
+
+</head>
+
+<body>
+
+	<div id="registerform">
+		<h3>register user</h3>
+		name:
+		<input type="text" id="name" value="ねこあつめ"/>
+		<button id="register">register</button><br>
+		userId:
+		<span id="userId">none</span>
+	</div>
+
+
+	<div id="makeroomform">
+		<h3>make room</h3>
+		gameMode:
+		<input type="text" id="gamemode" value="Score"/><br>
+		wordNum:
+		<input type="text" id="wordnum" value="10"/><br>
+		limitTime:
+		<input type="text" id="limittime" value="100"/>
+		<button id="makeroom">make</button><br>
+		roomId:
+		<span id="roomId"></span>
+	</div>
+
+	<div id="rankingform">
+		<h3>send ranking</h3>
+		resultTime:
+		<input type="text" id="resulttime" value="145"/>
+		<button id="sendranking">send</button><br>
+		<div id="ranking">none</div>
+	</div>
+	
+	<div id="closeroomform">
+		<h3>close form</h3>
+		<button id="closeroom">close</button><br>
+	</div>
+
+
+</body>
+
+</html>
