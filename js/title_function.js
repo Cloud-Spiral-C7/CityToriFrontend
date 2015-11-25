@@ -1,4 +1,4 @@
-// fade out
+ï»¿// fade out
 function fadeout(o){
 	o.animate({
 		"opacity": 0
@@ -26,7 +26,7 @@ function transition_to_playstyle(){
 	fadein($("#singleplayform"));
 	$("#main_in").append("<div id=\"multiplayform\"><button class=\"ok\" id=\"playmulti\" /></div>");
 	fadein($("#multiplayform"));
-	$("#description").text("¤è¤¦¤³¤½¡Ö" + $.cookie("name") + "¡× ¥×¥ì¥¤¿Í¿ô¤òÁªÂò¤·¤Æ¤Í¡ª");
+	$("#description").text("ã‚ˆã†ã“ãã€Œ" + $.cookie("name") + "ã€ ãƒ—ãƒ¬ã‚¤äººæ•°ã‚’é¸æŠã—ã¦ã­ï¼");
 }
 
 // transition to selectsinglemode
@@ -40,13 +40,13 @@ function transition_to_selectsingleplaymode(){
 	fadein($("#timeattackform"));
 	$("#main_in").append("<div id=\"scoreattackform\"><button class=\"ok2\" id=\"playscoreattack\" /></div>");
 	fadein($("#scoreattackform"));
-	$("#description").text("¥¿¥¤¥à¥¢¥¿¥Ã¥¯¤ÇÍ·¤Ö¡©¥¹¥³¥¢¥¢¥¿¥Ã¥¯¤ÇÍ·¤Ö¡©");
+	$("#description").text("ã‚¿ã‚¤ãƒ ã‚¢ã‚¿ãƒƒã‚¯ã§éŠã¶ï¼Ÿã‚¹ã‚³ã‚¢ã‚¢ã‚¿ãƒƒã‚¯ã§éŠã¶ï¼Ÿ");
 }
 
 // transition to selectmultimode
 function transition_to_selectmultimode(){
 	console.log("multiplay");
-	alert("(>o<)<Ì¤¼ÂÁõ");
+	alert("(>o<)<æœªå®Ÿè£…");
 }
 
 // transition to selectsinglemode
@@ -65,7 +65,7 @@ function transition_to_selectsinglemode(){
 // transition to selectmultimode
 function transition_to_selectmultimode(){
 	console.log("scoreattack");
-	alert("(ToT)<Ì¤¼ÂÁõ");
+	alert("(ToT)<æœªå®Ÿè£…");
 }
 
 // register name
