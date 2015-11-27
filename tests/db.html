@@ -1,4 +1,4 @@
-<html>
+Ôªø<html>
 
 <head>
 	<meta http-equiv="Content-Type" content="text/html; charset=EUC-JP">
@@ -68,7 +68,7 @@
 				success: function(json){
 					var arraySize = Object.keys(json.ranking).length;
 					for (var i = 0; i < arraySize; i++) {
-						$('#ranking').append('' + (i + 1) + '∞Ã ' + json.ranking[i].name + ' ' + json.ranking[i].score + '</br>');
+						$('#ranking').append('' + (i + 1) + 'ÔΩ∞Ôæå ' + json.ranking[i].name + ' ' + json.ranking[i].score + '</br>');
 					}
 				},
 				error: function(){
@@ -90,12 +90,49 @@
 			});
 		});
 
-		register();
-		setTimeout(function(){
-			makeroom();
-			},100
-		);
+//============================================================================================
 
+		function initialize(){
+			var roomId = $("#roomId").text();
+			$.ajax({
+				url: "http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/rooms/" + roomId + "/initialValue",
+				success: function(json){
+					console.log(json);
+				},
+				error: function(){
+					console.log("error");
+				}
+			});
+		};
+
+		$(document).on("click", "#initialize", function(){
+			initialize();
+		});
+
+		function answer(){
+			var kana = $("#answer").val();
+			var userId = $("#userId").text();
+			var roomId = $("#roomId").text();
+			$.ajax({
+				type:"post",
+				url:"http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/rooms/" + roomId + "/answers",
+				data:JSON.stringify({"locationName": "„Åª„Åí", "phonetic": kana, "userId": userId}),
+				contentType:"application/json",
+				dataType:"json",
+				success:function(data){
+					console.log(data);
+				},
+				error:function(){
+					console.log("error");
+				}
+			});
+		};
+
+		$(document).on("click", "#sendanswer", function(){
+			answer();
+		});
+
+//===========================================================================================
 
 	</script>
 
@@ -106,7 +143,7 @@
 	<div id="registerform">
 		<h3>register user</h3>
 		name:
-		<input type="text" id="name" value="§Õ§≥§¢§ƒ§·"/>
+		<input type="text" id="name" value=""/>
 		<button id="register">register</button><br>
 		userId:
 		<span id="userId">none</span>
@@ -116,7 +153,7 @@
 	<div id="makeroomform">
 		<h3>make room</h3>
 		gameMode:
-		<input type="text" id="gamemode" value="Score"/><br>
+		<input type="text" id="gamemode" value="Time"/><br>
 		wordNum:
 		<input type="text" id="wordnum" value="10"/><br>
 		limitTime:
@@ -137,6 +174,17 @@
 	<div id="closeroomform">
 		<h3>close form</h3>
 		<button id="closeroom">close</button><br>
+	</div>
+
+	<div id="initializeform">
+		<h3>room initialize form</h3>
+		<button id="initialize">initialize</button><br>
+	</div>
+
+	<div id="answerform">
+		<h3>answer form</h3>
+		<input type="text" id="answer" />
+		<button id="sendanswer">answer</button><br>
 	</div>
 
 
