@@ -90,8 +90,6 @@ function register(name){
 
 // make room
 function makeroom(userId, name, gameMode, wordNum, limitTime){
-	// console.log(arguments);
-
 	$.ajax({
 		type:"post",
 		url:"http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/rooms",
