@@ -4,7 +4,7 @@ function fadeout(o){
 		"opacity": 0
 	}, 500, "easeInQuad", function(){
 		$(this).remove();
-	});	
+	});
 }
 
 // fade in
@@ -90,6 +90,8 @@ function register(name){
 
 // make room
 function makeroom(userId, name, gameMode, wordNum, limitTime){
+	// console.log(arguments);
+
 	$.ajax({
 		type:"post",
 		url:"http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/rooms",
@@ -116,18 +118,18 @@ function sound_button(){
 	$("#sound_button").get(0).currentTime = 0;
 	$("#sound_button").get(0).play();
 };
-	
+
 // about register button
 $("#register_off").mousedown(function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_off","_on")	
+		"background": $(this).css("background").replace("_off","_on")
 	});
 	sound_button();
 });
 
 $("#register_off").mouseup(function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_on","_off")	
+		"background": $(this).css("background").replace("_on","_off")
 	});
 	if($("#name").val() != ""){
 		register($("#name").val());
@@ -143,14 +145,14 @@ $("#register_off").mouseout(function(){
 // about ok button
 $(document).on("mousedown", ".ok", function(){
 	$(this).css({
-		"background": $(this).css("background").replace(".","_dummy.")	
+		"background": $(this).css("background").replace(".","_dummy.")
 	});
 	sound_button();
 });
 
 $(document).on("mouseup", ".ok", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")	
+		"background": $(this).css("background").replace("_dummy.",".")
 	});
 	if($(this).attr("id") == "playsingle"){
 		transition_to_selectsingleplaymode();
@@ -168,14 +170,14 @@ $(document).on("mouseout", ".ok", function(){
 // about ok2 button
 $(document).on("mousedown", ".ok2", function(){
 	$(this).css({
-		"background": $(this).css("background").replace(".","_dummy.")	
+		"background": $(this).css("background").replace(".","_dummy.")
 	});
 	sound_button();
 });
 
 $(document).on("mouseup", ".ok2", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")	
+		"background": $(this).css("background").replace("_dummy.",".")
 	});
 	if($(this).attr("id") == "playtimeattack"){
 		transition_to_selectsinglemode();
@@ -193,17 +195,17 @@ $(document).on("mouseout", ".ok2", function(){
 // about setting button
 $(document).on("mousedown", "#setting", function(){
 	$(this).css({
-		"background": $(this).css("background").replace(".","_dummy.")	
+		"background": $(this).css("background").replace(".","_dummy.")
 	});
 	sound_button();
 });
 
 $(document).on("mouseup", "#setting", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")	
+		"background": $(this).css("background").replace("_dummy.",".")
 	});
 	if(parseInt($("#wordnum").val()) > 0){
-		makeroom($.cookie("userId"), $.cookie("name"), "Time", parseInt($("#wordnum")), 0);
+		makeroom($.cookie("userId"), $.cookie("name"), "Time", parseInt($("#wordnum").val()), 0);
 	}
 });
 
@@ -225,14 +227,14 @@ $(function(){
 	setInterval(function(){
 		bgscx1 += 1;
 		$("#main_cloud").css({
-			"background-position": bgscx1 + "px"	
+			"background-position": bgscx1 + "px"
 		});
 	},150);
 	var bgscx2 = 1000;
 	setInterval(function(){
 		bgscx2 += 1;
 		$("#main_bird").css({
-			"background-position": bgscx2 + "px"	
+			"background-position": bgscx2 + "px"
 		});
 	},75);
 });
@@ -247,4 +249,3 @@ $(document).ready(function(){
 		linkElement: ".animsition-link",
 	});
 });
-
