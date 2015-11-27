@@ -118,12 +118,28 @@ Game.prototype.createInfoWindowContentElement = function (places) {
 Game.prototype.answer = function (place) {
   var last = this.answerChain[this.answerChain.length - 1];
 
-  if (!last.phonetic.endsWith(place.phonetic[0])) return false;
+  if (place.phonetic.endsWith('ん')) {
+    this.gameOver(place);
+    return false;
+  }
+
+  if (!last.phonetic.endsWith(place.phonetic[0])) {
+    this.mistake(place);
+    return false;
+  }
 
   this.answerChain.push(place);
   this.currentTheme = place;
 
   return true;
+};
+
+Game.prototype.gameOver = function (place) {
+
+};
+
+Game.prototype.mistake = function (place) {
+  // body...
 };
 
 /**
