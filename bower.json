@@ -1,0 +1,22 @@
+{
+  "name": "city-tori",
+  "description": "",
+  "main": "index.js",
+  "authors": [
+    "nyamadori <nyamadorig@gmail.com>"
+  ],
+  "license": "ISC",
+  "homepage": "https://github.com/Cloud-Spiral-C7/CityTori",
+  "moduleType": [],
+  "private": true,
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ],
+  "dependencies": {
+    "vue": "~1.0.10"
+  }
+}
