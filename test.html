@@ -1,0 +1,57 @@
+<!-- for debug -->
+
+<html>
+
+<head>
+<script type="text/javascript" src="js/jquery-1.11.3.js"></script>
+<script type="text/javascript" src="js/jquery.cookie.js"></script>
+<style type="text/css">
+<!--
+body {
+	color: #333333;
+	width: 600px;
+	margin-right: auto;
+	margin-left: auto;
+	margin-top: 3ex;
+	margin-bottom: 3em;
+	padding: 10px;
+	border: 1px solid #CCCCCC;
+}
+h1 {
+	font-size: 120%;
+	color: #FFFFFF;
+	background-color: #006699;
+	text-align: center;
+	padding: 5px;
+}
+h2 {
+	font-size: 110%;
+	color: #00496C;
+	padding: 1em;
+}
+p {
+	padding: 1em;
+	margin-right: 2em;
+	margin-left: 2em;
+	margin-bottom: 1em;
+	border: 0px solid #CC9966;
+	font-size: 0.97em;
+	line-height: 170%;
+}
+-->
+</style>
+</head>
+
+<body>
+	<h1>
+		タイトル画面
+	</h1>
+	<div id="textarea1">はろー</div>
+</body>
+
+<script type="text/javascript">
+	var userId = $.cookie("userId");
+	$("#textarea1").text(userId);
+</script>
+
+</html>

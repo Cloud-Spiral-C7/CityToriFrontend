@@ -1,0 +1,363 @@
+html{
+	font-family: "m+1medium";
+}
+
+body{
+	background-color: rgb(153,204,255);
+	margin: 0;
+	padding: 0;
+	height: 100%;
+	width: 100%;
+}
+
+div#container{
+	position: relative;
+	height: auto;
+	height: 100%;
+	min-height: 100%;
+	margin: 0;
+	padding: 0;
+}
+
+div#header-bk{
+	background-image: url(../img/header.png);
+	background-repeat: repeat-x;
+	background-size: 1000px;
+	width: 100px;
+	height: 100px;
+}
+
+div#header{
+	color: white;
+	font-family: "m+1medium", serifi;
+}
+
+div#description{
+	width: calc(100% - 20px);
+	padding-top: 15px;
+	padding-left: 20px;
+	text-align: left;
+	font-size: 120%;
+	position: absolute;
+}
+
+div#links{
+	width: calc(100% - 20px);
+	padding-top: 10px;
+	text-align: right;
+	font-size: 200%;
+	position: absolute;
+}
+
+a{
+	color: white;
+	text-decoration: none;
+}
+
+div#main{
+	background-image: url("../img/background.png");
+	background-repeat: repeat-x;
+	background-size: contain;
+	background-position: center;
+	width: 100%;
+	height: 100px;
+	margin: 0;
+	padding: 0;
+	position: relative;
+}
+
+div#main_cloud{
+	background-image: url("../img/background_cloud.png");
+	background-repeat: repeat-x;
+	background-size: contain;
+	background-position: center;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+}
+
+div#main_bird{
+	background-image: url("../img/background_bird.png");
+	background-repeat: repeat-x;
+	background-size: contain;
+	background-position: center;
+	width: 100%;
+	height: 100%;
+	margin: 0;
+	padding: 0;
+	position: absolute;
+}
+
+div#main_in{
+	width: 100px;
+	height: 100%;
+	margin: auto;
+	top: 0;
+	bottom: 0;
+	
+	position: relative;
+}
+
+div#titlelogo{
+	background-image: url("../img/titlelogo.png");
+	background-repeat: no-repeat;
+	background-size: 45%;
+	background-position: center;
+	width: 100%;
+	height: 40%;
+	position: absolute;
+	top: 10%;
+}
+
+div#registerform{
+	background-image: url("../img/registerform.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: center;
+	width: 40%;
+	height: 30%;
+	position: absolute;
+	top: 50%;
+	left: 0;
+	right: 0;
+	margin: auto;
+	text-align: center;
+}
+
+input#name{
+	background-position: center;
+	width: 70%;
+	height: 17%;
+	font-family: "m+1medium";
+	font-size: 1.0rem;
+	text-align: center;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10;
+	position: absolute;
+	top: 37%;
+	margin: auto;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	outline : none;
+}
+
+button#register_on{
+	padding: 0;
+	margin: auto;
+	border: 0;
+	background: url("../img/registerbutton_on.png");
+	background-position: center;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	width: 70%;
+	height: 40%;
+	position: absolute;
+	bottom: 10%;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	outline: none;
+}
+
+button#register_off{
+	padding: 0;
+	margin : auto;
+	border : 0;
+	background:url("../img/registerbutton_off.png");
+	background-position: center;
+	background-size: 100%;
+	background-repeat: no-repeat;
+	width: 70%;
+	height: 40%;
+	cursor: pointer;	
+	position: absolute;
+	bottom: 10%;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	outline: none;
+}
+
+div#singleplayform{
+	background-image: url("../img/singleplayform.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% *350 / 1500);
+	height: calc(100% * 400 / 1000);
+	position: absolute;
+	top: 30%;
+	left: 25%;
+}
+
+div#multiplayform{
+	background-image: url("../img/multiplayform.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% *350 / 1500);
+	height: calc(100% * 400 / 1000);
+	position: absolute;
+	top: 30%;
+	right: 25%;
+}
+
+button.ok{
+	background: url("../img/okbutton.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: center;
+	width: calc(100% * 200 / 350);
+	height: calc(100% * 75 / 400);
+	position: absolute;
+	top: 69%;
+	margin: auto;
+	left: 1%;
+	right: 0;
+	border: 0;
+	cursor: pointer;
+	overflow: hidden;
+	outline: none;
+}
+
+div#singleplayicon{
+	background-image: url("../img/singleplayicon.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% * 200 / 1500);
+	height: calc(100% * 200 / 1000);
+	position: absolute;
+	top: 22%;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
+div#timeattackform{
+	background-image: url("../img/timeattackform.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% * 750 / 1500);
+	height: calc(100% * 150 / 1000);
+	position: absolute;
+	top: 43%;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
+div#scoreattackform{
+	background-image: url("../img/scoreattackform.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% * 750 / 1500);
+	height: calc(100% * 150 / 1000);
+	position: absolute;
+	top: 58%;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
+button.ok2{
+	background: url("../img/okbutton.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: center;
+	width: calc(100% * 200 / 750);
+	height: calc(100% * 75 / 150);
+	position: absolute;
+	top: 24.8%;
+	left: 64%;
+	margin: auto;
+	border: 0;
+	cursor: pointer;
+	overflow: hidden;
+	outline: none;
+}
+
+div#timeattackicon{
+	background-image: url("../img/timeattackicon.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% * 200 / 1500);
+	height: calc(100% * 200 / 1000);
+	position: absolute;
+	top: 22%;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
+div#settingform{
+	background-image: url("../img/settingform.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% * 450 / 1500);
+	height: calc(100% * 325 / 1000);
+	position: absolute;
+	top: 43%;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
+input#wordnum{
+	background-position: center;
+	width: 40%;
+	height: 17%;
+	font-family: "m+1medium";
+	font-size: 1.0rem;
+	text-align: center;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10;
+	position: absolute;
+	top: 39%;
+	margin: auto;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	outline : none;
+}
+
+button#setting{
+	background: url("../img/readybutton.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: center;
+	width: calc(100% * 300 / 450);
+	height: calc(100% * 100 / 325);
+	position: absolute;
+	top: 57%;
+	margin: auto;
+	left: 0;
+	right: 2%;
+	border: 0;
+	cursor: pointer;
+	overflow: hidden;
+	outline: none;
+}
+
+
+div#footer-bk{
+	background-color: rgb(153,153,153);
+	width: 100%;
+	height: 100px;
+	position: absolute;
+	bottom: 0px;
+}
+
+div#footer{
+	text-align: center;
+	color: white;
+	margin: auto;
+	padding-top: 20px;
+}
+
+@font-face{
+	font-family: "m+1medium";
+	src: url("../font/mplus-1p-medium.ttf");
+}
