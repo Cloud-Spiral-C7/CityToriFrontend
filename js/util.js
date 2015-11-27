@@ -1,7 +1,7 @@
 var util = {
   callApi: function (method, path, data) {
-    var url = 'http://' + location.hostname + ':8080/citytori/api' + path;
-    console.debug(method, url, data);
+    var hostname = 'ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com';
+    var url = 'http://' + hostname + '/citytori/api' + path;
 
     return $.ajax({
       type: method,

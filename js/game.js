@@ -1,32 +1,37 @@
 Game = function (element) {
-  this.geocoder = new google.maps.Geocoder();
-  this.map = new google.maps.Map(element, {
-    center: {lat: 35.681382, lng: 139.766084},
-    zoom: 12,
-    // maxZoom: 12,
-    // minZoom: 12,
-    disableDefaultUI: true,
-    // mapTypeId: google.maps.MapTypeId.TERRAIN,
-    styles: [
-      {
-        featureType: 'all',
-        elementType: 'labels',
-        stylers: [{ visibility: 'off' }]
-      },
-      {
-        featureType: 'administrative.locality',
-        elementType: 'labels',
-        stylers: [{ visibility: 'on' }]
-      },
-    ]
-  });
+  var that = this;
 
-  this.popup = undefined;
-  this.map.addListener('click', this.mapClicked.bind(this));
-  this.answerChain = [{phonetic: "おおさか", locationName: "大阪"}];
-  this.currentTheme = this.answerChain[this.answerChain.length - 1];
-  this.placeTheme = document.querySelector('#js-place-theme');
-  this.placeYours = document.querySelector('#js-place-yours');
+  api.initialValueIndex({roomId: $.cookie('roomId')}).done(function (data) {
+    console.log(data);
+
+    that.geocoder = new google.maps.Geocoder();
+    that.map = new google.maps.Map(element, {
+      center: {lat: 35.681382, lng: 139.766084},
+      zoom: 12,
+      // maxZoom: 12,
+      // minZoom: 12,
+      disableDefaultUI: true,
+      // mapTypeId: google.maps.MapTypeId.TERRAIN,
+      styles: [
+        {
+          featureType: 'all',
+          elementType: 'labels',
+          stylers: [{ visibility: 'off' }]
+        },
+        {
+          featureType: 'administrative.locality',
+          elementType: 'labels',
+          stylers: [{ visibility: 'on' }]
+        },
+      ]
+    });
+
+    that.popup = undefined;
+    that.map.addListener('click', that.mapClicked.bind(that));
+    that.currentTheme = { locationName: '最初のお題', phonetic: data.theme };
+    that.placeTheme = document.querySelector('#js-place-theme');
+    that.placeYours = document.querySelector('#js-place-yours');
+  });
 };
 
 Object.defineProperties(Game.prototype, {
@@ -117,20 +122,34 @@ Game.prototype.createInfoWindowContentElement = function (places) {
 };
 
 Game.prototype.answer = function (place) {
-  var last = this.answerChain[this.answerChain.length - 1];
-
-  if (place.phonetic.endsWith('ん')) {
-    this.gameOver(place);
-    return false;
-  }
-
-  if (!last.phonetic.endsWith(place.phonetic[0])) {
-    this.mistake(place);
-    return false;
-  }
-
-  this.answerChain.push(place);
-  this.currentTheme = place;
+  var that = this;
+  console.log(place);
+  api.answersCreate({roomId: $.cookie('roomId')}, {
+    locationName: place.locationName,
+    phonetic: place.phonetic,
+    userId: $.cookie('userId')
+  }).done(function (data) {
+    console.log(data);
+    if (data.result.startsWith('NG')) {
+      that.mistake(place);
+    } else {
+      that.currentTheme = place;
+    }
+  });
+  // var last = this.answerChain[this.answerChain.length - 1];
+  //
+  // if (place.phonetic.endsWith('ん')) {
+  //   this.gameOver(place);
+  //   return false;
+  // }
+  //
+  // if (!last.phonetic.endsWith(place.phonetic[0])) {
+  //   this.mistake(place);
+  //   return false;
+  // }
+  //
+  // this.answerChain.push(place);
+  // this.currentTheme = place;
 
   return true;
 };
