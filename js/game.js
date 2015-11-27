@@ -44,6 +44,7 @@ Object.defineProperties(Game.prototype, {
 
 Game.prototype.mapClicked = function (e) {
   var that = this;
+  if (this.popup) this.popup.close();
 
   this.geocoder.geocode({location: e.latLng}, function (addrInfo) {
     console.debug(addrInfo);
