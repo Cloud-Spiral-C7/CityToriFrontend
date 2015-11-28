@@ -22,23 +22,22 @@ module.exports = {
 </script>
 
 <template>
-<div class="container">
+<div id="game-container" class="container">
   <div id="js-bg-cloud" class="bg cloud"></div>
   <div id="js-bg-bird" class="bg bird"></div>
-  <div class="footer">&copy; 2015 Cloud Spiral Team C7</div>
+  <div id="page-footer">&copy; 2015 Cloud Spiral Team C7</div>
+  <citytori-title></citytori-title>
 </div>
 </template>
 
 <style>
-.container {
-  position: relative;
-  height: 100%;
+#game-container {
   background-image: url('/img/background.png');
   background-size: cover;
   background-position: bottom;
 }
 
-.footer {
+#page-footer {
   position: absolute;
   width: 100%;
   bottom: 0;

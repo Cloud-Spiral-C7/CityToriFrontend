@@ -44,8 +44,10 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Vue = __webpack_require__(2);
-	Vue.component('citytori-container', __webpack_require__(3));
+	var Vue = __webpack_require__(3);
+	Vue.component('citytori-container', __webpack_require__(4));
+	Vue.component('citytori-title', __webpack_require__(12));
+	
 	var app = new Vue({
 	  el: 'body'
 	});
@@ -53,7 +55,8 @@
 
 /***/ },
 /* 1 */,
-/* 2 */
+/* 2 */,
+/* 3 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -9366,14 +9369,14 @@
 	}));
 
 /***/ },
-/* 3 */
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(4)
-	module.exports = __webpack_require__(8)
+	__webpack_require__(5)
+	module.exports = __webpack_require__(9)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(9)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(11)
 	if (false) {
 	(function () {
 	var hotAPI = require("vue-hot-reload-api")
@@ -9391,16 +9394,16 @@
 	}
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(5);
+	var content = __webpack_require__(6);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(7)(content, {});
+	var update = __webpack_require__(8)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -9417,21 +9420,21 @@
 	}
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(6)();
+	exports = module.exports = __webpack_require__(7)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, ".container {\n  position: relative;\n  height: 100%;\n  background-image: url('/img/background.png');\n  background-size: cover;\n  background-position: bottom;\n}\n\n.footer {\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  text-align: center;\n  margin: 10px;\n  color: rgba(0, 0, 0, 0.5);\n}\n\n.bg {\n  background-repeat: repeat-x;\n  background-size: contain;\n  background-position: center;\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n  position: absolute;\n}\n\n.cloud {\n  background-image: url('/img/background_cloud.png');\n}\n\n.bird {\n\tbackground-image: url(\"/img/background_bird.png\");\n}", ""]);
+	exports.push([module.id, "#game-container {\n  background-image: url('/img/background.png');\n  background-size: cover;\n  background-position: bottom;\n}\n\n#page-footer {\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  text-align: center;\n  margin: 10px;\n  color: rgba(0, 0, 0, 0.5);\n}\n\n.bg {\n  background-repeat: repeat-x;\n  background-size: contain;\n  background-position: center;\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n  position: absolute;\n}\n\n.cloud {\n  background-image: url('/img/background_cloud.png');\n}\n\n.bird {\n\tbackground-image: url(\"/img/background_bird.png\");\n}", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports) {
 
 	/*
@@ -9487,7 +9490,7 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -9741,7 +9744,7 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	"use strict";
@@ -9766,12 +9769,6 @@
 	    }, 50);
 	  }
 	};
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=\"container\">\n  <div id=\"js-bg-cloud\" class=\"bg cloud\"></div>\n  <div id=\"js-bg-bird\" class=\"bg bird\"></div>\n  <div class=\"footer\">&copy; 2015 Cloud Spiral Team C7</div>\n</div>";
 
 /***/ },
 /* 10 */
@@ -18988,6 +18985,93 @@
 	
 	}));
 
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=\"game-container\" class=\"container\">\n  <div id=\"js-bg-cloud\" class=\"bg cloud\"></div>\n  <div id=\"js-bg-bird\" class=\"bg bird\"></div>\n  <div id=\"page-footer\">&copy; 2015 Cloud Spiral Team C7</div>\n  <citytori-title></citytori-title>\n</div>";
+
+/***/ },
+/* 12 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(13)
+	module.exports = __webpack_require__(15)
+	
+	if (module.exports.__esModule) module.exports = module.exports.default
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(16)
+	if (false) {
+	(function () {
+	var hotAPI = require("vue-hot-reload-api")
+	hotAPI.install(require("vue"))
+	if (!hotAPI.compatible) return
+	var id = "-!babel-loader?presets[]=es2015&plugins[]=transform-runtime!./../../node_modules/vue-loader/lib/selector.js?type=script&index=0!./title.vue"
+	hotAPI.createRecord(id, module.exports)
+	module.hot.accept(["-!babel-loader?presets[]=es2015&plugins[]=transform-runtime!./../../node_modules/vue-loader/lib/selector.js?type=script&index=0!./title.vue","-!vue-html-loader!./../../node_modules/vue-loader/lib/selector.js?type=template&index=0!./title.vue"], function () {
+	var newOptions = require("-!babel-loader?presets[]=es2015&plugins[]=transform-runtime!./../../node_modules/vue-loader/lib/selector.js?type=script&index=0!./title.vue")
+	if (newOptions && newOptions.__esModule) newOptions = newOptions.default
+	var newTemplate = require("-!vue-html-loader!./../../node_modules/vue-loader/lib/selector.js?type=template&index=0!./title.vue")
+	hotAPI.update(id, newOptions, newTemplate)
+	})
+	})()
+	}
+
+/***/ },
+/* 13 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(14);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(8)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-13c0aa86&file=title.vue!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./title.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-13c0aa86&file=title.vue!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./title.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(7)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "#title-container {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  margin: auto;\n  height: 400px;\n}\n\n#title-container > .title {\n  text-align: center;\n  color: #fff;\n  font-size: 56px;\n  text-shadow: 3px 4px #CCC;\n}\n\n#title-container > .sub-title {\n  margin-bottom: 40px;\n  text-align: center;\n  color: #fff;\n  text-shadow: 2px 3px #CCC;\n}", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 15 */
+/***/ function(module, exports, __webpack_require__) {
+
+	'use strict';
+	
+	var $ = __webpack_require__(10);
+	
+	module.exports = {};
+
+/***/ },
+/* 16 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=\"title-container\" class=\"container\">\n  <h1 class=\"title\">シティとり</h1>\n  <h2 class=\"sub-title\">- A new shiritori game -</h2>\n  <form class=\"form\">\n    <p>名前を入力してください</p>\n    <input class=\"form-input\" type=\"text\"><br>\n    <button class=\"form-button\" type=\"submit\">ゲームを始める</button>\n  </form>\n</div>";
 
 /***/ }
 /******/ ]);
