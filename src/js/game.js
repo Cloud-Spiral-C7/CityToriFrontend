@@ -1,8 +1,18 @@
-function Game() {
-  this.panels = {};
-};
+var Game = function () {
+  this._scenes = {};
+}, p = Game.prototype;
 
-var p = Game.prototype;
+Object.defineProperties(p, {
+  scenes: {
+    get: function () {
+      return this._scenes;
+    }
+  }
+});
+
+p.addScene = function (name, scene) {
+  this._scenes[name] = scene;
+}
 
 p.transition = function (name, header, cb) {
   function fadeout (o, cb) {
@@ -20,7 +30,7 @@ p.transition = function (name, header, cb) {
   	}, 500, "easeInQuad");
   }
 
-	var panelHTML = this.panels[name];
+	var panelHTML = this.scenes[name];
 	if (panelHTML === undefined) {
 		return console.warn('Not implemented panel:', name);
 	}

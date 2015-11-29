@@ -29,11 +29,7 @@ function makeroom(userId, name, gameMode, wordNum, limitTime){
 		success:function(data){
 			$.cookie("roomId", data.id);
 			$.cookie("wordNum", wordNum);
-			$("body").animate({
-				"opacity": 0
-			}, 1000, "easeInQuad", function(){
-					window.location.href = "game_single_play.html";
-			});
+			game.transition('playGameSingle', 'タイムアタック!');
 		},
 		error:function(){
 			console.log("error");
