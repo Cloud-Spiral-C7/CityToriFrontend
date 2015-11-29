@@ -1,40 +1,3 @@
-var panels = {
-	title: require('../html/title.html'),
-	selectPlayMode: require('../html/select_play_mode.html'),
-	selectSinglePlayMode: require('../html/select_single_play_mode.html'),
-	configSinglePlayMode: require('../html/config_single_play_mode.html')
-};
-
-function fadein(o) {
-	o.css({
-		"opacity": 0
-	});
-	o.animate({
-		"opacity": 1
-	}, 500, "easeInQuad");
-}
-
-function fadeout(o, cb) {
-	o.animate({
-		"opacity": 0
-	}, 500, "easeInQuad", cb);
-}
-
-function transition(name, header) {
-	var panelHTML = panels[name];
-	if (panelHTML === undefined) {
-		return console.warn('Not implemented panel:', name);
-	}
-
-	var $main = $('#main_in');
-
-	fadeout($main, function () {
-		$main.html(panelHTML);
-		fadein($main);
-		$("#description").text(header);
-	});
-}
-
 // register name
 function register(name){
 		$.ajax({
@@ -47,7 +10,7 @@ function register(name){
 				console.log(data);
 				$.cookie("name", name);
 				$.cookie("userId", data.userId);
-				transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
+				game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
 			},
 			error:function(){
 				console.log("error");
@@ -120,9 +83,9 @@ $(document).on("mouseup", ".ok", function(){
 		"background": $(this).css("background").replace("_dummy.",".")
 	});
 	if($(this).attr("id") == "playsingle"){
-		transition('selectSinglePlayMode', 'タイムアタックで遊ぶ？スコアアタックで遊ぶ？');
+		game.transition('selectSinglePlayMode', 'タイムアタックで遊ぶ？スコアアタックで遊ぶ？');
 	}else{
-		transition('selectMultiPlayMode', '遊ぶモードを選んでね');
+		game.transition('selectMultiPlayMode', '遊ぶモードを選んでね');
 	}
 });
 
@@ -145,9 +108,9 @@ $(document).on("mouseup", ".ok2", function(){
 		"background": $(this).css("background").replace("_dummy.",".")
 	});
 	if($(this).attr("id") == "playtimeattack"){
-		transition('configSinglePlayMode', '目標しりとり数を入力してね');
+		game.transition('configSinglePlayMode', '目標しりとり数を入力してね');
 	}else{
-		transition('configMultiplayPlayMode', 'ゲームモードを選択してね');
+		game.transition('configMultiplayPlayMode', 'ゲームモードを選択してね');
 	}
 });
 

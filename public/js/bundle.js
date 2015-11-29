@@ -50,22 +50,30 @@
 	__webpack_require__(2);
 	__webpack_require__(3);
 	__webpack_require__(4);
-
-	$('#main_in').html(__webpack_require__(5));
-
-	__webpack_require__(6);
 	__webpack_require__(7);
 
+	var Game = __webpack_require__(6);
+	var game = window.game = new Game
 
-	// animsition setting
-	$(document).ready(function(){
-		$(".animsition").animsition({
-			inClass: "fade-in",
-			outClass: "fade-out",
-			inDuration: 1000,
-			outDuration: 1000,
-			linkElement: ".animsition-link",
-		});
+	game.panels = {
+		title: __webpack_require__(5),
+		selectPlayMode: __webpack_require__(9),
+		selectSinglePlayMode: __webpack_require__(10),
+		configSinglePlayMode: __webpack_require__(11)
+	};
+
+	game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
+	  __webpack_require__(8);
+	});
+
+	$(function () {
+	  $(".animsition").animsition({
+	    inClass: 'fade-in',
+	    outClass: 'fade-out',
+	    inDuration: 1000,
+	    outDuration: 1000,
+	    linkElement: '.animsition-link'
+	  });
 	});
 
 
@@ -9992,6 +10000,55 @@
 /* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
+	/* WEBPACK VAR INJECTION */(function($) {function Game() {
+	  this.panels = {};
+	};
+
+	var p = Game.prototype;
+
+	p.transition = function (name, header, cb) {
+	  function fadeout (o, cb) {
+	  	o.animate({
+	  		"opacity": 0
+	  	}, 500, "easeInQuad", cb);
+	  }
+
+	  function fadein (o) {
+	  	o.css({
+	  		"opacity": 0
+	  	});
+	  	o.animate({
+	  		"opacity": 1
+	  	}, 500, "easeInQuad");
+	  }
+
+		var panelHTML = this.panels[name];
+		if (panelHTML === undefined) {
+			return console.warn('Not implemented panel:', name);
+		}
+
+		var $main = $('#main_in');
+	  var $description = $('#description');
+
+	  fadeout($description);
+		fadeout($main, function () {
+			$main.html(panelHTML);
+			fadein($main);
+	    fadein($description);
+
+			$("#description").text(header);
+	    if (cb) cb();
+		});
+	}
+
+	module.exports = Game;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function($) {
 	// initial layout
 	$(document).ready(function(){
@@ -10087,47 +10144,10 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {var panels = {
-		title: __webpack_require__(5),
-		selectPlayMode: __webpack_require__(9),
-		selectSinglePlayMode: __webpack_require__(10),
-		configSinglePlayMode: __webpack_require__(11)
-	};
-
-	function fadein(o) {
-		o.css({
-			"opacity": 0
-		});
-		o.animate({
-			"opacity": 1
-		}, 500, "easeInQuad");
-	}
-
-	function fadeout(o, cb) {
-		o.animate({
-			"opacity": 0
-		}, 500, "easeInQuad", cb);
-	}
-
-	function transition(name, header) {
-		var panelHTML = panels[name];
-		if (panelHTML === undefined) {
-			return console.warn('Not implemented panel:', name);
-		}
-
-		var $main = $('#main_in');
-
-		fadeout($main, function () {
-			$main.html(panelHTML);
-			fadein($main);
-			$("#description").text(header);
-		});
-	}
-
-	// register name
+	/* WEBPACK VAR INJECTION */(function($) {// register name
 	function register(name){
 			$.ajax({
 				type:"post",
@@ -10139,7 +10159,7 @@
 					console.log(data);
 					$.cookie("name", name);
 					$.cookie("userId", data.userId);
-					transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
+					game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
 				},
 				error:function(){
 					console.log("error");
@@ -10212,9 +10232,9 @@
 			"background": $(this).css("background").replace("_dummy.",".")
 		});
 		if($(this).attr("id") == "playsingle"){
-			transition('selectSinglePlayMode', 'タイムアタックで遊ぶ？スコアアタックで遊ぶ？');
+			game.transition('selectSinglePlayMode', 'タイムアタックで遊ぶ？スコアアタックで遊ぶ？');
 		}else{
-			transition('selectMultiPlayMode', '遊ぶモードを選んでね');
+			game.transition('selectMultiPlayMode', '遊ぶモードを選んでね');
 		}
 	});
 
@@ -10237,9 +10257,9 @@
 			"background": $(this).css("background").replace("_dummy.",".")
 		});
 		if($(this).attr("id") == "playtimeattack"){
-			transition('configSinglePlayMode', '目標しりとり数を入力してね');
+			game.transition('configSinglePlayMode', '目標しりとり数を入力してね');
 		}else{
-			transition('configMultiplayPlayMode', 'ゲームモードを選択してね');
+			game.transition('configMultiplayPlayMode', 'ゲームモードを選択してね');
 		}
 	});
 
@@ -10298,7 +10318,6 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 8 */,
 /* 9 */
 /***/ function(module, exports) {
 
