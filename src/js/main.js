@@ -5,7 +5,7 @@ require('jquery.cookie');
 require('jquery.easing');
 require('animsition');
 
-$('#page-container').html(require('../html/title.html'));
+$('#main_in').html(require('../html/title.html'));
 
 require('./title_layout');
 require('./title_function');

@@ -51,7 +51,7 @@
 	__webpack_require__(3);
 	__webpack_require__(4);
 
-	$('#page-container').html(__webpack_require__(5));
+	$('#main_in').html(__webpack_require__(5));
 
 	__webpack_require__(6);
 	__webpack_require__(7);
@@ -9986,7 +9986,7 @@
 /* 5 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=container><div id=header-bk><div id=header><div id=description>自分の名前を入力してゲームを始めよう！</div><div id=links><a id=linktwitter href=\"http://www.twitter.com/share?text=now playing citytori ! @Cloud Spiral (@v@) http://ec2-52-68-181-106.ap-northeast-1.compute.amazonaws.com/title.html\">t</a> <a id=linkfacebook href=http://www.facebook.com>f</a> <a id=linkgoogle+ href=http://www.plus.google.com>g+</a></div></div></div><div id=main><div id=main_cloud></div><div id=main_bird></div><div id=main_in><div id=titlelogo></div><div id=registerform><input id=\"name\"><br><button id=register_on></button> <button id=register_off></button></div></div></div><div id=footer-bk><div id=footer>2015 CloudSpiral Team C7<br>（Google Chrome 推奨）</div></div></div>";
+	module.exports = "<div id=titlelogo></div><div id=registerform><input id=\"name\"><br><button id=register_on></button> <button id=register_off></button></div>";
 
 /***/ },
 /* 6 */
