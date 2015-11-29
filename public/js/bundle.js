@@ -10090,17 +10090,14 @@
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {// fade out
-	function fadeout(o){
-		o.animate({
-			"opacity": 0
-		}, 500, "easeInQuad", function(){
-			$(this).remove();
-		});
-	}
+	/* WEBPACK VAR INJECTION */(function($) {var panels = {
+		title: __webpack_require__(5),
+		selectPlayMode: __webpack_require__(9),
+		selectSinglePlayMode: __webpack_require__(10),
+		configSinglePlayMode: __webpack_require__(11)
+	};
 
-	// fade in
-	function fadein(o){
+	function fadein(o) {
 		o.css({
 			"opacity": 0
 		});
@@ -10109,55 +10106,25 @@
 		}, 500, "easeInQuad");
 	}
 
-	// transition to playstyle
-	function transition_to_playstyle(){
-		console.log("transition");
-		fadeout($("#titlelogo"));
-		fadeout($("#registerform"));
-		$("#main_in").append("<div id=\"singleplayform\"><button class=\"ok\" id=\"playsingle\" /></div>");
-		fadein($("#singleplayform"));
-		$("#main_in").append("<div id=\"multiplayform\"><button class=\"ok\" id=\"playmulti\" /></div>");
-		fadein($("#multiplayform"));
-		$("#description").text("ようこそ「" + $.cookie("name") + "」 プレイ人数を選択してね！");
+	function fadeout(o, cb) {
+		o.animate({
+			"opacity": 0
+		}, 500, "easeInQuad", cb);
 	}
 
-	// transition to selectsinglemode
-	function transition_to_selectsingleplaymode(){
-		console.log("singleplay");
-		fadeout($("#singleplayform"));
-		fadeout($("#multiplayform"));
-		$("#main_in").append("<div id=\"singleplayicon\"></div>");
-		fadein($("#singleplayicon"));
-		$("#main_in").append("<div id=\"timeattackform\"><button class=\"ok2\" id=\"playtimeattack\" /></div>");
-		fadein($("#timeattackform"));
-		$("#main_in").append("<div id=\"scoreattackform\"><button class=\"ok2\" id=\"playscoreattack\" /></div>");
-		fadein($("#scoreattackform"));
-		$("#description").text("タイムアタックで遊ぶ？スコアアタックで遊ぶ？");
-	}
+	function transition(name, header) {
+		var panelHTML = panels[name];
+		if (panelHTML === undefined) {
+			return console.warn('Not implemented panel:', name);
+		}
 
-	// transition to selectmultimode
-	function transition_to_selectmultimode(){
-		console.log("multiplay");
-		alert("(>o<)<未実装");
-	}
+		var $main = $('#main_in');
 
-	// transition to selectsinglemode
-	function transition_to_selectsinglemode(){
-		console.log("timeattack");
-		fadeout($("#singleplayicon"));
-		fadeout($("#timeattackform"));
-		fadeout($("#scoreattackform"));
-		$("#main_in").append("<div id=\"timeattackicon\"></div>");
-		fadein($("#timeattackicon"));
-		$("#main_in").append("<div id=\"settingform\"><input type=\"number\" id=\"wordnum\" step=5 min=5 max=50 value=10 /><br><button id=\"setting\" /></div>");
-		fadein($("#settingform"));
-		$("#description").text("目標しりとり数を入力してね？")
-	}
-
-	// transition to selectmultimode
-	function transition_to_selectmultimode(){
-		console.log("scoreattack");
-		alert("(ToT)<未実装");
+		fadeout($main, function () {
+			$main.html(panelHTML);
+			fadein($main);
+			$("#description").text(header);
+		});
 	}
 
 	// register name
@@ -10172,7 +10139,7 @@
 					console.log(data);
 					$.cookie("name", name);
 					$.cookie("userId", data.userId);
-					transition_to_playstyle();
+					transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
 				},
 				error:function(){
 					console.log("error");
@@ -10245,9 +10212,9 @@
 			"background": $(this).css("background").replace("_dummy.",".")
 		});
 		if($(this).attr("id") == "playsingle"){
-			transition_to_selectsingleplaymode();
+			transition('selectSinglePlayMode', 'タイムアタックで遊ぶ？スコアアタックで遊ぶ？');
 		}else{
-			transition_to_selectmultimode();
+			transition('selectMultiPlayMode', '遊ぶモードを選んでね');
 		}
 	});
 
@@ -10270,9 +10237,9 @@
 			"background": $(this).css("background").replace("_dummy.",".")
 		});
 		if($(this).attr("id") == "playtimeattack"){
-			transition_to_selectsinglemode();
+			transition('configSinglePlayMode', '目標しりとり数を入力してね');
 		}else{
-			transition_to_selectmultimode();
+			transition('configMultiplayPlayMode', 'ゲームモードを選択してね');
 		}
 	});
 
@@ -10310,9 +10277,8 @@
 		sound_button();
 	});
 
-
 	// background scrool
-	$(function(){
+	$(function() {
 		var bgscx1 = 3500;
 		setInterval(function(){
 			bgscx1 += 1;
@@ -10329,18 +10295,26 @@
 		},75);
 	});
 
-	// animsition setting
-	$(document).ready(function(){
-		$(".animsition").animsition({
-			inClass: "fade-in",
-			outClass: "fade-out",
-			inDuration: 1000,
-			outDuration: 1000,
-			linkElement: ".animsition-link",
-		});
-	});
-
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ },
+/* 8 */,
+/* 9 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=singleplayform><button class=ok id=playsingle></button></div><div id=multiplayform><button class=ok id=playmulti></button></div>";
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=singleplayicon></div><div id=timeattackform><button class=ok2 id=\"playtimeattack\"></div><div id=scoreattackform><button class=ok2 id=\"playscoreattack\"></div>";
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=timeattackicon></div><div id=settingform><input type=number id=wordnum step=5 min=5 max=50 value=\"10\"><br><button id=\"setting\"></div>";
 
 /***/ }
 /******/ ]);
