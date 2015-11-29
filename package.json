@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "postinstall": "./node_modules/bower/bin/bower install",
+    "webpack": "./node_modules/webpack/bin/webpack.js -w",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -18,5 +20,15 @@
   "homepage": "https://github.com/Cloud-Spiral-C7/CityTori#readme",
   "dependencies": {
     "express": "^4.13.3"
+  },
+  "devDependencies": {
+    "babel-core": "^6.2.1",
+    "babel-loader": "^6.2.0",
+    "bower": "^1.6.8",
+    "css-loader": "^0.23.0",
+    "style-loader": "^0.13.0",
+    "vue-html-loader": "^1.0.0",
+    "vue-loader": "^7.1.4",
+    "webpack": "^1.12.9"
   }
 }
