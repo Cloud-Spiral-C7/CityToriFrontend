@@ -4,7 +4,7 @@ var $ = require('jquery');
 module.exports = {
   methods: {
     startGame: function () {
-      this.$root.currentComponent = 'citytori-gamemode';
+      this.$dispatch('changeComponent', 'citytori-gamemode');
     }
   }
 };

@@ -1,6 +1,10 @@
 <script>
 module.exports = {
-
+  events: {
+    'hook:created': function () {
+      this.$dispatch('changeMessage', 'hoge');
+    }
+  }
 };
 </script>
 

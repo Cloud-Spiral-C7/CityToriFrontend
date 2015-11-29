@@ -9433,7 +9433,7 @@
 	
 	
 	// module
-	exports.push([module.id, "#game-container {\n  background-image: url('/img/background.png');\n  background-size: cover;\n  background-position: bottom;\n}\n\n#page-footer {\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  text-align: center;\n  margin: 10px;\n  color: rgba(0, 0, 0, 0.5);\n}\n\n.bg {\n  background-repeat: repeat-x;\n  background-size: contain;\n  background-position: center;\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n  position: absolute;\n}\n\n.cloud {\n  background-image: url('/img/background_cloud.png');\n}\n\n.bird {\n\tbackground-image: url(\"/img/background_bird.png\");\n}", ""]);
+	exports.push([module.id, "#page-header {\n  position: absolute;\n  width: 100%;\n  padding: 8px 24px;\n  background-color: rgba(0, 0, 0, 0.2);\n  z-index: 1;\n  color: #fff;\n  font-size: 20px;\n}\n\n#game-container {\n  background-image: url('/img/background.png');\n  background-size: cover;\n  background-position: bottom;\n}\n\n#page-footer {\n  position: absolute;\n  width: 100%;\n  bottom: 0;\n  text-align: center;\n  margin: 10px;\n  color: rgba(0, 0, 0, 0.5);\n}\n\n.bg {\n  background-repeat: repeat-x;\n  background-size: contain;\n  background-position: center;\n  width: 100%;\n  height: 100%;\n  margin: 0;\n  padding: 0;\n  position: absolute;\n}\n\n.cloud {\n  background-image: url('/img/background_cloud.png');\n}\n\n.bird {\n\tbackground-image: url(\"/img/background_bird.png\");\n}", ""]);
 	
 	// exports
 
@@ -9759,26 +9759,38 @@
 	module.exports = {
 	  data: function data() {
 	    return {
-	      currentComponent: 'citytori-title'
+	      currentComponent: 'citytori-title',
+	      message: '自分の名前を入力してゲームを始めよう!'
 	    };
 	  },
 	
-	  created: function created() {
-	    var bgCloudX = 0;
-	    var bgBirdX = 0;
+	  events: {
+	    'hook:created': function hookCreated() {
+	      var bgCloudX = 0;
+	      var bgBirdX = 0;
 	
-	    setInterval(function () {
-	      $("#js-bg-cloud").css({
-	        "background-position": bgCloudX++ + "px"
-	      });
-	    }, 150);
+	      setInterval(function () {
+	        $("#js-bg-cloud").css({
+	          "background-position": bgCloudX++ + "px"
+	        });
+	      }, 150);
 	
-	    setInterval(function () {
-	      $("#js-bg-bird").css({
-	        "background-position": bgBirdX++ + "px"
-	      });
-	    }, 50);
+	      setInterval(function () {
+	        $("#js-bg-bird").css({
+	          "background-position": bgBirdX++ + "px"
+	        });
+	      }, 50);
+	    },
+	
+	    changeComponent: function changeComponent(name) {
+	      this.currentComponent = name;
+	    },
+	
+	    changeMessage: function changeMessage(msg) {
+	      this.message = msg;
+	    }
 	  }
+	
 	};
 
 /***/ },
@@ -19001,7 +19013,7 @@
 /* 12 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"game-container\" class=\"container\">\n  <div id=\"js-bg-cloud\" class=\"bg cloud\"></div>\n  <div id=\"js-bg-bird\" class=\"bg bird\"></div>\n  <div id=\"page-footer\">&copy; 2015 Cloud Spiral Team C7</div>\n  <component :is=\"$parent.currentComponent\" transition=\"fade\" transition-mode=\"out-in\"></component>\n</div>";
+	module.exports = "<div id=\"page-header\">{{ message }}</div>\n<div id=\"game-container\" class=\"container\">\n  <div id=\"js-bg-cloud\" class=\"bg cloud\"></div>\n  <div id=\"js-bg-bird\" class=\"bg bird\"></div>\n  <component :is=\"currentComponent\" transition=\"fade\" transition-mode=\"out-in\"></component>\n</div>\n<div id=\"page-footer\">&copy; 2015 Cloud Spiral Team C7</div>";
 
 /***/ },
 /* 13 */
@@ -19079,7 +19091,7 @@
 	module.exports = {
 	  methods: {
 	    startGame: function startGame() {
-	      this.$root.currentComponent = 'citytori-gamemode';
+	      this.$dispatch('changeComponent', 'citytori-gamemode');
 	    }
 	  }
 	};
@@ -19159,9 +19171,15 @@
 /* 21 */
 /***/ function(module, exports) {
 
-	"use strict";
+	'use strict';
 	
-	module.exports = {};
+	module.exports = {
+	  events: {
+	    'hook:created': function hookCreated() {
+	      this.$dispatch('changeMessage', 'hoge');
+	    }
+	  }
+	};
 
 /***/ },
 /* 22 */
