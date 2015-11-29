@@ -19001,7 +19001,7 @@
 /* 12 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"game-container\" class=\"container\">\n  <div id=\"js-bg-cloud\" class=\"bg cloud\"></div>\n  <div id=\"js-bg-bird\" class=\"bg bird\"></div>\n  <div id=\"page-footer\">&copy; 2015 Cloud Spiral Team C7</div>\n  <component :is=\"$parent.currentComponent\"></component>\n</div>";
+	module.exports = "<div id=\"game-container\" class=\"container\">\n  <div id=\"js-bg-cloud\" class=\"bg cloud\"></div>\n  <div id=\"js-bg-bird\" class=\"bg bird\"></div>\n  <div id=\"page-footer\">&copy; 2015 Cloud Spiral Team C7</div>\n  <component :is=\"$parent.currentComponent\" transition=\"fade\" transition-mode=\"out-in\"></component>\n</div>";
 
 /***/ },
 /* 13 */

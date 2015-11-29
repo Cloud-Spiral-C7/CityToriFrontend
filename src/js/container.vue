@@ -32,7 +32,7 @@ module.exports = {
   <div id="js-bg-cloud" class="bg cloud"></div>
   <div id="js-bg-bird" class="bg bird"></div>
   <div id="page-footer">&copy; 2015 Cloud Spiral Team C7</div>
-  <component :is="$parent.currentComponent"></component>
+  <component :is="$parent.currentComponent" transition="fade" transition-mode="out-in"></component>
 </div>
 </template>
 
