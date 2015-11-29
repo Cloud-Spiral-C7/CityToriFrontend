@@ -44,11 +44,15 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Vue = __webpack_require__(3);
-	Vue.component('citytori-container', __webpack_require__(4));
-	Vue.component('citytori-title', __webpack_require__(12));
+	var Vue = __webpack_require__(4);
+	Vue.component('citytori-container', __webpack_require__(5));
+	Vue.component('citytori-title', __webpack_require__(13));
+	Vue.component('citytori-gamemode', __webpack_require__(18));
 	
 	var app = new Vue({
+	  data: {
+	    currentComponent: 'citytori-title'
+	  },
 	  el: 'body'
 	});
 
@@ -56,7 +60,8 @@
 /***/ },
 /* 1 */,
 /* 2 */,
-/* 3 */
+/* 3 */,
+/* 4 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*!
@@ -9369,14 +9374,14 @@
 	}));
 
 /***/ },
-/* 4 */
+/* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(5)
-	module.exports = __webpack_require__(9)
+	__webpack_require__(6)
+	module.exports = __webpack_require__(10)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(11)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(12)
 	if (false) {
 	(function () {
 	var hotAPI = require("vue-hot-reload-api")
@@ -9394,16 +9399,16 @@
 	}
 
 /***/ },
-/* 5 */
+/* 6 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(6);
+	var content = __webpack_require__(7);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
+	var update = __webpack_require__(9)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -9420,10 +9425,10 @@
 	}
 
 /***/ },
-/* 6 */
+/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(7)();
+	exports = module.exports = __webpack_require__(8)();
 	// imports
 	
 	
@@ -9434,7 +9439,7 @@
 
 
 /***/ },
-/* 7 */
+/* 8 */
 /***/ function(module, exports) {
 
 	/*
@@ -9490,7 +9495,7 @@
 
 
 /***/ },
-/* 8 */
+/* 9 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/*
@@ -9744,14 +9749,20 @@
 
 
 /***/ },
-/* 9 */
+/* 10 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 	
-	var $ = __webpack_require__(10);
+	var $ = __webpack_require__(11);
 	
 	module.exports = {
+	  data: function data() {
+	    return {
+	      currentComponent: 'citytori-title'
+	    };
+	  },
+	
 	  created: function created() {
 	    var bgCloudX = 0;
 	    var bgBirdX = 0;
@@ -9771,7 +9782,7 @@
 	};
 
 /***/ },
-/* 10 */
+/* 11 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var __WEBPACK_AMD_DEFINE_ARRAY__, __WEBPACK_AMD_DEFINE_RESULT__;/*!
@@ -18987,20 +18998,20 @@
 
 
 /***/ },
-/* 11 */
+/* 12 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"game-container\" class=\"container\">\n  <div id=\"js-bg-cloud\" class=\"bg cloud\"></div>\n  <div id=\"js-bg-bird\" class=\"bg bird\"></div>\n  <div id=\"page-footer\">&copy; 2015 Cloud Spiral Team C7</div>\n  <citytori-title></citytori-title>\n</div>";
+	module.exports = "<div id=\"game-container\" class=\"container\">\n  <div id=\"js-bg-cloud\" class=\"bg cloud\"></div>\n  <div id=\"js-bg-bird\" class=\"bg bird\"></div>\n  <div id=\"page-footer\">&copy; 2015 Cloud Spiral Team C7</div>\n  <component :is=\"$parent.currentComponent\"></component>\n</div>";
 
 /***/ },
-/* 12 */
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
-	__webpack_require__(13)
-	module.exports = __webpack_require__(15)
+	__webpack_require__(14)
+	module.exports = __webpack_require__(16)
 	
 	if (module.exports.__esModule) module.exports = module.exports.default
-	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(16)
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(17)
 	if (false) {
 	(function () {
 	var hotAPI = require("vue-hot-reload-api")
@@ -19018,16 +19029,16 @@
 	}
 
 /***/ },
-/* 13 */
+/* 14 */
 /***/ function(module, exports, __webpack_require__) {
 
 	// style-loader: Adds some css to the DOM by adding a <style> tag
 	
 	// load the styles
-	var content = __webpack_require__(14);
+	var content = __webpack_require__(15);
 	if(typeof content === 'string') content = [[module.id, content, '']];
 	// add the styles to the DOM
-	var update = __webpack_require__(8)(content, {});
+	var update = __webpack_require__(9)(content, {});
 	if(content.locals) module.exports = content.locals;
 	// Hot Module Replacement
 	if(false) {
@@ -19044,34 +19055,119 @@
 	}
 
 /***/ },
-/* 14 */
+/* 15 */
 /***/ function(module, exports, __webpack_require__) {
 
-	exports = module.exports = __webpack_require__(7)();
+	exports = module.exports = __webpack_require__(8)();
 	// imports
 	
 	
 	// module
-	exports.push([module.id, "#title-container {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  margin: auto;\n  height: 400px;\n}\n\n#title-container > .title {\n  text-align: center;\n  color: #fff;\n  font-size: 56px;\n  text-shadow: 3px 4px #CCC;\n}\n\n#title-container > .sub-title {\n  margin-bottom: 40px;\n  text-align: center;\n  color: #fff;\n  text-shadow: 2px 3px #CCC;\n}", ""]);
+	exports.push([module.id, "#title-container {\n  position: absolute;\n  width: 300px;\n  height: 400px;\n}\n\n#title-container > .title {\n  text-align: center;\n  color: #fff;\n  font-size: 56px;\n  text-shadow: 3px 4px #CCC;\n}\n\n#title-container > .sub-title {\n  margin-bottom: 40px;\n  text-align: center;\n  color: #fff;\n  text-shadow: 2px 3px #CCC;\n}", ""]);
 	
 	// exports
 
 
 /***/ },
-/* 15 */
+/* 16 */
 /***/ function(module, exports, __webpack_require__) {
 
 	'use strict';
 	
-	var $ = __webpack_require__(10);
+	var $ = __webpack_require__(11);
+	
+	module.exports = {
+	  methods: {
+	    startGame: function startGame() {
+	      this.$root.currentComponent = 'citytori-gamemode';
+	    }
+	  }
+	};
+
+/***/ },
+/* 17 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=\"title-container\" class=\"container block-center\">\n  <h1 class=\"title\">シティとり</h1>\n  <h2 class=\"sub-title\">- A new shiritori game -</h2>\n\n  <form @submit.prevent=\"startGame\" class=\"form\">\n    <p>名前を入力してください</p>\n    <input class=\"form-input\" type=\"text\"><br>\n    <button class=\"form-button\" type=\"submit\">ゲームを始める</button>\n  </form>\n</div>";
+
+/***/ },
+/* 18 */
+/***/ function(module, exports, __webpack_require__) {
+
+	__webpack_require__(19)
+	module.exports = __webpack_require__(21)
+	
+	if (module.exports.__esModule) module.exports = module.exports.default
+	;(typeof module.exports === "function" ? module.exports.options : module.exports).template = __webpack_require__(22)
+	if (false) {
+	(function () {
+	var hotAPI = require("vue-hot-reload-api")
+	hotAPI.install(require("vue"))
+	if (!hotAPI.compatible) return
+	var id = "-!babel-loader?presets[]=es2015&plugins[]=transform-runtime!./../../node_modules/vue-loader/lib/selector.js?type=script&index=0!./gamemode.vue"
+	hotAPI.createRecord(id, module.exports)
+	module.hot.accept(["-!babel-loader?presets[]=es2015&plugins[]=transform-runtime!./../../node_modules/vue-loader/lib/selector.js?type=script&index=0!./gamemode.vue","-!vue-html-loader!./../../node_modules/vue-loader/lib/selector.js?type=template&index=0!./gamemode.vue"], function () {
+	var newOptions = require("-!babel-loader?presets[]=es2015&plugins[]=transform-runtime!./../../node_modules/vue-loader/lib/selector.js?type=script&index=0!./gamemode.vue")
+	if (newOptions && newOptions.__esModule) newOptions = newOptions.default
+	var newTemplate = require("-!vue-html-loader!./../../node_modules/vue-loader/lib/selector.js?type=template&index=0!./gamemode.vue")
+	hotAPI.update(id, newOptions, newTemplate)
+	})
+	})()
+	}
+
+/***/ },
+/* 19 */
+/***/ function(module, exports, __webpack_require__) {
+
+	// style-loader: Adds some css to the DOM by adding a <style> tag
+	
+	// load the styles
+	var content = __webpack_require__(20);
+	if(typeof content === 'string') content = [[module.id, content, '']];
+	// add the styles to the DOM
+	var update = __webpack_require__(9)(content, {});
+	if(content.locals) module.exports = content.locals;
+	// Hot Module Replacement
+	if(false) {
+		// When the styles change, update the <style> tags
+		if(!content.locals) {
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-75e06bc0&file=gamemode.vue!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./gamemode.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-75e06bc0&file=gamemode.vue!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./gamemode.vue");
+				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
+				update(newContent);
+			});
+		}
+		// When the module is disposed, remove the <style> tags
+		module.hot.dispose(function() { update(); });
+	}
+
+/***/ },
+/* 20 */
+/***/ function(module, exports, __webpack_require__) {
+
+	exports = module.exports = __webpack_require__(8)();
+	// imports
+	
+	
+	// module
+	exports.push([module.id, "#gamemode-container {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  margin: auto;\n  width: 500px;\n  height: 200px;\n}\n\n.player-icon-group {\n  margin: 8px 0 16px 0;\n  line-height: 1;\n  font-size: 40px;\n  text-shadow: #FF9663 2px 2px 0px, #FF9663 -2px 2px 0px,\n             #FF9663 2px -2px 0px, #FF9663 -2px -2px 0px;\n  letter-spacing: 2px;\n}\n\n.row::after {\n  content: '';\n  clear: both;\n}\n\n.col-50 {\n  width: 50%;\n  float: left;\n  padding: 12px;\n}", ""]);
+	
+	// exports
+
+
+/***/ },
+/* 21 */
+/***/ function(module, exports) {
+
+	"use strict";
 	
 	module.exports = {};
 
 /***/ },
-/* 16 */
+/* 22 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"title-container\" class=\"container\">\n  <h1 class=\"title\">シティとり</h1>\n  <h2 class=\"sub-title\">- A new shiritori game -</h2>\n  <form class=\"form\">\n    <p>名前を入力してください</p>\n    <input class=\"form-input\" type=\"text\"><br>\n    <button class=\"form-button\" type=\"submit\">ゲームを始める</button>\n  </form>\n</div>";
+	module.exports = "<div id=\"gamemode-container\" class=\"row block-center\">\n  <div class=\"col-50\">\n    <div class=\"form\">\n      <p>1人でプレイ</p>\n      <p class=\"player-icon-group\">\n        <i class=\"fa fa-male\"></i>\n      </p>\n      <a href=\"#\" class=\"form-button block\">OK</a>\n    </div>\n  </div>\n\n  <div class=\"col-50\">\n    <div class=\"form\">\n      <p>みんなでプレイ</p>\n      <p class=\"player-icon-group\">\n        <i class=\"fa fa-male\"></i><i class=\"fa fa-male\"></i><i class=\"fa fa-male\"></i><i class=\"fa fa-male\"></i>\n      </p>\n      <a href=\"#\" class=\"form-button block\">OK</a>\n    </div>\n  </div>\n</div>";
 
 /***/ }
 /******/ ]);

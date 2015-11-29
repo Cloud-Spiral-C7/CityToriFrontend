@@ -2,6 +2,12 @@
 var $ = require('jquery');
 
 module.exports = {
+  data: function () {
+    return {
+      currentComponent: 'citytori-title'
+    };
+  },
+
   created: function () {
     var bgCloudX = 0;
     var bgBirdX = 0;
@@ -26,7 +32,7 @@ module.exports = {
   <div id="js-bg-cloud" class="bg cloud"></div>
   <div id="js-bg-bird" class="bg bird"></div>
   <div id="page-footer">&copy; 2015 Cloud Spiral Team C7</div>
-  <citytori-title></citytori-title>
+  <component :is="$parent.currentComponent"></component>
 </div>
 </template>
 
