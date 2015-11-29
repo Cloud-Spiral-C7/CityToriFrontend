@@ -4,7 +4,7 @@ var $ = require('jquery');
 module.exports = {
   methods: {
     startGame: function () {
-      this.$dispatch('changeComponent', 'citytori-gamemode');
+      this.$dispatch('changeComponent', 'citytori-playermode');
     }
   }
 };
@@ -17,7 +17,7 @@ module.exports = {
 
   <form @submit.prevent="startGame" class="form">
     <p>名前を入力してください</p>
-    <input class="form-input" type="text"><br>
+    <input v-model="name" class="form-input" type="text"><br>
     <button class="form-button" type="submit">ゲームを始める</button>
   </form>
 </div>

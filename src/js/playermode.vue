@@ -9,7 +9,7 @@ module.exports = {
 </script>
 
 <template>
-<div id="gamemode-container" class="row block-center">
+<div id="playermode-container" class="row block-center">
   <div class="col-50">
     <div class="form">
       <p>1人でプレイ</p>
@@ -33,7 +33,7 @@ module.exports = {
 </template>
 
 <style>
-#gamemode-container {
+#playermode-container {
   position: absolute;
   left: 0;
   right: 0;

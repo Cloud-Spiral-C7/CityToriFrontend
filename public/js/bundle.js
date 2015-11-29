@@ -47,7 +47,7 @@
 	var Vue = __webpack_require__(4);
 	Vue.component('citytori-container', __webpack_require__(5));
 	Vue.component('citytori-title', __webpack_require__(13));
-	Vue.component('citytori-gamemode', __webpack_require__(18));
+	Vue.component('citytori-playermode', __webpack_require__(18));
 	
 	var app = new Vue({
 	  data: {
@@ -19091,7 +19091,7 @@
 	module.exports = {
 	  methods: {
 	    startGame: function startGame() {
-	      this.$dispatch('changeComponent', 'citytori-gamemode');
+	      this.$dispatch('changeComponent', 'citytori-playermode');
 	    }
 	  }
 	};
@@ -19100,7 +19100,7 @@
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"title-container\" class=\"container block-center\">\n  <h1 class=\"title\">シティとり</h1>\n  <h2 class=\"sub-title\">- A new shiritori game -</h2>\n\n  <form @submit.prevent=\"startGame\" class=\"form\">\n    <p>名前を入力してください</p>\n    <input class=\"form-input\" type=\"text\"><br>\n    <button class=\"form-button\" type=\"submit\">ゲームを始める</button>\n  </form>\n</div>";
+	module.exports = "<div id=\"title-container\" class=\"container block-center\">\n  <h1 class=\"title\">シティとり</h1>\n  <h2 class=\"sub-title\">- A new shiritori game -</h2>\n\n  <form @submit.prevent=\"startGame\" class=\"form\">\n    <p>名前を入力してください</p>\n    <input v-model=\"name\" class=\"form-input\" type=\"text\"><br>\n    <button class=\"form-button\" type=\"submit\">ゲームを始める</button>\n  </form>\n</div>";
 
 /***/ },
 /* 18 */
@@ -19116,12 +19116,12 @@
 	var hotAPI = require("vue-hot-reload-api")
 	hotAPI.install(require("vue"))
 	if (!hotAPI.compatible) return
-	var id = "-!babel-loader?presets[]=es2015&plugins[]=transform-runtime!./../../node_modules/vue-loader/lib/selector.js?type=script&index=0!./gamemode.vue"
+	var id = "-!babel-loader?presets[]=es2015&plugins[]=transform-runtime!./../../node_modules/vue-loader/lib/selector.js?type=script&index=0!./playermode.vue"
 	hotAPI.createRecord(id, module.exports)
-	module.hot.accept(["-!babel-loader?presets[]=es2015&plugins[]=transform-runtime!./../../node_modules/vue-loader/lib/selector.js?type=script&index=0!./gamemode.vue","-!vue-html-loader!./../../node_modules/vue-loader/lib/selector.js?type=template&index=0!./gamemode.vue"], function () {
-	var newOptions = require("-!babel-loader?presets[]=es2015&plugins[]=transform-runtime!./../../node_modules/vue-loader/lib/selector.js?type=script&index=0!./gamemode.vue")
+	module.hot.accept(["-!babel-loader?presets[]=es2015&plugins[]=transform-runtime!./../../node_modules/vue-loader/lib/selector.js?type=script&index=0!./playermode.vue","-!vue-html-loader!./../../node_modules/vue-loader/lib/selector.js?type=template&index=0!./playermode.vue"], function () {
+	var newOptions = require("-!babel-loader?presets[]=es2015&plugins[]=transform-runtime!./../../node_modules/vue-loader/lib/selector.js?type=script&index=0!./playermode.vue")
 	if (newOptions && newOptions.__esModule) newOptions = newOptions.default
-	var newTemplate = require("-!vue-html-loader!./../../node_modules/vue-loader/lib/selector.js?type=template&index=0!./gamemode.vue")
+	var newTemplate = require("-!vue-html-loader!./../../node_modules/vue-loader/lib/selector.js?type=template&index=0!./playermode.vue")
 	hotAPI.update(id, newOptions, newTemplate)
 	})
 	})()
@@ -19143,8 +19143,8 @@
 	if(false) {
 		// When the styles change, update the <style> tags
 		if(!content.locals) {
-			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-75e06bc0&file=gamemode.vue!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./gamemode.vue", function() {
-				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-75e06bc0&file=gamemode.vue!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./gamemode.vue");
+			module.hot.accept("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-22ece2ef&file=playermode.vue!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./playermode.vue", function() {
+				var newContent = require("!!./../../node_modules/css-loader/index.js!./../../node_modules/vue-loader/lib/style-rewriter.js?id=_v-22ece2ef&file=playermode.vue!./../../node_modules/vue-loader/lib/selector.js?type=style&index=0!./playermode.vue");
 				if(typeof newContent === 'string') newContent = [[module.id, newContent, '']];
 				update(newContent);
 			});
@@ -19162,7 +19162,7 @@
 	
 	
 	// module
-	exports.push([module.id, "#gamemode-container {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  margin: auto;\n  width: 500px;\n  height: 200px;\n}\n\n.player-icon-group {\n  margin: 8px 0 16px 0;\n  line-height: 1;\n  font-size: 40px;\n  text-shadow: #FF9663 2px 2px 0px, #FF9663 -2px 2px 0px,\n             #FF9663 2px -2px 0px, #FF9663 -2px -2px 0px;\n  letter-spacing: 2px;\n}\n\n.row::after {\n  content: '';\n  clear: both;\n}\n\n.col-50 {\n  width: 50%;\n  float: left;\n  padding: 12px;\n}", ""]);
+	exports.push([module.id, "#playermode-container {\n  position: absolute;\n  left: 0;\n  right: 0;\n  top: 0;\n  bottom: 0;\n  margin: auto;\n  width: 500px;\n  height: 200px;\n}\n\n.player-icon-group {\n  margin: 8px 0 16px 0;\n  line-height: 1;\n  font-size: 40px;\n  text-shadow: #FF9663 2px 2px 0px, #FF9663 -2px 2px 0px,\n             #FF9663 2px -2px 0px, #FF9663 -2px -2px 0px;\n  letter-spacing: 2px;\n}\n\n.row::after {\n  content: '';\n  clear: both;\n}\n\n.col-50 {\n  width: 50%;\n  float: left;\n  padding: 12px;\n}", ""]);
 	
 	// exports
 
@@ -19185,7 +19185,7 @@
 /* 22 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=\"gamemode-container\" class=\"row block-center\">\n  <div class=\"col-50\">\n    <div class=\"form\">\n      <p>1人でプレイ</p>\n      <p class=\"player-icon-group\">\n        <i class=\"fa fa-male\"></i>\n      </p>\n      <a href=\"#\" class=\"form-button block\">OK</a>\n    </div>\n  </div>\n\n  <div class=\"col-50\">\n    <div class=\"form\">\n      <p>みんなでプレイ</p>\n      <p class=\"player-icon-group\">\n        <i class=\"fa fa-male\"></i><i class=\"fa fa-male\"></i><i class=\"fa fa-male\"></i><i class=\"fa fa-male\"></i>\n      </p>\n      <a href=\"#\" class=\"form-button block\">OK</a>\n    </div>\n  </div>\n</div>";
+	module.exports = "<div id=\"playermode-container\" class=\"row block-center\">\n  <div class=\"col-50\">\n    <div class=\"form\">\n      <p>1人でプレイ</p>\n      <p class=\"player-icon-group\">\n        <i class=\"fa fa-male\"></i>\n      </p>\n      <a href=\"#\" class=\"form-button block\">OK</a>\n    </div>\n  </div>\n\n  <div class=\"col-50\">\n    <div class=\"form\">\n      <p>みんなでプレイ</p>\n      <p class=\"player-icon-group\">\n        <i class=\"fa fa-male\"></i><i class=\"fa fa-male\"></i><i class=\"fa fa-male\"></i><i class=\"fa fa-male\"></i>\n      </p>\n      <a href=\"#\" class=\"form-button block\">OK</a>\n    </div>\n  </div>\n</div>";
 
 /***/ }
 /******/ ]);
