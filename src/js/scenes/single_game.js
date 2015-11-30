@@ -1,40 +1,54 @@
-Game = function (element) {
+var util = require('../util');
+var Scene = require('../scene');
+var api = require('../api');
+
+var GameScene = function () {
+  Scene.call(this, require('../../html/play_game_single.html'));
+
+  var element = $('#map')[0];
   var that = this;
 
-  api.initialValueIndex({roomId: $.cookie('roomId')}).done(function (data) {
-    console.log(data);
+  this.on('shown', function () {
+    api.initialValueIndex({roomId: $.cookie('roomId')}).done(function (data) {
+      console.log(data);
 
-    that.geocoder = new google.maps.Geocoder();
-    that.map = new google.maps.Map(element, {
-      center: {lat: 35.681382, lng: 139.766084},
-      zoom: 12,
-      // maxZoom: 12,
-      // minZoom: 12,
-      disableDefaultUI: true,
-      // mapTypeId: google.maps.MapTypeId.TERRAIN,
-      styles: [
-        {
-          featureType: 'all',
-          elementType: 'labels',
-          stylers: [{ visibility: 'off' }]
-        },
-        {
-          featureType: 'administrative.locality',
-          elementType: 'labels',
-          stylers: [{ visibility: 'on' }]
-        },
-      ]
+      that.geocoder = new google.maps.Geocoder();
+      that.map = new google.maps.Map(document.querySelector('#map'), {
+        center: {lat: 35.681382, lng: 139.766084},
+        zoom: 12,
+        // maxZoom: 12,
+        // minZoom: 12,
+        disableDefaultUI: true,
+        // mapTypeId: google.maps.MapTypeId.TERRAIN,
+        styles: [
+          {
+            featureType: 'all',
+            elementType: 'labels',
+            stylers: [{ visibility: 'off' }]
+          },
+          {
+            featureType: 'administrative.locality',
+            elementType: 'labels',
+            stylers: [{ visibility: 'on' }]
+          },
+        ]
+      });
+
+      that.popup = undefined;
+      that.map.addListener('click', that.mapClicked.bind(that));
+      that.currentTheme = { locationName: '最初のお題', phonetic: data.theme };
+      that.placeTheme = document.querySelector('#js-place-theme');
+      that.placeYours = document.querySelector('#js-place-yours');
     });
-
-    that.popup = undefined;
-    that.map.addListener('click', that.mapClicked.bind(that));
-    that.currentTheme = { locationName: '最初のお題', phonetic: data.theme };
-    that.placeTheme = document.querySelector('#js-place-theme');
-    that.placeYours = document.querySelector('#js-place-yours');
   });
-};
 
-Object.defineProperties(Game.prototype, {
+}, p = GameScene.prototype;
+
+util.inherits(GameScene, Scene);
+console.log(GameScene.prototype, Scene.prototype);
+
+
+Object.defineProperties(p, {
   'currentTheme': {
     get: function () { return this._currentTheme; },
     set: function (value) {
@@ -47,7 +61,7 @@ Object.defineProperties(Game.prototype, {
   }
 });
 
-Game.prototype.mapClicked = function (e) {
+p.mapClicked = function (e) {
   var that = this;
   if (this.popup) this.popup.close();
 
@@ -69,7 +83,7 @@ Game.prototype.mapClicked = function (e) {
   });
 };
 
-Game.prototype.locationNameClicked = function (e, place) {
+p.locationNameClicked = function (e, place) {
   this.popup.close();
   this.answer(place);
   // api.answersCreate(
@@ -83,7 +97,7 @@ Game.prototype.locationNameClicked = function (e, place) {
   // });
 };
 
-Game.prototype.createLocationLinkElement = function (place) {
+p.createLocationLinkElement = function (place) {
   var that = this;
   var link = document.createElement('a');
 
@@ -98,7 +112,7 @@ Game.prototype.createLocationLinkElement = function (place) {
   return link;
 };
 
-Game.prototype.createInfoWindowContentElement = function (places) {
+p.createInfoWindowContentElement = function (places) {
   var that = this;
   var content = document.createElement('div');
   var list = document.createElement('ul');
@@ -121,7 +135,7 @@ Game.prototype.createInfoWindowContentElement = function (places) {
   return content;
 };
 
-Game.prototype.answer = function (place) {
+p.answer = function (place) {
   var that = this;
   console.log(place);
   api.answersCreate({roomId: $.cookie('roomId')}, {
@@ -154,11 +168,11 @@ Game.prototype.answer = function (place) {
   return true;
 };
 
-Game.prototype.gameOver = function (place) {
+p.gameOver = function (place) {
 
 };
 
-Game.prototype.mistake = function (place) {
+p.mistake = function (place) {
   // body...
 };
 
@@ -167,7 +181,7 @@ Game.prototype.mistake = function (place) {
  * @param {String} sentence - 解析対象の文
  * @returns {Object} - API呼び出し結果
  */
-Game.prototype.callAnalyseMorphApi = function (sentence) {
+p.callAnalyseMorphApi = function (sentence) {
   return $.ajax({
     type: 'post',
     url: 'https://labs.goo.ne.jp/api/morph',
@@ -183,7 +197,7 @@ Game.prototype.callAnalyseMorphApi = function (sentence) {
  * @param {Array} 形態素解析で得られた文の単語リスト
  * @returns {Array} しりとりで利用可能な地名リスト
  */
-Game.prototype.getAvailableWords = function (places, done) {
+p.getAvailableWords = function (places, done) {
   var availableWords = [];
 
   this.callAnalyseMorphApi(places.join('/')).done(function (data) {
@@ -207,7 +221,7 @@ Game.prototype.getAvailableWords = function (places, done) {
  * @param {Array} 住所のコンポーネントリスト
  * @returns {Array} しりとりで利用可能な地名リスト
  */
-Game.prototype.selectAvailablePlaces = function (addrComponents) {
+p.selectAvailablePlaces = function (addrComponents) {
   var availablePlaces = [];
 
   addrComponents.forEach(function (component) {
@@ -221,4 +235,6 @@ Game.prototype.selectAvailablePlaces = function (addrComponents) {
   });
 
   return availablePlaces.reverse();
-}
+};
+
+module.exports = GameScene;

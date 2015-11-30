@@ -1,5 +1,6 @@
 var Game = function () {
   this._scenes = {};
+  this._currentScene = null;
 }, p = Game.prototype;
 
 Object.defineProperties(p, {
@@ -8,13 +9,25 @@ Object.defineProperties(p, {
       return this._scenes;
     },
     set: function (value) {
-      this._scenes = value;
+      for (var key in value) {
+        this.addScene(key, value[key]);
+      }
+    }
+  },
+  currentScene: {
+    get: function () {
+      return this._currentScene;
+    },
+    set: function (value) {
+      this._currentScene = value;
+      window.currentScene = value;
     }
   }
 });
 
 p.addScene = function (name, scene) {
   this._scenes[name] = scene;
+  scene._game = this;
 }
 
 p.transition = function (name, header, cb) {
@@ -33,17 +46,22 @@ p.transition = function (name, header, cb) {
   	}, 500, "easeInQuad");
   }
 
-	var panelHTML = this.scenes[name];
-	if (panelHTML === undefined) {
+  var Scene = this.scenes[name];
+
+	if (Scene === undefined) {
 		return console.warn('Not implemented panel:', name);
 	}
 
+  this.currentScene = new Scene;
+
 	var $main = $('#main_in');
   var $description = $('#description');
+  var that = this;
 
   fadeout($description);
 	fadeout($main, function () {
-		$main.html(panelHTML);
+		$main.html(that.currentScene.view);
+    that.currentScene.emit('shown');
 		fadein($main);
     fadein($description);
 
