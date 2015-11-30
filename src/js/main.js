@@ -8,7 +8,7 @@ require('./title_layout');
 
 var Game = require('./game');
 var game = window.game = new Game
-game.scenes = require('./scenes');
+game.scenes = require('./scenes/');
 
 game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
   require('./title_function');

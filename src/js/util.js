@@ -1,4 +1,4 @@
-var util = {
+module.exports = {
   callApi: function (method, path, data) {
     var hostname = 'ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com';
     var url = 'http://' + hostname + '/citytori/api' + path;
@@ -13,11 +13,11 @@ var util = {
   },
 
   apiGet: function (path, data) {
-    return util.callApi('get', path, data);
+    return this.callApi('get', path, data);
   },
 
   apiPost: function (path, data) {
-    return util.callApi('post', path, data);
+    return this.callApi('post', path, data);
   },
 
   /**
@@ -41,5 +41,9 @@ var util = {
   		var chr = match.charCodeAt(0) - 0x60;
   		return String.fromCharCode(chr);
   	});
+  },
+
+  inherits: function(childCtor, parentCtor) {
+    Object.setPrototypeOf(childCtor.prototype, parentCtor.prototype);
   }
 };

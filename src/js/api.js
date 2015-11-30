@@ -1,4 +1,6 @@
-var api = {
+var util = require('./util');
+
+module.exports = {
   answersCreate: function (params, data) {
     return util.apiPost('/rooms/' + params.roomId + '/answers', data);
   },
