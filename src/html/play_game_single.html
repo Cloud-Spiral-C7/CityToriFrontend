@@ -1,0 +1,23 @@
+<div class="map" id="map"></div>
+<div class="navigation">
+  <h2>現在のお題</h2>
+  <div id="js-place-theme" class="place">
+    <div class="name">有楽 (町)</div>
+    <div class="phonetic">ゆうらく (ちょう)</div>
+  </div>
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+<script src="/js/util.js"></script>
+<script src="/js/api.js"></script>
+<script src="/js/game.js"></script>
+<script>
+function initMap() {
+  new Game(document.getElementById('map'));
+}
+</script>
+<script async defer
+src="https://maps.googleapis.com/maps/api/js?key=AIzaSyCz-nxKgKLTvgFeMfjBLU_PkcYwpOOULR4&callback=initMap">
+</script>
+<script src="/js/jquery.cookie.js"></script>
