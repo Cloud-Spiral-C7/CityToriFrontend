@@ -6,6 +6,9 @@ Object.defineProperties(p, {
   scenes: {
     get: function () {
       return this._scenes;
+    },
+    set: function (value) {
+      this._scenes = value;
     }
   }
 });

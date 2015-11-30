@@ -50,19 +50,14 @@
 	__webpack_require__(2);
 	__webpack_require__(3);
 	__webpack_require__(4);
-	__webpack_require__(7);
+	__webpack_require__(5);
 
 	var Game = __webpack_require__(6);
 	var game = window.game = new Game
-
-	game.addScene('title', __webpack_require__(5));
-	game.addScene('selectPlayMode', __webpack_require__(9));
-	game.addScene('selectSinglePlayMode', __webpack_require__(10));
-	game.addScene('configSinglePlayMode', __webpack_require__(11));
-	game.addScene('playGameSingle', __webpack_require__(13));
+	game.scenes = __webpack_require__(7);
 
 	game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
-	  __webpack_require__(8);
+	  __webpack_require__(13);
 	});
 
 	$(function () {
@@ -9991,71 +9986,6 @@
 
 /***/ },
 /* 5 */
-/***/ function(module, exports) {
-
-	module.exports = "<div id=titlelogo></div><div id=registerform><input id=\"name\"><br><button id=register_on></button> <button id=register_off></button></div>";
-
-/***/ },
-/* 6 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function($) {var Game = function () {
-	  this._scenes = {};
-	}, p = Game.prototype;
-
-	Object.defineProperties(p, {
-	  scenes: {
-	    get: function () {
-	      return this._scenes;
-	    }
-	  }
-	});
-
-	p.addScene = function (name, scene) {
-	  this._scenes[name] = scene;
-	}
-
-	p.transition = function (name, header, cb) {
-	  function fadeout (o, cb) {
-	  	o.animate({
-	  		"opacity": 0
-	  	}, 500, "easeInQuad", cb);
-	  }
-
-	  function fadein (o) {
-	  	o.css({
-	  		"opacity": 0
-	  	});
-	  	o.animate({
-	  		"opacity": 1
-	  	}, 500, "easeInQuad");
-	  }
-
-		var panelHTML = this.scenes[name];
-		if (panelHTML === undefined) {
-			return console.warn('Not implemented panel:', name);
-		}
-
-		var $main = $('#main_in');
-	  var $description = $('#description');
-
-	  fadeout($description);
-		fadeout($main, function () {
-			$main.html(panelHTML);
-			fadein($main);
-	    fadein($description);
-
-			$("#description").text(header);
-	    if (cb) cb();
-		});
-	}
-
-	module.exports = Game;
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ },
-/* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {
@@ -10153,7 +10083,112 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
+/* 6 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($) {var Game = function () {
+	  this._scenes = {};
+	}, p = Game.prototype;
+
+	Object.defineProperties(p, {
+	  scenes: {
+	    get: function () {
+	      return this._scenes;
+	    },
+	    set: function (value) {
+	      this._scenes = value;
+	    }
+	  }
+	});
+
+	p.addScene = function (name, scene) {
+	  this._scenes[name] = scene;
+	}
+
+	p.transition = function (name, header, cb) {
+	  function fadeout (o, cb) {
+	  	o.animate({
+	  		"opacity": 0
+	  	}, 500, "easeInQuad", cb);
+	  }
+
+	  function fadein (o) {
+	  	o.css({
+	  		"opacity": 0
+	  	});
+	  	o.animate({
+	  		"opacity": 1
+	  	}, 500, "easeInQuad");
+	  }
+
+		var panelHTML = this.scenes[name];
+		if (panelHTML === undefined) {
+			return console.warn('Not implemented panel:', name);
+		}
+
+		var $main = $('#main_in');
+	  var $description = $('#description');
+
+	  fadeout($description);
+		fadeout($main, function () {
+			$main.html(panelHTML);
+			fadein($main);
+	    fadein($description);
+
+			$("#description").text(header);
+	    if (cb) cb();
+		});
+	}
+
+	module.exports = Game;
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ },
+/* 7 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = {
+	  title: __webpack_require__(8),
+	  selectPlayMode: __webpack_require__(9),
+	  selectSinglePlayMode: __webpack_require__(10),
+	  configSinglePlayMode: __webpack_require__(11),
+	  playGameSingle: __webpack_require__(12)
+	};
+
+
+/***/ },
 /* 8 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=titlelogo></div><div id=registerform><input id=\"name\"><br><button id=register_on></button> <button id=register_off></button></div>";
+
+/***/ },
+/* 9 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=singleplayform><button class=ok id=playsingle></button></div><div id=multiplayform><button class=ok id=playmulti></button></div>";
+
+/***/ },
+/* 10 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=singleplayicon></div><div id=timeattackform><button class=ok2 id=\"playtimeattack\"></div><div id=scoreattackform><button class=ok2 id=\"playscoreattack\"></div>";
+
+/***/ },
+/* 11 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=timeattackicon></div><div id=settingform><input type=number id=wordnum step=5 min=5 max=50 value=\"10\"><br><button id=\"setting\"></div>";
+
+/***/ },
+/* 12 */
+/***/ function(module, exports) {
+
+	module.exports = "<div class=map id=map></div><div class=navigation><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></div><script src=https://code.jquery.com/jquery-2.1.4.min.js></script><script src=/js/util.js></script><script src=/js/api.js></script><script src=/js/game.js></script><script>function initMap() {\n  new Game(document.getElementById('map'));\n}</script><script async defer src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyCz-nxKgKLTvgFeMfjBLU_PkcYwpOOULR4&callback=initMap\"></script><script src=/js/jquery.cookie.js></script>";
+
+/***/ },
+/* 13 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {// register name
@@ -10321,31 +10356,6 @@
 	});
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ },
-/* 9 */
-/***/ function(module, exports) {
-
-	module.exports = "<div id=singleplayform><button class=ok id=playsingle></button></div><div id=multiplayform><button class=ok id=playmulti></button></div>";
-
-/***/ },
-/* 10 */
-/***/ function(module, exports) {
-
-	module.exports = "<div id=singleplayicon></div><div id=timeattackform><button class=ok2 id=\"playtimeattack\"></div><div id=scoreattackform><button class=ok2 id=\"playscoreattack\"></div>";
-
-/***/ },
-/* 11 */
-/***/ function(module, exports) {
-
-	module.exports = "<div id=timeattackicon></div><div id=settingform><input type=number id=wordnum step=5 min=5 max=50 value=\"10\"><br><button id=\"setting\"></div>";
-
-/***/ },
-/* 12 */,
-/* 13 */
-/***/ function(module, exports) {
-
-	module.exports = "<div class=map id=map></div><div class=navigation><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></div><script src=https://code.jquery.com/jquery-2.1.4.min.js></script><script src=/js/util.js></script><script src=/js/api.js></script><script src=/js/game.js></script><script>function initMap() {\n  new Game(document.getElementById('map'));\n}</script><script async defer src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyCz-nxKgKLTvgFeMfjBLU_PkcYwpOOULR4&callback=initMap\"></script><script src=/js/jquery.cookie.js></script>";
 
 /***/ }
 /******/ ]);
