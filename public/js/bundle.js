@@ -54,12 +54,7 @@
 
 	var Game = __webpack_require__(6);
 	var game = window.game = new Game
-
-	game.addScene('title', __webpack_require__(5));
-	game.addScene('selectPlayMode', __webpack_require__(9));
-	game.addScene('selectSinglePlayMode', __webpack_require__(10));
-	game.addScene('configSinglePlayMode', __webpack_require__(11));
-	game.addScene('playGameSingle', __webpack_require__(13));
+	game.scenes = __webpack_require__(14);
 
 	game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
 	  __webpack_require__(8);
@@ -10007,6 +10002,9 @@
 	  scenes: {
 	    get: function () {
 	      return this._scenes;
+	    },
+	    set: function (value) {
+	      this._scenes = value;
 	    }
 	  }
 	});
@@ -10346,6 +10344,19 @@
 /***/ function(module, exports) {
 
 	module.exports = "<div class=map id=map></div><div class=navigation><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></div><script src=https://code.jquery.com/jquery-2.1.4.min.js></script><script src=/js/util.js></script><script src=/js/api.js></script><script src=/js/game.js></script><script>function initMap() {\n  new Game(document.getElementById('map'));\n}</script><script async defer src=\"https://maps.googleapis.com/maps/api/js?key=AIzaSyCz-nxKgKLTvgFeMfjBLU_PkcYwpOOULR4&callback=initMap\"></script><script src=/js/jquery.cookie.js></script>";
+
+/***/ },
+/* 14 */
+/***/ function(module, exports, __webpack_require__) {
+
+	module.exports = {
+	  title: __webpack_require__(5),
+	  selectPlayMode: __webpack_require__(9),
+	  selectSinglePlayMode: __webpack_require__(10),
+	  configSinglePlayMode: __webpack_require__(11),
+	  playGameSingle: __webpack_require__(13)
+	};
+
 
 /***/ }
 /******/ ]);
