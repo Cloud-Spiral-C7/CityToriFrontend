@@ -10381,8 +10381,6 @@
 	}, p = GameScene.prototype;
 
 	util.inherits(GameScene, Scene);
-	console.log(GameScene.prototype, Scene.prototype);
-
 
 	Object.defineProperties(p, {
 	  'currentTheme': {
@@ -10408,29 +10406,42 @@
 
 	    that.getAvailableWords(availablePlaces, function (err, places) {
 	      console.debug(places);
+	      //
+	      // that.popup = new google.maps.InfoWindow({
+	      //   content: that.createInfoWindowContentElement(places),
+	      //   position: e.latLng
+	      // });
 
-	      that.popup = new google.maps.InfoWindow({
-	        content: that.createInfoWindowContentElement(places),
-	        position: e.latLng
-	      });
-
-	      that.popup.open(that.map);
+	      that.openAnswerDialog(places);
+	      // that.popup.open(that.map);
 	    });
 	  });
 	};
 
+	p.openAnswerDialog = function (places) {
+	  var that = this;
+
+	  places.forEach(function (place) {
+	    var $listItem = $('<li><a href="#">' + place.locationName + '</a></li>');
+
+	    $listItem.on('click', function (e) {
+	      that.locationNameClicked(e, place)
+	    });
+
+	    $('#answer-candidates').append($listItem);
+	  });
+
+	  $('#js-game-answer-dialog').show();
+	}
+
+	p.closeAnswerDialog = function (places) {
+	  $('#js-game-answer-dialog').hide();
+	  $('#answer-candidates').html('');
+	}
+
 	p.locationNameClicked = function (e, place) {
-	  this.popup.close();
+	  this.closeAnswerDialog();
 	  this.answer(place);
-	  // api.answersCreate(
-	  //   { roomId: util.getQueryParam('roomId') },
-	  //   {
-	  //     locationName: place.locationName,
-	  //     phonetic: place.phonetic,
-	  //     userId: util.getQueryParam('userId')
-	  //   }).done(function (data) {
-	  //   console.debug(data);
-	  // });
 	};
 
 	p.createLocationLinkElement = function (place) {
@@ -10474,32 +10485,19 @@
 
 	p.answer = function (place) {
 	  var that = this;
-	  console.log(place);
+
 	  api.answersCreate({roomId: $.cookie('roomId')}, {
 	    locationName: place.locationName,
 	    phonetic: place.phonetic,
 	    userId: $.cookie('userId')
 	  }).done(function (data) {
-	    console.log(data);
+	    console.debug(data);
 
 	    if (data.result.startsWith('NG')) return that.mistake(place);
 	    if (data.result == 'Finish') return that.clearGame();
+
 	    that.currentTheme = place;
 	  });
-	  // var last = this.answerChain[this.answerChain.length - 1];
-	  //
-	  // if (place.phonetic.endsWith('ん')) {
-	  //   this.gameOver(place);
-	  //   return false;
-	  // }
-	  //
-	  // if (!last.phonetic.endsWith(place.phonetic[0])) {
-	  //   this.mistake(place);
-	  //   return false;
-	  // }
-	  //
-	  // this.answerChain.push(place);
-	  // this.currentTheme = place;
 
 	  return true;
 	};
@@ -11493,7 +11491,7 @@
 /* 23 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=map id=map></div><div class=navigation><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></div>";
+	module.exports = "<div id=game-scene class=container><div class=row><div class=col-sm-7><div class=map id=map></div><div id=js-game-answer-dialog class=game-dialog style=\"display: none\"><p>クリックして答えてね</p><ol id=answer-candidates class=answer-candidates></ol></div></div><div class=col-sm-3><div class=navigation><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></div></div></div></div>";
 
 /***/ },
 /* 24 */
