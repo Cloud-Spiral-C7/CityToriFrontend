@@ -27,7 +27,6 @@ Object.defineProperties(p, {
 
 p.addScene = function (name, scene) {
   this._scenes[name] = scene;
-  scene._game = this;
 }
 
 p.transition = function (name, header, cb) {
@@ -52,11 +51,13 @@ p.transition = function (name, header, cb) {
 		return console.warn('Not implemented panel:', name);
 	}
 
-  this.currentScene = new Scene;
-
 	var $main = $('#main_in');
   var $description = $('#description');
   var that = this;
+  var scene = new Scene;
+
+  scene._game = this;
+  this.currentScene = scene;
 
   fadeout($description);
 	fadeout($main, function () {

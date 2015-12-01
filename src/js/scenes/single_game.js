@@ -1,3 +1,6 @@
+var moment = require('moment');
+require("moment-duration-format");
+
 var util = require('../util');
 var Scene = require('../scene');
 var api = require('../api');
@@ -39,6 +42,8 @@ var GameScene = function () {
       that.currentTheme = { locationName: '最初のお題', phonetic: data.theme };
       that.placeTheme = document.querySelector('#js-place-theme');
       that.placeYours = document.querySelector('#js-place-yours');
+
+      that.start();
     });
   });
 
@@ -103,6 +108,7 @@ p.createLocationLinkElement = function (place) {
 
   link.innerHTML = place.locationName;
   link.href = '#';
+  link.style.color = '#000';
   link.dataset.locationName = place.locationName;
   link.dataset.phonetic = place.phonetic;
   link.addEventListener('click', function (e) {
@@ -144,11 +150,10 @@ p.answer = function (place) {
     userId: $.cookie('userId')
   }).done(function (data) {
     console.log(data);
-    if (data.result.startsWith('NG')) {
-      that.mistake(place);
-    } else {
-      that.currentTheme = place;
-    }
+
+    if (data.result.startsWith('NG')) return that.mistake(place);
+    if (data.result == 'Finish') return that.clearGame();
+    that.currentTheme = place;
   });
   // var last = this.answerChain[this.answerChain.length - 1];
   //
@@ -168,12 +173,24 @@ p.answer = function (place) {
   return true;
 };
 
+p.start = function () {
+  this._startTime = moment();
+};
+
 p.gameOver = function (place) {
 
 };
 
 p.mistake = function (place) {
   // body...
+};
+
+p.clearGame = function () {
+  this._finishTime = moment();
+  var duration = moment.duration(this._finishTime.diff(this._startTime));
+  console.log(duration, duration.format('h時間m分s秒'));
+
+  this.game.transition('singleResult', { time: duration });
 };
 
 /**
