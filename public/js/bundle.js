@@ -23343,7 +23343,7 @@
 /* 113 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=game-scene class=container><div class=row><div class=col-sm-7><div class=map id=map></div><div id=js-game-answer-dialog class=\"game-dialog clearfix\" style=\"display: none\"><a id=js-cancel-button class=game-dialog-close-btn href=#>×</a><div class=game-dialog-heading>クリックして地名を答えてね</div><ol id=js-answer-candidates class=answer-candidates></ol></div></div><div class=col-sm-3><div class=navigation><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></div></div></div></div>";
+	module.exports = "<div id=game-scene class=container><div class=map-container><div class=map id=map></div><div id=js-game-answer-dialog class=\"game-dialog clearfix\" style=\"display: none\"><a id=js-cancel-button class=game-dialog-close-btn href=#>×</a><div class=game-dialog-heading>クリックして地名を答えてね</div><ol id=js-answer-candidates class=answer-candidates></ol></div><div id=js-game-mistake-dialog class=\"game-dialog clearfix\" style=\"display: none\"><a id=js-cancel-button class=game-dialog-close-btn href=#>×</a><div class=game-dialog-heading>クリックして地名を答えてね</div><ol id=js-answer-candidates class=answer-candidates></ol></div></div><div class=navigation-container><div class=navigation><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></div></div></div>";
 
 /***/ },
 /* 114 */
