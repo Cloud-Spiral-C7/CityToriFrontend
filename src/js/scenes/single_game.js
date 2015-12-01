@@ -39,6 +39,7 @@ var GameScene = function () {
 
       that.popup = undefined;
       that.map.addListener('click', that.mapClicked.bind(that));
+      $('#js-cancel-button').on('click', that.closeAnswerDialog.bind(that));
       that.currentTheme = { locationName: '最初のお題', phonetic: data.theme };
       that.placeTheme = document.querySelector('#js-place-theme');
       that.placeYours = document.querySelector('#js-place-yours');
@@ -50,8 +51,6 @@ var GameScene = function () {
 }, p = GameScene.prototype;
 
 util.inherits(GameScene, Scene);
-console.log(GameScene.prototype, Scene.prototype);
-
 
 Object.defineProperties(p, {
   'currentTheme': {
@@ -77,29 +76,42 @@ p.mapClicked = function (e) {
 
     that.getAvailableWords(availablePlaces, function (err, places) {
       console.debug(places);
+      //
+      // that.popup = new google.maps.InfoWindow({
+      //   content: that.createInfoWindowContentElement(places),
+      //   position: e.latLng
+      // });
 
-      that.popup = new google.maps.InfoWindow({
-        content: that.createInfoWindowContentElement(places),
-        position: e.latLng
-      });
-
-      that.popup.open(that.map);
+      that.openAnswerDialog(places);
+      // that.popup.open(that.map);
     });
   });
 };
 
+p.openAnswerDialog = function (places) {
+  var that = this;
+
+  places.forEach(function (place) {
+    var $listItem = $('<li><a href="#">' + place.locationName + '</a></li>');
+
+    $listItem.on('click', function (e) {
+      that.locationNameClicked(e, place)
+    });
+
+    $('#js-answer-candidates').append($listItem);
+  });
+
+  $('#js-game-answer-dialog').show();
+}
+
+p.closeAnswerDialog = function (places) {
+  $('#js-game-answer-dialog').hide();
+  $('#js-answer-candidates').html('');
+}
+
 p.locationNameClicked = function (e, place) {
-  this.popup.close();
+  this.closeAnswerDialog();
   this.answer(place);
-  // api.answersCreate(
-  //   { roomId: util.getQueryParam('roomId') },
-  //   {
-  //     locationName: place.locationName,
-  //     phonetic: place.phonetic,
-  //     userId: util.getQueryParam('userId')
-  //   }).done(function (data) {
-  //   console.debug(data);
-  // });
 };
 
 p.createLocationLinkElement = function (place) {
@@ -143,32 +155,19 @@ p.createInfoWindowContentElement = function (places) {
 
 p.answer = function (place) {
   var that = this;
-  console.log(place);
+
   api.answersCreate({roomId: $.cookie('roomId')}, {
     locationName: place.locationName,
     phonetic: place.phonetic,
     userId: $.cookie('userId')
   }).done(function (data) {
-    console.log(data);
+    console.debug(data);
 
     if (data.result.startsWith('NG')) return that.mistake(place);
     if (data.result == 'Finish') return that.clearGame();
+
     that.currentTheme = place;
   });
-  // var last = this.answerChain[this.answerChain.length - 1];
-  //
-  // if (place.phonetic.endsWith('ん')) {
-  //   this.gameOver(place);
-  //   return false;
-  // }
-  //
-  // if (!last.phonetic.endsWith(place.phonetic[0])) {
-  //   this.mistake(place);
-  //   return false;
-  // }
-  //
-  // this.answerChain.push(place);
-  // this.currentTheme = place;
 
   return true;
 };

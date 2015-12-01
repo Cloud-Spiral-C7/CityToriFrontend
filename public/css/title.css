@@ -347,7 +347,6 @@ button#setting{
 	outline: none;
 }
 
-
 div#footer-bk{
 	background-color: rgb(153,153,153);
 	width: 100%;
@@ -361,22 +360,20 @@ div#footer{
 	padding-top: 20px;
 }
 
+#game-scene {
+	height: 100%;
+}
 
-.container::after {
-  display: block;
-  content: '';
+#game-scene > .row {
+	height: 100%;
+}
+
+#game-scene > .row > [class^='col-'] {
+	height: 100%;
 }
 
 .map {
-  width: 70%;
-  height: 100%;
-  float: left;
-}
-
-.navigation {
-  width: 30%;
-  float: left;
-  padding: 16px;
+	height: 100%;
 }
 
 .place {
@@ -397,6 +394,62 @@ div#footer{
   line-height: 1;
 }
 
+.game-dialog {
+  position: relative;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+  left: 0;
+  top: -100%;
+	font-size: 24px;
+  background-color: rgba(255,255,255,0.9);
+}
+
+.answer-candidates {
+	padding-left: 0;
+	list-style-position: inside;
+}
+
+.answer-candidates > li {
+}
+
+.answer-candidates > li > a {
+  display: block;
+  border-bottom: 2px solid rgb(255, 204, 102);
+  padding: 16px;
+  color: #000;
+	text-decoration: none;
+}
+
+.answer-candidates > li > a:hover {
+	background-color: rgba(255, 204, 102, 0.2);
+}
+
+.game-dialog-heading {
+	font-size: 32px;
+}
+
+.game-dialog-close-btn {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #ccc;
+  line-height: 1;
+  padding: 32px;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  box-sizing: content-box;
+  text-align: center;
+	text-decoration: none;
+}
+
+.game-dialog-close-btn:hover {
+	color: #aaa;
+	text-decoration: none;
+}
 
 @font-face{
 	font-family: "m+1medium";
