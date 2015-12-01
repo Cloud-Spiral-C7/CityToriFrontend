@@ -39,6 +39,7 @@ var GameScene = function () {
 
       that.popup = undefined;
       that.map.addListener('click', that.mapClicked.bind(that));
+      $('#js-cancel-button').on('click', that.closeAnswerDialog.bind(that));
       that.currentTheme = { locationName: '最初のお題', phonetic: data.theme };
       that.placeTheme = document.querySelector('#js-place-theme');
       that.placeYours = document.querySelector('#js-place-yours');
@@ -97,7 +98,7 @@ p.openAnswerDialog = function (places) {
       that.locationNameClicked(e, place)
     });
 
-    $('#answer-candidates').append($listItem);
+    $('#js-answer-candidates').append($listItem);
   });
 
   $('#js-game-answer-dialog').show();
@@ -105,7 +106,7 @@ p.openAnswerDialog = function (places) {
 
 p.closeAnswerDialog = function (places) {
   $('#js-game-answer-dialog').hide();
-  $('#answer-candidates').html('');
+  $('#js-answer-candidates').html('');
 }
 
 p.locationNameClicked = function (e, place) {
