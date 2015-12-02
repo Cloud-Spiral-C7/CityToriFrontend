@@ -164,9 +164,8 @@ p.answer = function (place) {
     console.debug(data);
 
     if (data.result.startsWith('NG')) return that.answerNG(place);
-    if (data.result == 'Finish') return that.clearGame();
 
-    that.answerOK(place);
+    that.answerOK(place, data.result == 'Finish');
     that.currentTheme = place;
   });
 
@@ -188,7 +187,7 @@ p.gameOver = function (place) {
 
 };
 
-p.answerOK = function (place) {
+p.answerOK = function (place, finished) {
   var that = this;
 
   $('#js-answer-result')
@@ -198,6 +197,7 @@ p.answerOK = function (place) {
     .show();
 
   setTimeout(function() {
+    if (finished) that.clearGame();
     that.closeAnswerDialog();
   }, 1500);
 };
