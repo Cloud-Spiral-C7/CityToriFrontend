@@ -57,7 +57,7 @@
 	game.scenes = __webpack_require__(7);
 
 	game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
-	  __webpack_require__(119);
+	  __webpack_require__(121);
 	});
 
 	$(function () {
@@ -10186,7 +10186,8 @@
 	  configSinglePlayMode: __webpack_require__(20),
 	  playGameSingle: __webpack_require__(22),
 	  resultTimeAttack: __webpack_require__(115),
-	  selectMultiPlayMode: __webpack_require__(117),
+	  GameFinish: __webpack_require__(117),
+	  selectMultiPlayMode: __webpack_require__(119),
 	};
 
 
@@ -11353,28 +11354,11 @@
 	};
 
 	p.clearGame = function () {
-	  this._finishTime = moment();
-	  var duration = moment.duration(this._finishTime.diff(this._startTime));
-	  console.log(duration, duration.format('h時間m分s秒'));
+	  var duration = moment.duration(moment().diff(this._startTime));
+
+	  $.cookie('resultTime', duration.milliseconds());
+	  this.game.transition('GameFinish', '君のタイムは何位かな？');
 	  clearInterval(this._updateTimeTextIntervalID);
-
-	  this.game.transition('resultTimeAttack', "君のタイムは何位かな？");
-	  setTimeout(function(){
-		  var finishTime = duration._milliseconds / 1000;
-		  api.getRanking($.cookie("userId"), $.cookie("roomId"), finishTime, 0).done(function(data){
-			console.log(data);
-			var arraySize = Object.keys(data.ranking).length;
-			for (var i = 0; i < arraySize; i++) {
-				if(data.ranking[i].name == $.cookie("name") && data.ranking[i].score == finishTime){
-					$("#ranking").append("<div id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></div>");
-				}else{
-					$("#ranking").append("<span>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
-				}
-			}
-			var v = $("#myscore").position().top - (100 * $("#main_in").width() / 1500);
-			$("#rankingboard").scrollTop(v);
-	  });}, 500);
-
 	};
 
 	/**
@@ -23406,7 +23390,7 @@
 	  },
 
 	  getRanking: function (userId, roomId, resultTime, rankCount) {
-		return util.apiGet('/ranks?userId=' + userId + '&roomId=' + roomId + '&resultTime=' + resultTime + '&rankCount=' + rankCount);
+		   return util.apiGet('/ranks?userId=' + userId + '&roomId=' + roomId + '&resultTime=' + resultTime + '&rankCount=' + rankCount);
 	  }
 	};
 
@@ -23446,37 +23430,71 @@
 /* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {var util = __webpack_require__(9);
+	/* WEBPACK VAR INJECTION */(function($) {var util = __webpack_require__(16);
 	var Scene = __webpack_require__(13);
 	var sounds = __webpack_require__(113);
+	var api = __webpack_require__(112);
+
 	var ResultTimeAttackScene = function () {
 	  Scene.call(this, __webpack_require__(116));
-	}
+	  this.on('shown', this.onshown);
+	}, p = ResultTimeAttackScene.prototype;
 
-	util.inherits(ResultTimeAttackScene, Scene)
+	util.inherits(ResultTimeAttackScene, Scene);
+
+	p.onshown = function () {
+	  this.setEventHandlers();
+	  this.fetchRankingData();
+	};
+
+	p.setEventHandlers = function () {
+	  // about back button
+	  $(document).on('mousedown', '#back', function() {
+	  	$(this).css({
+	  		background: $(this).css('background').replace('.', '_dummy.')
+	  	});
+	  	sounds.sound_button();
+	  });
+
+	  $(document).on('mouseup', '#back', function() {
+	  	$(this).css({
+	  		background: $(this).css('background').replace('_dummy.', '.')
+	  	});
+	  });
+
+	  $(document).on('mouseout', '#back', function() {
+	  	$(this).css({
+	  		background: $(this).css('background').replace('_dummy.', '.')
+	  	});
+	  });
+	};
+
+	p.fetchRankingData = function () {
+	  api.getRanking($.cookie('userId'), $.cookie('roomId'), $.cookie('resultTime') / 1000, 0).done(function(data) {
+	    console.log(data);
+	    var arraySize = Object.keys(data.ranking).length;
+
+	    for (var i = 0; i < arraySize; i++) {
+	      if (data.ranking[i].name == $.cookie('name')) {
+	        $('#ranking')
+	          .append(
+	            '<span id="myscore">- 今回の成績 -<br>' + (i + 1) + '位</br>' +
+	            data.ranking[i].name + '</br>' +
+	            data.ranking[i].score + ' 秒</br><hr></span>');
+	      } else {
+	        $('#ranking').append(
+	          '<span>' + (i + 1) + '位</br>' +
+	          data.ranking[i].name + '</br>' +
+	          data.ranking[i].score + ' 秒</br><hr></span>');
+	      }
+	    }
+
+	    var v = $('#myscore').position().top - (100 * $('#main_in').width() / 1500);
+	    $('#rankingboard').scrollTop(v);
+	  });
+	};
 
 	module.exports = ResultTimeAttackScene;
-
-	// about back button
-	$(document).on("mousedown", "#back", function(){
-		$(this).css({
-			"background": $(this).css("background").replace(".","_dummy.")	
-		});
-		sounds.sound_button();
-	});
-
-	$(document).on("mouseup", "#back", function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")	
-		});
-		game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
-	});
-
-	$(document).on("mouseout", "#back", function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
-		});
-	});
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
@@ -23493,8 +23511,40 @@
 	var Scene = __webpack_require__(13);
 	var util = __webpack_require__(16);
 
-	var MultiPlayModeScene = function () {
+	var GameFinishScene = function () {
 	  Scene.call(this, __webpack_require__(118));
+
+	  this.on('shown', this.onshown);
+	}, p = GameFinishScene.prototype;
+
+	util.inherits(GameFinishScene, Scene);
+
+	p.onshown = function (e) {
+	  var that = this;
+
+	  setTimeout(function () {
+	    that.game.transition('resultTimeAttack', '君のタイムは何位かな？');
+	  }, 1000);
+	}
+
+	module.exports = GameFinishScene;
+
+
+/***/ },
+/* 118 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=game-finish-scene>終了!</div>";
+
+/***/ },
+/* 119 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Scene = __webpack_require__(13);
+	var util = __webpack_require__(16);
+
+	var MultiPlayModeScene = function () {
+	  Scene.call(this, __webpack_require__(120));
 	};
 
 	util.inherits(MultiPlayModeScene, Scene);
@@ -23503,13 +23553,13 @@
 
 
 /***/ },
-/* 118 */
+/* 120 */
 /***/ function(module, exports) {
 
 	module.exports = "<div id=multiplayicon></div><div id=battleform><button class=ok2 id=\"playbattle\"></div><div id=raceform><button class=ok2 id=\"playrace\"></div>";
 
 /***/ },
-/* 119 */
+/* 121 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {var sounds = __webpack_require__(113);
