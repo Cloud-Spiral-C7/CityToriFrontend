@@ -16,29 +16,33 @@ p.onshown = function () {
 };
 
 p.setEventHandlers = function () {
+
+  var that = this;
+
   // about back button
   $(document).on('mousedown', '#back', function() {
   	$(this).css({
-  		background: $(this).css('background').replace('.', '_dummy.')
+  		background: $(this).css('background').replace('.png', '_dummy.png')
   	});
   	sounds.sound_button();
   });
 
   $(document).on('mouseup', '#back', function() {
   	$(this).css({
-  		background: $(this).css('background').replace('_dummy.', '.')
+  		background: $(this).css('background').replace('_dummy.png', '.png')
   	});
+	that.game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
   });
 
   $(document).on('mouseout', '#back', function() {
   	$(this).css({
-  		background: $(this).css('background').replace('_dummy.', '.')
+  		background: $(this).css('background').replace('_dummy.png', '.png')
   	});
   });
 };
 
 p.fetchRankingData = function () {
-  api.getRanking($.cookie('userId'), $.cookie('roomId'), $.cookie('resultTime') / 1000, 0).done(function(data) {
+  api.getRanking($.cookie('userId'), $.cookie('roomId'), $.cookie('resultTime') / 1000, 0, 1).done(function(data) {
     console.log(data);
     var arraySize = Object.keys(data.ranking).length;
 
@@ -46,9 +50,9 @@ p.fetchRankingData = function () {
       if (data.ranking[i].name == $.cookie('name')) {
         $('#ranking')
           .append(
-            '<span id="myscore">- 今回の成績 -<br>' + (i + 1) + '位</br>' +
+            '<div id="myscore">- 今回の成績 -<br>' + (i + 1) + '位</br>' +
             data.ranking[i].name + '</br>' +
-            data.ranking[i].score + ' 秒</br><hr></span>');
+            data.ranking[i].score + ' 秒</br><hr></div>');
       } else {
         $('#ranking').append(
           '<span>' + (i + 1) + '位</br>' +

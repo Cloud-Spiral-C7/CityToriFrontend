@@ -23389,8 +23389,8 @@
 	    return util.apiGet('/rooms/' + params.roomId + '/initialValue');
 	  },
 
-	  getRanking: function (userId, roomId, resultTime, rankCount) {
-		   return util.apiGet('/ranks?userId=' + userId + '&roomId=' + roomId + '&resultTime=' + resultTime + '&rankCount=' + rankCount);
+	  getRanking: function (userId, roomId, resultTime, rankCount, rankSort) {
+		   return util.apiGet('/ranks?userId=' + userId + '&roomId=' + roomId + '&resultTime=' + resultTime + '&rankCount=' + rankCount + '&rankSort=' + rankSort);
 	  }
 	};
 
@@ -23448,29 +23448,33 @@
 	};
 
 	p.setEventHandlers = function () {
+
+	  var that = this;
+
 	  // about back button
 	  $(document).on('mousedown', '#back', function() {
 	  	$(this).css({
-	  		background: $(this).css('background').replace('.', '_dummy.')
+	  		background: $(this).css('background').replace('.png', '_dummy.png')
 	  	});
 	  	sounds.sound_button();
 	  });
 
 	  $(document).on('mouseup', '#back', function() {
 	  	$(this).css({
-	  		background: $(this).css('background').replace('_dummy.', '.')
+	  		background: $(this).css('background').replace('_dummy.png', '.png')
 	  	});
+		that.game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
 	  });
 
 	  $(document).on('mouseout', '#back', function() {
 	  	$(this).css({
-	  		background: $(this).css('background').replace('_dummy.', '.')
+	  		background: $(this).css('background').replace('_dummy.png', '.png')
 	  	});
 	  });
 	};
 
 	p.fetchRankingData = function () {
-	  api.getRanking($.cookie('userId'), $.cookie('roomId'), $.cookie('resultTime') / 1000, 0).done(function(data) {
+	  api.getRanking($.cookie('userId'), $.cookie('roomId'), $.cookie('resultTime') / 1000, 0, 1).done(function(data) {
 	    console.log(data);
 	    var arraySize = Object.keys(data.ranking).length;
 
@@ -23478,9 +23482,9 @@
 	      if (data.ranking[i].name == $.cookie('name')) {
 	        $('#ranking')
 	          .append(
-	            '<span id="myscore">- 今回の成績 -<br>' + (i + 1) + '位</br>' +
+	            '<div id="myscore">- 今回の成績 -<br>' + (i + 1) + '位</br>' +
 	            data.ranking[i].name + '</br>' +
-	            data.ranking[i].score + ' 秒</br><hr></span>');
+	            data.ranking[i].score + ' 秒</br><hr></div>');
 	      } else {
 	        $('#ranking').append(
 	          '<span>' + (i + 1) + '位</br>' +
@@ -23679,14 +23683,14 @@
 	// about ok button
 	$(document).on("mousedown", ".ok", function(){
 		$(this).css({
-			"background": $(this).css("background").replace(".","_dummy.")
+			"background": $(this).css("background").replace(".png","_dummy.png")
 		});
 		sounds.sound_button();
 	});
 
 	$(document).on("mouseup", ".ok", function(){
 		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
+			"background": $(this).css("background").replace("_dummy.png",".png")
 		});
 		if($(this).attr("id") == "playsingle"){
 			game.transition('selectSinglePlayMode', 'タイムアタックで遊ぶ？スコアアタックで遊ぶ？');
@@ -23697,21 +23701,21 @@
 
 	$(document).on("mouseout", ".ok", function(){
 		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
+			"background": $(this).css("background").replace("_dummy.png",".png")
 		});
 	});
 
 	// about ok2 button
 	$(document).on("mousedown", ".ok2", function(){
 		$(this).css({
-			"background": $(this).css("background").replace(".","_dummy.")
+			"background": $(this).css("background").replace(".png","_dummy.png")
 		});
 		sounds.sound_button();
 	});
 
 	$(document).on("mouseup", ".ok2", function(){
 		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
+			"background": $(this).css("background").replace("_dummy.png",".png")
 		});
 		if($(this).attr("id") == "playtimeattack"){
 			game.transition('configSinglePlayMode', '目標しりとり数を入力してね');
@@ -23722,21 +23726,21 @@
 
 	$(document).on("mouseout", ".ok2", function(){
 		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
+			"background": $(this).css("background").replace("_dummy.png",".png")
 		});
 	});
 
 	// about setting button
 	$(document).on("mousedown", "#setting", function(){
 		$(this).css({
-			"background": $(this).css("background").replace(".","_dummy.")
+			"background": $(this).css("background").replace(".png","_dummy.png")
 		});
 		sounds.sound_button();
 	});
 
 	$(document).on("mouseup", "#setting", function(){
 		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
+			"background": $(this).css("background").replace("_dummy.png",".png")
 		});
 		if(parseInt($("#wordnum").val()) > 0){
 			makeroom($.cookie("userId"), $.cookie("name"), "Time", parseInt($("#wordnum").val()), 0);
@@ -23745,7 +23749,7 @@
 
 	$(document).on("mouseout", "#setting", function(){
 		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
+			"background": $(this).css("background").replace("_dummy.png",".png")
 		});
 	});
 

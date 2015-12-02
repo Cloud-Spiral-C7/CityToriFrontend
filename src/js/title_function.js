@@ -115,14 +115,14 @@ $("#register_off").mouseout(function(){
 // about ok button
 $(document).on("mousedown", ".ok", function(){
 	$(this).css({
-		"background": $(this).css("background").replace(".","_dummy.")
+		"background": $(this).css("background").replace(".png","_dummy.png")
 	});
 	sounds.sound_button();
 });
 
 $(document).on("mouseup", ".ok", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")
+		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
 	if($(this).attr("id") == "playsingle"){
 		game.transition('selectSinglePlayMode', 'タイムアタックで遊ぶ？スコアアタックで遊ぶ？');
@@ -133,21 +133,21 @@ $(document).on("mouseup", ".ok", function(){
 
 $(document).on("mouseout", ".ok", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")
+		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
 });
 
 // about ok2 button
 $(document).on("mousedown", ".ok2", function(){
 	$(this).css({
-		"background": $(this).css("background").replace(".","_dummy.")
+		"background": $(this).css("background").replace(".png","_dummy.png")
 	});
 	sounds.sound_button();
 });
 
 $(document).on("mouseup", ".ok2", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")
+		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
 	if($(this).attr("id") == "playtimeattack"){
 		game.transition('configSinglePlayMode', '目標しりとり数を入力してね');
@@ -158,21 +158,21 @@ $(document).on("mouseup", ".ok2", function(){
 
 $(document).on("mouseout", ".ok2", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")
+		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
 });
 
 // about setting button
 $(document).on("mousedown", "#setting", function(){
 	$(this).css({
-		"background": $(this).css("background").replace(".","_dummy.")
+		"background": $(this).css("background").replace(".png","_dummy.png")
 	});
 	sounds.sound_button();
 });
 
 $(document).on("mouseup", "#setting", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")
+		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
 	if(parseInt($("#wordnum").val()) > 0){
 		makeroom($.cookie("userId"), $.cookie("name"), "Time", parseInt($("#wordnum").val()), 0);
@@ -181,7 +181,7 @@ $(document).on("mouseup", "#setting", function(){
 
 $(document).on("mouseout", "#setting", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")
+		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
 });
 
