@@ -11169,6 +11169,7 @@
 
 	      that.popup = undefined;
 	      that.map.addListener('click', that.mapClicked.bind(that));
+	      $('#js-cancel-button').on('click', that.closeAnswerDialog.bind(that));
 	      that.currentTheme = { locationName: '最初のお題', phonetic: data.theme };
 	      that.placeTheme = document.querySelector('#js-place-theme');
 	      that.placeYours = document.querySelector('#js-place-yours');
@@ -11180,8 +11181,6 @@
 	}, p = GameScene.prototype;
 
 	util.inherits(GameScene, Scene);
-	console.log(GameScene.prototype, Scene.prototype);
-
 
 	Object.defineProperties(p, {
 	  'currentTheme': {
@@ -11198,7 +11197,6 @@
 
 	p.mapClicked = function (e) {
 	  var that = this;
-	  if (this.popup) this.popup.close();
 
 	  this.geocoder.geocode({location: e.latLng}, function (addrInfo) {
 	    console.debug(addrInfo);
@@ -11207,29 +11205,43 @@
 
 	    that.getAvailableWords(availablePlaces, function (err, places) {
 	      console.debug(places);
+	      //
+	      // that.popup = new google.maps.InfoWindow({
+	      //   content: that.createInfoWindowContentElement(places),
+	      //   position: e.latLng
+	      // });
 
-	      that.popup = new google.maps.InfoWindow({
-	        content: that.createInfoWindowContentElement(places),
-	        position: e.latLng
-	      });
-
-	      that.popup.open(that.map);
+	      that.openAnswerDialog(places);
+	      // that.popup.open(that.map);
 	    });
 	  });
 	};
 
+	p.openAnswerDialog = function (places) {
+	  var that = this;
+
+	  $('#js-answer-result').hide();
+	  $('#js-answer-candidates').html('');
+
+	  places.forEach(function (place) {
+	    var $listItem = $('<li><a href="#">' + place.locationName + '</a></li>');
+
+	    $listItem.on('click', function (e) {
+	      that.locationNameClicked(e, place)
+	    });
+
+	    $('#js-answer-candidates').append($listItem);
+	  });
+
+	  $('#js-game-answer-dialog').show();
+	}
+
+	p.closeAnswerDialog = function (places) {
+	  $('#js-game-answer-dialog').hide();
+	}
+
 	p.locationNameClicked = function (e, place) {
-	  this.popup.close();
 	  this.answer(place);
-	  // api.answersCreate(
-	  //   { roomId: util.getQueryParam('roomId') },
-	  //   {
-	  //     locationName: place.locationName,
-	  //     phonetic: place.phonetic,
-	  //     userId: util.getQueryParam('userId')
-	  //   }).done(function (data) {
-	  //   console.debug(data);
-	  // });
 	};
 
 	p.createLocationLinkElement = function (place) {
@@ -11273,32 +11285,20 @@
 
 	p.answer = function (place) {
 	  var that = this;
-	  console.log(place);
+
 	  api.answersCreate({roomId: $.cookie('roomId')}, {
 	    locationName: place.locationName,
 	    phonetic: place.phonetic,
 	    userId: $.cookie('userId')
 	  }).done(function (data) {
-	    console.log(data);
+	    console.debug(data);
 
-	    if (data.result.startsWith('NG')) return that.mistake(place);
+	    if (data.result.startsWith('NG')) return that.answerNG(place);
 	    if (data.result == 'Finish') return that.clearGame();
+
+	    that.answerOK(place);
 	    that.currentTheme = place;
 	  });
-	  // var last = this.answerChain[this.answerChain.length - 1];
-	  //
-	  // if (place.phonetic.endsWith('ん')) {
-	  //   this.gameOver(place);
-	  //   return false;
-	  // }
-	  //
-	  // if (!last.phonetic.endsWith(place.phonetic[0])) {
-	  //   this.mistake(place);
-	  //   return false;
-	  // }
-	  //
-	  // this.answerChain.push(place);
-	  // this.currentTheme = place;
 
 	  return true;
 	};
@@ -11311,9 +11311,32 @@
 
 	};
 
-	p.mistake = function (place) {
-	  // body...
+	p.answerOK = function (place) {
+	  var that = this;
+
+	  $('#js-answer-result')
+	    .text('○')
+	    .removeClass('ng')
+	    .addClass('ok')
+	    .show();
+
+	  setTimeout(function() {
+	    that.closeAnswerDialog();
+	  }, 1500);
 	};
+
+	p.answerNG = function (place) {
+	  $('#js-answer-result')
+	    .text('×')
+	    .removeClass('ok')
+	    .addClass('ng')
+	    .show();
+
+	  setTimeout(function () {
+	    $('#js-answer-result').hide();
+	  }, 1500);
+	};
+
 
 	p.clearGame = function () {
 	  this._finishTime = moment();
@@ -11322,28 +11345,29 @@
 
 	  this.game.transition('resultTimeAttack', { time: duration });
 	  setTimeout(function(){
-	  api.getRanking($.cookie("userId"), $.cookie("roomId"), 98.33, 0).done(function(data){
-		console.log(data);
-		var arraySize = Object.keys(data.ranking).length;
-		for (var i = 0; i < arraySize; i++) {
-			if(data.ranking[i].name == $.cookie("name")){
-				$("#ranking").append("<span id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
-			}else{
-				$("#ranking").append("<span>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
-				console.log("aaa");
+		  api.getRanking($.cookie("userId"), $.cookie("roomId"), (duration._milliseconds)/1000, 0).done(function(data){
+			console.log(data);
+			var arraySize = Object.keys(data.ranking).length;
+			for (var i = 0; i < arraySize; i++) {
+				if(data.ranking[i].name == $.cookie("name")){
+					$("#ranking").append("<span id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
+				}else{
+					$("#ranking").append("<span>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
+				}
 			}
-		}
-		$("#ranking").append("hoge");
-		for (var i=0; i < arraySize; i++){
-			if(data.ranking[i].name == $.cookie("name")){
-				v = i;
-				break;
+			$("#ranking").append("hoge");
+	/*
+			for (var i=0; i < arraySize; i++){
+				if(data.ranking[i].name == $.cookie("name")){
+					v = i;
+					break;
+				}
 			}
-		}
-		var v = i * 131 * $("#main_in").width() / 1500;
-		$("#rankingboard").scrollTop(v);
-	  });
-		}, 2000);
+			var v = (i * 135 - 100) * $("#main_in").width() / 1500;
+	*/
+			var v = $("#myscore").position().top - (100 * $("#main_in").width() / 1500);
+			$("#rankingboard").scrollTop(v);
+	  });}, 1000);
 	};
 
 	/**
@@ -23384,7 +23408,7 @@
 /* 113 */
 /***/ function(module, exports) {
 
-	module.exports = "<div class=map id=map></div><div class=navigation><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></div>";
+	module.exports = "<div id=game-scene class=container><div class=map-container><div class=map id=map></div><div id=js-game-answer-dialog class=\"game-dialog clearfix\" style=\"display: none\"><a id=js-cancel-button class=game-dialog-close-btn href=#>×</a><div class=game-dialog-heading>クリックして地名を答えてね</div><ol id=js-answer-candidates class=answer-candidates></ol><div id=js-answer-result class=answer-result></div></div></div><div class=navigation-container><div class=navigation><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></div></div></div>";
 
 /***/ },
 /* 114 */

@@ -427,22 +427,26 @@ div#footer{
 	padding-top: 20px;
 }
 
+#game-scene {
+	height: 100%;
+}
 
-.container::after {
-  display: block;
-  content: '';
+.map-container, .navigation-container {
+	height: 100%;
+	float: left;
+}
+
+.map-container {
+	position: relative;
+	width: 70%;
+}
+
+.navigation-container {
+	width: 30%;
 }
 
 .map {
-  width: 70%;
-  height: 100%;
-  float: left;
-}
-
-.navigation {
-  width: 30%;
-  float: left;
-  padding: 16px;
+	height: 100%;
 }
 
 .place {
@@ -463,6 +467,82 @@ div#footer{
   line-height: 1;
 }
 
+.game-dialog {
+  position: absolute;
+  z-index: 1;
+  width: 100%;
+  height: 100%;
+  padding: 30px;
+  left: 0;
+  top: 0;
+	font-size: 24px;
+  background-color: rgba(255,255,255,0.9);
+}
+
+.answer-candidates {
+	padding-left: 0;
+	list-style-position: inside;
+}
+
+.answer-candidates > li {
+}
+
+.answer-candidates > li > a {
+  display: block;
+  border-bottom: 2px solid rgb(255, 204, 102);
+  padding: 16px;
+  color: #000;
+	text-decoration: none;
+}
+
+.answer-candidates > li > a:hover {
+	background-color: rgba(255, 204, 102, 0.2);
+}
+
+.game-dialog-heading {
+	font-size: 32px;
+}
+
+.game-dialog-close-btn {
+  display: inline-block;
+  position: absolute;
+  top: 0;
+  right: 0;
+  color: #ccc;
+  line-height: 1;
+  padding: 32px;
+  font-size: 32px;
+  width: 32px;
+  height: 32px;
+  box-sizing: content-box;
+  text-align: center;
+	text-decoration: none;
+}
+
+.game-dialog-close-btn:hover {
+	color: #aaa;
+	text-decoration: none;
+}
+
+.answer-result {
+  position: absolute;
+  left: 0;
+  top: 0;
+  font-size: 311px;
+  font-weight: bold;
+  width: 100%;
+  text-align: center;
+  height: 100%;
+  text-shadow: 0px 4px 10px #999;
+}
+
+.answer-result.ok {
+	color: #0047CC;
+}
+
+.answer-result.ng {
+	color: #CC001E;
+}
 
 @font-face{
 	font-family: "m+1medium";
