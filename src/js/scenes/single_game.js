@@ -67,7 +67,6 @@ Object.defineProperties(p, {
 
 p.mapClicked = function (e) {
   var that = this;
-  if (this.popup) this.popup.close();
 
   this.geocoder.geocode({location: e.latLng}, function (addrInfo) {
     console.debug(addrInfo);
@@ -91,6 +90,9 @@ p.mapClicked = function (e) {
 p.openAnswerDialog = function (places) {
   var that = this;
 
+  $('#js-answer-result').hide();
+  $('#js-answer-candidates').html('');
+
   places.forEach(function (place) {
     var $listItem = $('<li><a href="#">' + place.locationName + '</a></li>');
 
@@ -106,11 +108,9 @@ p.openAnswerDialog = function (places) {
 
 p.closeAnswerDialog = function (places) {
   $('#js-game-answer-dialog').hide();
-  $('#js-answer-candidates').html('');
 }
 
 p.locationNameClicked = function (e, place) {
-  this.closeAnswerDialog();
   this.answer(place);
 };
 
@@ -163,9 +163,10 @@ p.answer = function (place) {
   }).done(function (data) {
     console.debug(data);
 
-    if (data.result.startsWith('NG')) return that.mistake(place);
+    if (data.result.startsWith('NG')) return that.answerNG(place);
     if (data.result == 'Finish') return that.clearGame();
 
+    that.answerOK(place);
     that.currentTheme = place;
   });
 
@@ -180,9 +181,32 @@ p.gameOver = function (place) {
 
 };
 
-p.mistake = function (place) {
-  // body...
+p.answerOK = function (place) {
+  var that = this;
+
+  $('#js-answer-result')
+    .text('○')
+    .removeClass('ng')
+    .addClass('ok')
+    .show();
+
+  setTimeout(function() {
+    that.closeAnswerDialog();
+  }, 1500);
 };
+
+p.answerNG = function (place) {
+  $('#js-answer-result')
+    .text('×')
+    .removeClass('ok')
+    .addClass('ng')
+    .show();
+
+  setTimeout(function () {
+    $('#js-answer-result').hide();
+  }, 1500);
+};
+
 
 p.clearGame = function () {
   this._finishTime = moment();
