@@ -11355,16 +11355,6 @@
 					$("#ranking").append("<span>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
 				}
 			}
-			$("#ranking").append("hoge");
-	/*
-			for (var i=0; i < arraySize; i++){
-				if(data.ranking[i].name == $.cookie("name")){
-					v = i;
-					break;
-				}
-			}
-			var v = (i * 135 - 100) * $("#main_in").width() / 1500;
-	*/
 			var v = $("#myscore").position().top - (100 * $("#main_in").width() / 1500);
 			$("#rankingboard").scrollTop(v);
 	  });}, 1000);
