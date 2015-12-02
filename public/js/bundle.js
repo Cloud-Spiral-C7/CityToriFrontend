@@ -57,7 +57,7 @@
 	game.scenes = __webpack_require__(7);
 
 	game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
-	  __webpack_require__(117);
+	  __webpack_require__(114);
 	});
 
 	$(function () {
@@ -10011,10 +10011,7 @@
 
 			$("#name").css({
 				"font-size": w * 0.02
-			});
-			$("#ranking").css({
-				"font-size": (175 * (w) / 1500) + "%"
-			});
+			})	
 		}else{
 			$("#header-bk").css({
 				"width": w,
@@ -10033,10 +10030,7 @@
 
 			$("#name").css({
 				"font-size": 3/2 * (h - 100 - 100) * 0.02
-			});
-			$("#ranking").css({
-				"font-size": (175 * (h - 100 - 100) / 1000) + "%"
-			});
+			})
 		}
 	});
 
@@ -10062,10 +10056,7 @@
 
 			$("#name").css({
 				"font-size": w * 0.02
-			});
-			$("#ranking").css({
-				"font-size": (175 * (w) / 1500) + "%"
-			});
+			})	
 		}else{
 			$("#header-bk").css({
 				"width": w,
@@ -10084,10 +10075,7 @@
 
 			$("#name").css({
 				"font-size": 3/2 * (h - 100 - 100) * 0.02
-			});
-			$("#ranking").css({
-				"font-size": (175 * (h - 100 - 100) / 1000) + "%"
-			});
+			})
 		}
 	});
 
@@ -10184,8 +10172,7 @@
 	  selectPlayMode: __webpack_require__(15),
 	  selectSinglePlayMode: __webpack_require__(18),
 	  configSinglePlayMode: __webpack_require__(20),
-	  playGameSingle: __webpack_require__(22),
-	  resultTimeAttack: __webpack_require__(114)
+	  playGameSingle: __webpack_require__(22)
 	};
 
 
@@ -11122,7 +11109,7 @@
 /* 21 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=timeattackicon></div><div id=settingform><input type=number id=wordnum step=5 min=5 max=50 value=\"1\"><br><button id=\"setting\"></div>";
+	module.exports = "<div id=timeattackicon></div><div id=settingform><input type=number id=wordnum step=5 min=5 max=50 value=\"10\"><br><button id=\"setting\"></div>";
 
 /***/ },
 /* 22 */
@@ -11305,7 +11292,14 @@
 
 	p.start = function () {
 	  this._startTime = moment();
+	  this._updateTimeTextIntervalID = setInterval(this.updateTimeText.bind(this), 1);
 	};
+
+	p.updateTimeText = function () {
+	  var duration = moment.duration(moment().diff(this._startTime));
+	  var timeText = duration.format('h:mm:ss:SSS', { trim: false, forceLength: true });
+	  $('#js-game-time').text(timeText);
+	}
 
 	p.gameOver = function (place) {
 
@@ -11342,22 +11336,9 @@
 	  this._finishTime = moment();
 	  var duration = moment.duration(this._finishTime.diff(this._startTime));
 	  console.log(duration, duration.format('h時間m分s秒'));
+	  clearInterval(this._updateTimeTextIntervalID);
 
-	  this.game.transition('resultTimeAttack', { time: duration });
-	  setTimeout(function(){
-		  api.getRanking($.cookie("userId"), $.cookie("roomId"), (duration._milliseconds)/1000, 0).done(function(data){
-			console.log(data);
-			var arraySize = Object.keys(data.ranking).length;
-			for (var i = 0; i < arraySize; i++) {
-				if(data.ranking[i].name == $.cookie("name")){
-					$("#ranking").append("<span id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
-				}else{
-					$("#ranking").append("<span>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
-				}
-			}
-			var v = $("#myscore").position().top - (100 * $("#main_in").width() / 1500);
-			$("#rankingboard").scrollTop(v);
-	  });}, 1000);
+	  this.game.transition('singleResult', { time: duration });
 	};
 
 	/**
@@ -23386,10 +23367,6 @@
 
 	  initialValueIndex: function (params) {
 	    return util.apiGet('/rooms/' + params.roomId + '/initialValue');
-	  },
-
-	  getRanking: function (userId, roomId, resultTime, rankCount) {
-		return util.apiGet('/ranks?userId=' + userId + '&roomId=' + roomId + '&resultTime=' + resultTime + '&rankCount=' + rankCount);
 	  }
 	};
 
@@ -23398,72 +23375,13 @@
 /* 113 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=game-scene class=container><div class=map-container><div class=map id=map></div><div id=js-game-answer-dialog class=\"game-dialog clearfix\" style=\"display: none\"><a id=js-cancel-button class=game-dialog-close-btn href=#>×</a><div class=game-dialog-heading>クリックして地名を答えてね</div><ol id=js-answer-candidates class=answer-candidates></ol><div id=js-answer-result class=answer-result></div></div></div><div class=navigation-container><div class=navigation><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></div></div></div>";
+	module.exports = "<div id=game-scene class=container><div class=map-container><div class=map id=map></div><div id=js-game-answer-dialog class=\"game-dialog clearfix\" style=\"display: none\"><a id=js-cancel-button class=game-dialog-close-btn href=#>×</a><div class=game-dialog-heading>クリックして地名を答えてね</div><ol id=js-answer-candidates class=answer-candidates></ol><div id=js-answer-result class=answer-result></div></div></div><div class=navigation-container><div class=navigation><h2>経過時間<h2><div id=js-game-time class=game-time></div><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></h2></h2></div></div></div>";
 
 /***/ },
 /* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {var util = __webpack_require__(9);
-	var Scene = __webpack_require__(13);
-	var sounds = __webpack_require__(115);
-	var ResultTimeAttackScene = function () {
-	  Scene.call(this, __webpack_require__(116));
-	}
-
-	util.inherits(ResultTimeAttackScene, Scene)
-
-	module.exports = ResultTimeAttackScene;
-
-	// about back button
-	$(document).on("mousedown", "#back", function(){
-		$(this).css({
-			"background": $(this).css("background").replace(".","_dummy.")	
-		});
-		sounds.sound_button();
-	});
-
-	$(document).on("mouseup", "#back", function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")	
-		});
-	});
-
-	$(document).on("mouseout", "#back", function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
-		});
-	});
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ },
-/* 115 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function($) {module.exports = {
-		// sound on button pushed
-		sound_button: function (){
-			$("#sound_button").get(0).currentTime = 0;
-			$("#sound_button").get(0).play();
-		}
-	};
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ },
-/* 116 */
-/***/ function(module, exports) {
-
-	module.exports = "<div id=resultform><div id=rankingboard><div id=ranking></div></div><button id=back></button></div>";
-
-/***/ },
-/* 117 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function($) {var sounds = __webpack_require__(115);
-
-	// register name
+	/* WEBPACK VAR INJECTION */(function($) {// register name
 	function register(name){
 			$.ajax({
 				type:"post",
@@ -23473,14 +23391,9 @@
 				dataType:"json",
 				success:function(data){
 					console.log(data);
-					if(data.status == "OK"){
-						$.cookie("name", name);
-						$.cookie("userId", data.userId);
-						game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
-					}else{
-						$("#description").text("別の名前を入力してね！");
-						$("#name").select();
-					}
+					$.cookie("name", name);
+					$.cookie("userId", data.userId);
+					game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
 				},
 				error:function(){
 					console.log("error");
@@ -23507,57 +23420,18 @@
 		});
 	};
 
-	// send score and get ranking
-	function sendranking(){
-		var userId = $("#userId").text();
-		var roomId = $("#roomId").text();
-		var resultTime = parseFloat($("#resulttime").val());
-		var rankCount = parseInt($("#rankCount").val());
-		userId = "565d957a575db0e4f23e25b6";
-		roomId = "565d957b575db0e4f33e25b6";
-		resultTime = 24;
-		rankCount = 0;
-		$.ajax({
-			url: "http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/ranks",
-			data: {
-				userId: userId,
-				roomId: roomId,
-				resultTime: resultTime,
-				rankCount: rankCount,
-			},
-			success: function(json){
-				var arraySize = Object.keys(json.ranking).length;
-				for (var i = 0; i < arraySize; i++) {
-					if(json.ranking[i].name == "Mr. シティとり"){
-						$("#ranking").append("<span id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + json.ranking[i].name + "</br>" + json.ranking[i].score + " 秒</br><HR></span>");
-					}else{
-						$("#ranking").append("<span>" + (i + 1) + "位</br>" + json.ranking[i].name + "</br>" + json.ranking[i].score + " 秒</br><HR></span>");
-					}
-				}
-				$("#ranking").append("<br>");
-
-				for (var i=0; i < arraySize; i++){
-					if(json.ranking[i].name == "Mr. シティとり"){
-						v = i;
-						break;
-					}
-				}
-				var v = i * 131 * $("#main_in").width() / 1500;
-				$("#rankingboard").scrollTop(v);
-			},
-			error: function(){
-			console.log("error");
-			}
-		});
+	// sound on button pushed
+	function sound_button(){
+		$("#sound_button").get(0).currentTime = 0;
+		$("#sound_button").get(0).play();
 	};
-
 
 	// about register button
 	$("#register_off").mousedown(function(){
 		$(this).css({
 			"background": $(this).css("background").replace("_off","_on")
 		});
-		sounds.sound_button();
+		sound_button();
 	});
 
 	$("#register_off").mouseup(function(){
@@ -23580,7 +23454,7 @@
 		$(this).css({
 			"background": $(this).css("background").replace(".","_dummy.")
 		});
-		sounds.sound_button();
+		sound_button();
 	});
 
 	$(document).on("mouseup", ".ok", function(){
@@ -23605,7 +23479,7 @@
 		$(this).css({
 			"background": $(this).css("background").replace(".","_dummy.")
 		});
-		sounds.sound_button();
+		sound_button();
 	});
 
 	$(document).on("mouseup", ".ok2", function(){
@@ -23630,7 +23504,7 @@
 		$(this).css({
 			"background": $(this).css("background").replace(".","_dummy.")
 		});
-		sounds.sound_button();
+		sound_button();
 	});
 
 	$(document).on("mouseup", "#setting", function(){
@@ -23646,6 +23520,11 @@
 		$(this).css({
 			"background": $(this).css("background").replace("_dummy.",".")
 		});
+	});
+
+	// sound on wordnum change
+	$("#wordnum").on("change", function(){
+		sound_button();
 	});
 
 	// background scrool

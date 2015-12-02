@@ -175,7 +175,14 @@ p.answer = function (place) {
 
 p.start = function () {
   this._startTime = moment();
+  this._updateTimeTextIntervalID = setInterval(this.updateTimeText.bind(this), 1);
 };
+
+p.updateTimeText = function () {
+  var duration = moment.duration(moment().diff(this._startTime));
+  var timeText = duration.format('h:mm:ss:SSS', { trim: false, forceLength: true });
+  $('#js-game-time').text(timeText);
+}
 
 p.gameOver = function (place) {
 
@@ -212,6 +219,7 @@ p.clearGame = function () {
   this._finishTime = moment();
   var duration = moment.duration(this._finishTime.diff(this._startTime));
   console.log(duration, duration.format('h時間m分s秒'));
+  clearInterval(this._updateTimeTextIntervalID);
 
   this.game.transition('resultTimeAttack', { time: duration });
   setTimeout(function(){
