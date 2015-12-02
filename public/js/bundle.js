@@ -11336,6 +11336,7 @@
 	  this._finishTime = moment();
 	  var duration = moment.duration(this._finishTime.diff(this._startTime));
 	  console.log(duration, duration.format('h時間m分s秒'));
+	  clearInterval(this._updateTimeTextIntervalID);
 
 	  this.game.transition('singleResult', { time: duration });
 	};
