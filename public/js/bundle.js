@@ -10185,7 +10185,8 @@
 	  selectSinglePlayMode: __webpack_require__(18),
 	  configSinglePlayMode: __webpack_require__(20),
 	  playGameSingle: __webpack_require__(22),
-	  resultTimeAttack: __webpack_require__(114)
+	  resultTimeAttack: __webpack_require__(114),
+	  selectMultiPlayMode: __webpack_require__(118),
 	};
 
 
@@ -11337,27 +11338,27 @@
 	  }, 1500);
 	};
 
-
 	p.clearGame = function () {
 	  this._finishTime = moment();
 	  var duration = moment.duration(this._finishTime.diff(this._startTime));
 	  console.log(duration, duration.format('h時間m分s秒'));
 
-	  this.game.transition('resultTimeAttack', { time: duration });
+	  this.game.transition('resultTimeAttack', "君のタイムは何位かな？");
 	  setTimeout(function(){
-		  api.getRanking($.cookie("userId"), $.cookie("roomId"), (duration._milliseconds)/1000, 0).done(function(data){
+		  var finishTime = duration._milliseconds / 1000;
+		  api.getRanking($.cookie("userId"), $.cookie("roomId"), finishTime, 0).done(function(data){
 			console.log(data);
 			var arraySize = Object.keys(data.ranking).length;
 			for (var i = 0; i < arraySize; i++) {
-				if(data.ranking[i].name == $.cookie("name")){
-					$("#ranking").append("<span id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
+				if(data.ranking[i].name == $.cookie("name") && data.ranking[i].score == finishTime){
+					$("#ranking").append("<div id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></div>");
 				}else{
 					$("#ranking").append("<span>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
 				}
 			}
 			var v = $("#myscore").position().top - (100 * $("#main_in").width() / 1500);
 			$("#rankingboard").scrollTop(v);
-	  });}, 1000);
+	  });}, 500);
 	};
 
 	/**
@@ -23427,6 +23428,7 @@
 		$(this).css({
 			"background": $(this).css("background").replace("_dummy.",".")	
 		});
+		game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
 	});
 
 	$(document).on("mouseout", "#back", function(){
@@ -23667,6 +23669,28 @@
 	});
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ },
+/* 118 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var Scene = __webpack_require__(13);
+	var util = __webpack_require__(16);
+
+	var MultiPlayModeScene = function () {
+	  Scene.call(this, __webpack_require__(119));
+	};
+
+	util.inherits(MultiPlayModeScene, Scene);
+
+	module.exports = MultiPlayModeScene;
+
+
+/***/ },
+/* 119 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=multiplayicon></div><div id=battleform><button class=ok2 id=\"playbattle\"></div><div id=raceform><button class=ok2 id=\"playrace\"></div>";
 
 /***/ }
 /******/ ]);
