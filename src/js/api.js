@@ -7,5 +7,9 @@ module.exports = {
 
   initialValueIndex: function (params) {
     return util.apiGet('/rooms/' + params.roomId + '/initialValue');
+  },
+
+  getRanking: function (userId, roomId, resultTime, rankCount) {
+	return util.apiGet('/ranks?userId=' + userId + '&roomId=' + roomId + '&resultTime=' + resultTime + '&rankCount=' + rankCount);
   }
 };

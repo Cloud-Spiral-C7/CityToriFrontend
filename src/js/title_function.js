@@ -1,3 +1,5 @@
+var sounds = require("./sounds");
+
 // register name
 function register(name){
 		$.ajax({
@@ -8,9 +10,14 @@ function register(name){
 			dataType:"json",
 			success:function(data){
 				console.log(data);
-				$.cookie("name", name);
-				$.cookie("userId", data.userId);
-				game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
+				if(data.status == "OK"){
+					$.cookie("name", name);
+					$.cookie("userId", data.userId);
+					game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
+				}else{
+					$("#description").text("別の名前を入力してね！");
+					$("#name").select();
+				}
 			},
 			error:function(){
 				console.log("error");
@@ -37,18 +44,57 @@ function makeroom(userId, name, gameMode, wordNum, limitTime){
 	});
 };
 
-// sound on button pushed
-function sound_button(){
-	$("#sound_button").get(0).currentTime = 0;
-	$("#sound_button").get(0).play();
+// send score and get ranking
+function sendranking(){
+	var userId = $("#userId").text();
+	var roomId = $("#roomId").text();
+	var resultTime = parseFloat($("#resulttime").val());
+	var rankCount = parseInt($("#rankCount").val());
+	userId = "565d957a575db0e4f23e25b6";
+	roomId = "565d957b575db0e4f33e25b6";
+	resultTime = 24;
+	rankCount = 0;
+	$.ajax({
+		url: "http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/ranks",
+		data: {
+			userId: userId,
+			roomId: roomId,
+			resultTime: resultTime,
+			rankCount: rankCount,
+		},
+		success: function(json){
+			var arraySize = Object.keys(json.ranking).length;
+			for (var i = 0; i < arraySize; i++) {
+				if(json.ranking[i].name == "Mr. シティとり"){
+					$("#ranking").append("<span id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + json.ranking[i].name + "</br>" + json.ranking[i].score + " 秒</br><HR></span>");
+				}else{
+					$("#ranking").append("<span>" + (i + 1) + "位</br>" + json.ranking[i].name + "</br>" + json.ranking[i].score + " 秒</br><HR></span>");
+				}
+			}
+			$("#ranking").append("<br>");
+
+			for (var i=0; i < arraySize; i++){
+				if(json.ranking[i].name == "Mr. シティとり"){
+					v = i;
+					break;
+				}
+			}
+			var v = i * 131 * $("#main_in").width() / 1500;
+			$("#rankingboard").scrollTop(v);
+		},
+		error: function(){
+		console.log("error");
+		}
+	});
 };
+
 
 // about register button
 $("#register_off").mousedown(function(){
 	$(this).css({
 		"background": $(this).css("background").replace("_off","_on")
 	});
-	sound_button();
+	sounds.sound_button();
 });
 
 $("#register_off").mouseup(function(){
@@ -71,7 +117,7 @@ $(document).on("mousedown", ".ok", function(){
 	$(this).css({
 		"background": $(this).css("background").replace(".","_dummy.")
 	});
-	sound_button();
+	sounds.sound_button();
 });
 
 $(document).on("mouseup", ".ok", function(){
@@ -96,7 +142,7 @@ $(document).on("mousedown", ".ok2", function(){
 	$(this).css({
 		"background": $(this).css("background").replace(".","_dummy.")
 	});
-	sound_button();
+	sounds.sound_button();
 });
 
 $(document).on("mouseup", ".ok2", function(){
@@ -121,7 +167,7 @@ $(document).on("mousedown", "#setting", function(){
 	$(this).css({
 		"background": $(this).css("background").replace(".","_dummy.")
 	});
-	sound_button();
+	sounds.sound_button();
 });
 
 $(document).on("mouseup", "#setting", function(){
@@ -137,11 +183,6 @@ $(document).on("mouseout", "#setting", function(){
 	$(this).css({
 		"background": $(this).css("background").replace("_dummy.",".")
 	});
-});
-
-// sound on wordnum change
-$("#wordnum").on("change", function(){
-	sound_button();
 });
 
 // background scrool

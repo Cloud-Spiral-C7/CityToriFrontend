@@ -340,13 +340,79 @@ button#setting{
 	top: 57%;
 	margin: auto;
 	left: 0;
-	right: 2%;
+	right: 1%;
 	border: 0;
 	cursor: pointer;
 	overflow: hidden;
 	outline: none;
 }
 
+div#resultform{
+	background-image: url("../img/resultform.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% * 800 / 1500);
+	height: calc(100% * 800 / 1000);
+	position: absolute;
+	top: 10%;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
+div#rankingboard{
+	background-color: rgb(255,170,70);
+	background-position: center;
+	width: 80%;
+	height: 68%;
+	position: absolute;
+	top: 0%;
+	bottom: 3%;
+	left: 0;
+	right: 0;
+	margin: auto;
+	overflow-y: scroll;
+	-moz-box-shadow:    0 0 10px 5px rgba(0,0,0,0.4) inset;
+	-webkit-box-shadow: 0 0 10px 5px rgba(0,0,0,0.4) inset;
+	-o-box-shadow:      0 0 10px 5px rgba(0,0,0,0.4) inset;
+	-ms-box-shadow:     0 0 10px 5px rgba(0,0,0,0.4) inset;
+}
+
+div#ranking{
+	color: white;
+	font-family: m+1medium;
+	text-align: center;
+	width: 90%;
+	height: 80%;
+	position: absolute;
+	top: 0%;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
+}
+
+span#myscore{
+	font-size: 125%;
+}
+
+button#back{
+	background: url("../img/backbutton.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: center;
+	width: calc(100% * 200 / 800);
+	height: calc(100% * 75 / 800);
+	position: absolute;
+	top: 84.5%;
+	margin: auto;
+	left: 0;
+	right: 1%;
+	border: 0;
+	cursor: pointer;
+	overflow: hidden;
+	outline: none;
+}
 
 div#footer-bk{
 	background-color: rgb(153,153,153);
