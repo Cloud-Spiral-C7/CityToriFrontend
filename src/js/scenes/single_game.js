@@ -4,6 +4,7 @@ require("moment-duration-format");
 var util = require('../util');
 var Scene = require('../scene');
 var api = require('../api');
+var sounds = require('../sounds');
 
 var GameScene = function () {
   Scene.call(this, require('../../html/play_game_single.html'));
@@ -104,6 +105,8 @@ p.openAnswerDialog = function (places) {
   });
 
   $('#js-game-answer-dialog').show();
+
+  sounds.sound_select_open();
 }
 
 p.closeAnswerDialog = function (places) {
@@ -200,6 +203,8 @@ p.answerOK = function (place, finished) {
     if (finished) that.clearGame();
     that.closeAnswerDialog();
   }, 1500);
+
+  sounds.sound_answer_success();
 };
 
 p.answerNG = function (place) {
@@ -212,6 +217,8 @@ p.answerNG = function (place) {
   setTimeout(function () {
     $('#js-answer-result').hide();
   }, 1500);
+
+  sounds.sound_answer_miss();
 };
 
 p.clearGame = function () {
@@ -236,6 +243,7 @@ p.clearGame = function () {
 		var v = $("#myscore").position().top - (100 * $("#main_in").width() / 1500);
 		$("#rankingboard").scrollTop(v);
   });}, 500);
+
 };
 
 /**

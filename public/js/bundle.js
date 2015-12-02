@@ -11135,6 +11135,7 @@
 	var util = __webpack_require__(16);
 	var Scene = __webpack_require__(13);
 	var api = __webpack_require__(112);
+	var sounds = __webpack_require__(115);
 
 	var GameScene = function () {
 	  Scene.call(this, __webpack_require__(113));
@@ -11235,6 +11236,8 @@
 	  });
 
 	  $('#js-game-answer-dialog').show();
+
+	  sounds.sound_select_open();
 	}
 
 	p.closeAnswerDialog = function (places) {
@@ -11331,6 +11334,8 @@
 	    if (finished) that.clearGame();
 	    that.closeAnswerDialog();
 	  }, 1500);
+
+	  sounds.sound_answer_success();
 	};
 
 	p.answerNG = function (place) {
@@ -11343,6 +11348,8 @@
 	  setTimeout(function () {
 	    $('#js-answer-result').hide();
 	  }, 1500);
+
+	  sounds.sound_answer_miss();
 	};
 
 	p.clearGame = function () {
@@ -11367,6 +11374,7 @@
 			var v = $("#myscore").position().top - (100 * $("#main_in").width() / 1500);
 			$("#rankingboard").scrollTop(v);
 	  });}, 500);
+
 	};
 
 	/**
@@ -23452,11 +23460,22 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {module.exports = {
-		// sound on button pushed
 		sound_button: function (){
 			$("#sound_button").get(0).currentTime = 0;
 			$("#sound_button").get(0).play();
-		}
+		},
+		sound_select_open: function (){
+			$("#sound_select_open").get(0).currentTime = 0;
+			$("#sound_select_open").get(0).play();
+		},
+		sound_answer_success: function (){
+			$("#sound_answer_success").get(0).currentTime = 0;
+			$("#sound_answer_success").get(0).play();
+		},
+		sound_answer_miss: function (){
+			$("#sound_answer_miss").get(0).currentTime = 0;
+			$("#sound_answer_miss").get(0).play();
+		},
 	};
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
