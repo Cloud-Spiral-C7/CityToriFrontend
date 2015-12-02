@@ -4,6 +4,7 @@ require("moment-duration-format");
 var util = require('../util');
 var Scene = require('../scene');
 var api = require('../api');
+var sounds = require('../sounds');
 
 var GameScene = function () {
   Scene.call(this, require('../../html/play_game_single.html'));
@@ -104,6 +105,8 @@ p.openAnswerDialog = function (places) {
   });
 
   $('#js-game-answer-dialog').show();
+
+  sounds.sound_select_open();
 }
 
 p.closeAnswerDialog = function (places) {
@@ -200,6 +203,8 @@ p.answerOK = function (place, finished) {
     if (finished) that.clearGame();
     that.closeAnswerDialog();
   }, 1500);
+
+  sounds.sound_answer_success();
 };
 
 p.answerNG = function (place) {
@@ -212,30 +217,16 @@ p.answerNG = function (place) {
   setTimeout(function () {
     $('#js-answer-result').hide();
   }, 1500);
+
+  sounds.sound_answer_miss();
 };
 
 p.clearGame = function () {
-  this._finishTime = moment();
-  var duration = moment.duration(this._finishTime.diff(this._startTime));
-  console.log(duration, duration.format('h時間m分s秒'));
-  clearInterval(this._updateTimeTextIntervalID);
+  var duration = moment.duration(moment().diff(this._startTime));
 
-  this.game.transition('resultTimeAttack', "君のタイムは何位かな？");
-  setTimeout(function(){
-	  var finishTime = duration._milliseconds / 1000;
-	  api.getRanking($.cookie("userId"), $.cookie("roomId"), finishTime, 0).done(function(data){
-		console.log(data);
-		var arraySize = Object.keys(data.ranking).length;
-		for (var i = 0; i < arraySize; i++) {
-			if(data.ranking[i].name == $.cookie("name") && data.ranking[i].score == finishTime){
-				$("#ranking").append("<div id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></div>");
-			}else{
-				$("#ranking").append("<span>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
-			}
-		}
-		var v = $("#myscore").position().top - (100 * $("#main_in").width() / 1500);
-		$("#rankingboard").scrollTop(v);
-  });}, 500);
+  $.cookie('resultTime', duration.milliseconds());
+  this.game.transition('GameFinish', '君のタイムは何位かな？');
+  clearInterval(this._updateTimeTextIntervalID);
 };
 
 /**
