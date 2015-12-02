@@ -57,7 +57,7 @@
 	game.scenes = __webpack_require__(7);
 
 	game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
-	  __webpack_require__(119);
+	  __webpack_require__(121);
 	});
 
 	$(function () {
@@ -10185,8 +10185,9 @@
 	  selectSinglePlayMode: __webpack_require__(18),
 	  configSinglePlayMode: __webpack_require__(20),
 	  playGameSingle: __webpack_require__(22),
-	  resultTimeAttack: __webpack_require__(114),
-	  GameFinish: __webpack_require__(117)
+	  resultTimeAttack: __webpack_require__(115),
+	  GameFinish: __webpack_require__(117),
+	  selectMultiPlayMode: __webpack_require__(119),
 	};
 
 
@@ -11135,9 +11136,10 @@
 	var util = __webpack_require__(16);
 	var Scene = __webpack_require__(13);
 	var api = __webpack_require__(112);
+	var sounds = __webpack_require__(113);
 
 	var GameScene = function () {
-	  Scene.call(this, __webpack_require__(113));
+	  Scene.call(this, __webpack_require__(114));
 
 	  var element = $('#map')[0];
 	  var that = this;
@@ -11235,6 +11237,8 @@
 	  });
 
 	  $('#js-game-answer-dialog').show();
+
+	  sounds.sound_select_open();
 	}
 
 	p.closeAnswerDialog = function (places) {
@@ -11331,6 +11335,8 @@
 	    if (finished) that.clearGame();
 	    that.closeAnswerDialog();
 	  }, 1500);
+
+	  sounds.sound_answer_success();
 	};
 
 	p.answerNG = function (place) {
@@ -11343,14 +11349,15 @@
 	  setTimeout(function () {
 	    $('#js-answer-result').hide();
 	  }, 1500);
-	};
 
+	  sounds.sound_answer_miss();
+	};
 
 	p.clearGame = function () {
 	  var duration = moment.duration(moment().diff(this._startTime));
 
 	  $.cookie('resultTime', duration.milliseconds());
-	  this.game.transition('GameFinish', '結果発表!');
+	  this.game.transition('GameFinish', '君のタイムは何位かな？');
 	  clearInterval(this._updateTimeTextIntervalID);
 	};
 
@@ -23390,17 +23397,42 @@
 
 /***/ },
 /* 113 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($) {module.exports = {
+		sound_button: function (){
+			$("#sound_button").get(0).currentTime = 0;
+			$("#sound_button").get(0).play();
+		},
+		sound_select_open: function (){
+			$("#sound_select_open").get(0).currentTime = 0;
+			$("#sound_select_open").get(0).play();
+		},
+		sound_answer_success: function (){
+			$("#sound_answer_success").get(0).currentTime = 0;
+			$("#sound_answer_success").get(0).play();
+		},
+		sound_answer_miss: function (){
+			$("#sound_answer_miss").get(0).currentTime = 0;
+			$("#sound_answer_miss").get(0).play();
+		},
+	};
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ },
+/* 114 */
 /***/ function(module, exports) {
 
 	module.exports = "<div id=game-scene class=container><div class=map-container><div class=map id=map></div><div id=js-game-answer-dialog class=\"game-dialog clearfix\" style=\"display: none\"><a id=js-cancel-button class=game-dialog-close-btn href=#>×</a><div class=game-dialog-heading>クリックして地名を答えてね</div><ol id=js-answer-candidates class=answer-candidates></ol><div id=js-answer-result class=answer-result></div></div></div><div class=navigation-container><div class=navigation><h2>経過時間<h2><div id=js-game-time class=game-time></div><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></h2></h2></div></div></div>";
 
 /***/ },
-/* 114 */
+/* 115 */
 /***/ function(module, exports, __webpack_require__) {
 
 	/* WEBPACK VAR INJECTION */(function($) {var util = __webpack_require__(16);
 	var Scene = __webpack_require__(13);
-	var sounds = __webpack_require__(115);
+	var sounds = __webpack_require__(113);
 	var api = __webpack_require__(112);
 
 	var ResultTimeAttackScene = function () {
@@ -23467,20 +23499,6 @@
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
 /***/ },
-/* 115 */
-/***/ function(module, exports, __webpack_require__) {
-
-	/* WEBPACK VAR INJECTION */(function($) {module.exports = {
-		// sound on button pushed
-		sound_button: function (){
-			$("#sound_button").get(0).currentTime = 0;
-			$("#sound_button").get(0).play();
-		}
-	};
-
-	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ },
 /* 116 */
 /***/ function(module, exports) {
 
@@ -23505,7 +23523,7 @@
 	  var that = this;
 
 	  setTimeout(function () {
-	    that.game.transition('resultTimeAttack', '結果発表!');
+	    that.game.transition('resultTimeAttack', '君のタイムは何位かな？');
 	  }, 1000);
 	}
 
@@ -23522,7 +23540,29 @@
 /* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {var sounds = __webpack_require__(115);
+	var Scene = __webpack_require__(13);
+	var util = __webpack_require__(16);
+
+	var MultiPlayModeScene = function () {
+	  Scene.call(this, __webpack_require__(120));
+	};
+
+	util.inherits(MultiPlayModeScene, Scene);
+
+	module.exports = MultiPlayModeScene;
+
+
+/***/ },
+/* 120 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=multiplayicon></div><div id=battleform><button class=ok2 id=\"playbattle\"></div><div id=raceform><button class=ok2 id=\"playrace\"></div>";
+
+/***/ },
+/* 121 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($) {var sounds = __webpack_require__(113);
 
 	// register name
 	function register(name){
