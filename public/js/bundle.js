@@ -11295,9 +11295,8 @@
 	    console.debug(data);
 
 	    if (data.result.startsWith('NG')) return that.answerNG(place);
-	    if (data.result == 'Finish') return that.clearGame();
 
-	    that.answerOK(place);
+	    that.answerOK(place, data.result == 'Finish');
 	    that.currentTheme = place;
 	  });
 
@@ -11306,13 +11305,20 @@
 
 	p.start = function () {
 	  this._startTime = moment();
+	  this._updateTimeTextIntervalID = setInterval(this.updateTimeText.bind(this), 1);
 	};
+
+	p.updateTimeText = function () {
+	  var duration = moment.duration(moment().diff(this._startTime));
+	  var timeText = duration.format('h:mm:ss:SSS', { trim: false, forceLength: true });
+	  $('#js-game-time').text(timeText);
+	}
 
 	p.gameOver = function (place) {
 
 	};
 
-	p.answerOK = function (place) {
+	p.answerOK = function (place, finished) {
 	  var that = this;
 
 	  $('#js-answer-result')
@@ -11322,6 +11328,7 @@
 	    .show();
 
 	  setTimeout(function() {
+	    if (finished) that.clearGame();
 	    that.closeAnswerDialog();
 	  }, 1500);
 	};
@@ -11342,6 +11349,7 @@
 	  this._finishTime = moment();
 	  var duration = moment.duration(this._finishTime.diff(this._startTime));
 	  console.log(duration, duration.format('h時間m分s秒'));
+	  clearInterval(this._updateTimeTextIntervalID);
 
 	  this.game.transition('resultTimeAttack', "君のタイムは何位かな？");
 	  setTimeout(function(){
@@ -23399,7 +23407,7 @@
 /* 113 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=game-scene class=container><div class=map-container><div class=map id=map></div><div id=js-game-answer-dialog class=\"game-dialog clearfix\" style=\"display: none\"><a id=js-cancel-button class=game-dialog-close-btn href=#>×</a><div class=game-dialog-heading>クリックして地名を答えてね</div><ol id=js-answer-candidates class=answer-candidates></ol><div id=js-answer-result class=answer-result></div></div></div><div class=navigation-container><div class=navigation><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></div></div></div>";
+	module.exports = "<div id=game-scene class=container><div class=map-container><div class=map id=map></div><div id=js-game-answer-dialog class=\"game-dialog clearfix\" style=\"display: none\"><a id=js-cancel-button class=game-dialog-close-btn href=#>×</a><div class=game-dialog-heading>クリックして地名を答えてね</div><ol id=js-answer-candidates class=answer-candidates></ol><div id=js-answer-result class=answer-result></div></div></div><div class=navigation-container><div class=navigation><h2>経過時間<h2><div id=js-game-time class=game-time></div><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></h2></h2></div></div></div>";
 
 /***/ },
 /* 114 */
