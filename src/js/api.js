@@ -10,6 +10,6 @@ module.exports = {
   },
 
   getRanking: function (userId, roomId, resultTime, rankCount) {
-	return util.apiGet('/ranks?userId=' + userId + '&roomId=' + roomId + '&resultTime=' + resultTime + '&rankCount=' + rankCount);
+	   return util.apiGet('/ranks?userId=' + userId + '&roomId=' + roomId + '&resultTime=' + resultTime + '&rankCount=' + rankCount);
   }
 };
