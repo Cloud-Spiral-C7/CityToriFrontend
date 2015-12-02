@@ -214,12 +214,11 @@ p.answerNG = function (place) {
   }, 1500);
 };
 
-
 p.clearGame = function () {
   var duration = moment.duration(moment().diff(this._startTime));
 
   $.cookie('resultTime', duration.milliseconds());
-  this.game.transition('GameFinish', '結果発表!');
+  this.game.transition('GameFinish', '君のタイムは何位かな？');
   clearInterval(this._updateTimeTextIntervalID);
 };
 

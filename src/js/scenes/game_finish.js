@@ -13,7 +13,7 @@ p.onshown = function (e) {
   var that = this;
 
   setTimeout(function () {
-    that.game.transition('resultTimeAttack', '結果発表!');
+    that.game.transition('resultTimeAttack', '君のタイムは何位かな？');
   }, 1000);
 }
 

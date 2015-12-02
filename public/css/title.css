@@ -267,6 +267,45 @@ div#scoreattackform{
 	right: 0;
 }
 
+div#multiplayicon{
+	background-image: url("../img/multiplayicon.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% * 200 / 1500);
+	height: calc(100% * 200 / 1000);
+	position: absolute;
+	top: 22%;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
+div#battleform{
+	background-image: url("../img/battleform.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% * 750 / 1500);
+	height: calc(100% * 150 / 1000);
+	position: absolute;
+	top: 43%;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
+div#raceform{
+	background-image: url("../img/raceform.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% * 750 / 1500);
+	height: calc(100% * 150 / 1000);
+	position: absolute;
+	top: 58%;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
 button.ok2{
 	background: url("../img/okbutton.png");
 	background-repeat: no-repeat;
@@ -372,10 +411,10 @@ div#rankingboard{
 	right: 0;
 	margin: auto;
 	overflow-y: scroll;
-	-moz-box-shadow:    0 0 10px 5px rgba(0,0,0,0.4) inset;
-	-webkit-box-shadow: 0 0 10px 5px rgba(0,0,0,0.4) inset;
-	-o-box-shadow:      0 0 10px 5px rgba(0,0,0,0.4) inset;
-	-ms-box-shadow:     0 0 10px 5px rgba(0,0,0,0.4) inset;
+	-moz-box-shadow:    0 0 10px 5px rgba(0,0,0,0.2) inset;
+	-webkit-box-shadow: 0 0 10px 5px rgba(0,0,0,0.2) inset;
+	-o-box-shadow:      0 0 10px 5px rgba(0,0,0,0.2) inset;
+	-ms-box-shadow:     0 0 10px 5px rgba(0,0,0,0.2) inset;
 }
 
 div#ranking{
@@ -392,7 +431,11 @@ div#ranking{
 	margin: auto;
 }
 
-span#myscore{
+div#myscore{
+	background: url("../img/myscore.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	background-position: center;
 	font-size: 125%;
 }
 
