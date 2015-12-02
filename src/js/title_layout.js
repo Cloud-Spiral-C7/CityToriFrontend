@@ -21,7 +21,10 @@ $(document).ready(function(){
 
 		$("#name").css({
 			"font-size": w * 0.02
-		})	
+		});
+		$("#ranking").css({
+			"font-size": (175 * (w) / 1500) + "%"
+		});
 	}else{
 		$("#header-bk").css({
 			"width": w,
@@ -40,7 +43,10 @@ $(document).ready(function(){
 
 		$("#name").css({
 			"font-size": 3/2 * (h - 100 - 100) * 0.02
-		})
+		});
+		$("#ranking").css({
+			"font-size": (175 * (h - 100 - 100) / 1000) + "%"
+		});
 	}
 });
 
@@ -66,7 +72,10 @@ $(window).resize(function(){
 
 		$("#name").css({
 			"font-size": w * 0.02
-		})	
+		});
+		$("#ranking").css({
+			"font-size": (175 * (w) / 1500) + "%"
+		});
 	}else{
 		$("#header-bk").css({
 			"width": w,
@@ -85,7 +94,10 @@ $(window).resize(function(){
 
 		$("#name").css({
 			"font-size": 3/2 * (h - 100 - 100) * 0.02
-		})
+		});
+		$("#ranking").css({
+			"font-size": (175 * (h - 100 - 100) / 1000) + "%"
+		});
 	}
 });
 
