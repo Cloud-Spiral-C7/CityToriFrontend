@@ -57,7 +57,7 @@
 	game.scenes = __webpack_require__(7);
 
 	game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
-	  __webpack_require__(114);
+	  __webpack_require__(117);
 	});
 
 	$(function () {
@@ -10011,7 +10011,10 @@
 
 			$("#name").css({
 				"font-size": w * 0.02
-			})	
+			});
+			$("#ranking").css({
+				"font-size": (175 * (w) / 1500) + "%"
+			});
 		}else{
 			$("#header-bk").css({
 				"width": w,
@@ -10030,7 +10033,10 @@
 
 			$("#name").css({
 				"font-size": 3/2 * (h - 100 - 100) * 0.02
-			})
+			});
+			$("#ranking").css({
+				"font-size": (175 * (h - 100 - 100) / 1000) + "%"
+			});
 		}
 	});
 
@@ -10056,7 +10062,10 @@
 
 			$("#name").css({
 				"font-size": w * 0.02
-			})	
+			});
+			$("#ranking").css({
+				"font-size": (175 * (w) / 1500) + "%"
+			});
 		}else{
 			$("#header-bk").css({
 				"width": w,
@@ -10075,7 +10084,10 @@
 
 			$("#name").css({
 				"font-size": 3/2 * (h - 100 - 100) * 0.02
-			})
+			});
+			$("#ranking").css({
+				"font-size": (175 * (h - 100 - 100) / 1000) + "%"
+			});
 		}
 	});
 
@@ -10172,7 +10184,8 @@
 	  selectPlayMode: __webpack_require__(15),
 	  selectSinglePlayMode: __webpack_require__(18),
 	  configSinglePlayMode: __webpack_require__(20),
-	  playGameSingle: __webpack_require__(22)
+	  playGameSingle: __webpack_require__(22),
+	  resultTimeAttack: __webpack_require__(114)
 	};
 
 
@@ -11109,7 +11122,7 @@
 /* 21 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=timeattackicon></div><div id=settingform><input type=number id=wordnum step=5 min=5 max=50 value=\"10\"><br><button id=\"setting\"></div>";
+	module.exports = "<div id=timeattackicon></div><div id=settingform><input type=number id=wordnum step=5 min=5 max=50 value=\"1\"><br><button id=\"setting\"></div>";
 
 /***/ },
 /* 22 */
@@ -11281,9 +11294,8 @@
 	    console.debug(data);
 
 	    if (data.result.startsWith('NG')) return that.answerNG(place);
-	    if (data.result == 'Finish') return that.clearGame();
 
-	    that.answerOK(place);
+	    that.answerOK(place, data.result == 'Finish');
 	    that.currentTheme = place;
 	  });
 
@@ -11305,7 +11317,7 @@
 
 	};
 
-	p.answerOK = function (place) {
+	p.answerOK = function (place, finished) {
 	  var that = this;
 
 	  $('#js-answer-result')
@@ -11315,6 +11327,7 @@
 	    .show();
 
 	  setTimeout(function() {
+	    if (finished) that.clearGame();
 	    that.closeAnswerDialog();
 	  }, 1500);
 	};
@@ -11338,7 +11351,21 @@
 	  console.log(duration, duration.format('h時間m分s秒'));
 	  clearInterval(this._updateTimeTextIntervalID);
 
-	  this.game.transition('singleResult', { time: duration });
+	  this.game.transition('resultTimeAttack', { time: duration });
+	  setTimeout(function(){
+		  api.getRanking($.cookie("userId"), $.cookie("roomId"), (duration._milliseconds)/1000, 0).done(function(data){
+			console.log(data);
+			var arraySize = Object.keys(data.ranking).length;
+			for (var i = 0; i < arraySize; i++) {
+				if(data.ranking[i].name == $.cookie("name")){
+					$("#ranking").append("<span id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
+				}else{
+					$("#ranking").append("<span>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
+				}
+			}
+			var v = $("#myscore").position().top - (100 * $("#main_in").width() / 1500);
+			$("#rankingboard").scrollTop(v);
+	  });}, 1000);
 	};
 
 	/**
@@ -23367,6 +23394,10 @@
 
 	  initialValueIndex: function (params) {
 	    return util.apiGet('/rooms/' + params.roomId + '/initialValue');
+	  },
+
+	  getRanking: function (userId, roomId, resultTime, rankCount) {
+		return util.apiGet('/ranks?userId=' + userId + '&roomId=' + roomId + '&resultTime=' + resultTime + '&rankCount=' + rankCount);
 	  }
 	};
 
@@ -23381,7 +23412,66 @@
 /* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {// register name
+	/* WEBPACK VAR INJECTION */(function($) {var util = __webpack_require__(9);
+	var Scene = __webpack_require__(13);
+	var sounds = __webpack_require__(115);
+	var ResultTimeAttackScene = function () {
+	  Scene.call(this, __webpack_require__(116));
+	}
+
+	util.inherits(ResultTimeAttackScene, Scene)
+
+	module.exports = ResultTimeAttackScene;
+
+	// about back button
+	$(document).on("mousedown", "#back", function(){
+		$(this).css({
+			"background": $(this).css("background").replace(".","_dummy.")	
+		});
+		sounds.sound_button();
+	});
+
+	$(document).on("mouseup", "#back", function(){
+		$(this).css({
+			"background": $(this).css("background").replace("_dummy.",".")	
+		});
+	});
+
+	$(document).on("mouseout", "#back", function(){
+		$(this).css({
+			"background": $(this).css("background").replace("_dummy.",".")
+		});
+	});
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ },
+/* 115 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($) {module.exports = {
+		// sound on button pushed
+		sound_button: function (){
+			$("#sound_button").get(0).currentTime = 0;
+			$("#sound_button").get(0).play();
+		}
+	};
+
+	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
+
+/***/ },
+/* 116 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=resultform><div id=rankingboard><div id=ranking></div></div><button id=back></button></div>";
+
+/***/ },
+/* 117 */
+/***/ function(module, exports, __webpack_require__) {
+
+	/* WEBPACK VAR INJECTION */(function($) {var sounds = __webpack_require__(115);
+
+	// register name
 	function register(name){
 			$.ajax({
 				type:"post",
@@ -23391,9 +23481,14 @@
 				dataType:"json",
 				success:function(data){
 					console.log(data);
-					$.cookie("name", name);
-					$.cookie("userId", data.userId);
-					game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
+					if(data.status == "OK"){
+						$.cookie("name", name);
+						$.cookie("userId", data.userId);
+						game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
+					}else{
+						$("#description").text("別の名前を入力してね！");
+						$("#name").select();
+					}
 				},
 				error:function(){
 					console.log("error");
@@ -23420,18 +23515,57 @@
 		});
 	};
 
-	// sound on button pushed
-	function sound_button(){
-		$("#sound_button").get(0).currentTime = 0;
-		$("#sound_button").get(0).play();
+	// send score and get ranking
+	function sendranking(){
+		var userId = $("#userId").text();
+		var roomId = $("#roomId").text();
+		var resultTime = parseFloat($("#resulttime").val());
+		var rankCount = parseInt($("#rankCount").val());
+		userId = "565d957a575db0e4f23e25b6";
+		roomId = "565d957b575db0e4f33e25b6";
+		resultTime = 24;
+		rankCount = 0;
+		$.ajax({
+			url: "http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/ranks",
+			data: {
+				userId: userId,
+				roomId: roomId,
+				resultTime: resultTime,
+				rankCount: rankCount,
+			},
+			success: function(json){
+				var arraySize = Object.keys(json.ranking).length;
+				for (var i = 0; i < arraySize; i++) {
+					if(json.ranking[i].name == "Mr. シティとり"){
+						$("#ranking").append("<span id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + json.ranking[i].name + "</br>" + json.ranking[i].score + " 秒</br><HR></span>");
+					}else{
+						$("#ranking").append("<span>" + (i + 1) + "位</br>" + json.ranking[i].name + "</br>" + json.ranking[i].score + " 秒</br><HR></span>");
+					}
+				}
+				$("#ranking").append("<br>");
+
+				for (var i=0; i < arraySize; i++){
+					if(json.ranking[i].name == "Mr. シティとり"){
+						v = i;
+						break;
+					}
+				}
+				var v = i * 131 * $("#main_in").width() / 1500;
+				$("#rankingboard").scrollTop(v);
+			},
+			error: function(){
+			console.log("error");
+			}
+		});
 	};
+
 
 	// about register button
 	$("#register_off").mousedown(function(){
 		$(this).css({
 			"background": $(this).css("background").replace("_off","_on")
 		});
-		sound_button();
+		sounds.sound_button();
 	});
 
 	$("#register_off").mouseup(function(){
@@ -23454,7 +23588,7 @@
 		$(this).css({
 			"background": $(this).css("background").replace(".","_dummy.")
 		});
-		sound_button();
+		sounds.sound_button();
 	});
 
 	$(document).on("mouseup", ".ok", function(){
@@ -23479,7 +23613,7 @@
 		$(this).css({
 			"background": $(this).css("background").replace(".","_dummy.")
 		});
-		sound_button();
+		sounds.sound_button();
 	});
 
 	$(document).on("mouseup", ".ok2", function(){
@@ -23504,7 +23638,7 @@
 		$(this).css({
 			"background": $(this).css("background").replace(".","_dummy.")
 		});
-		sound_button();
+		sounds.sound_button();
 	});
 
 	$(document).on("mouseup", "#setting", function(){
@@ -23520,11 +23654,6 @@
 		$(this).css({
 			"background": $(this).css("background").replace("_dummy.",".")
 		});
-	});
-
-	// sound on wordnum change
-	$("#wordnum").on("change", function(){
-		sound_button();
 	});
 
 	// background scrool
