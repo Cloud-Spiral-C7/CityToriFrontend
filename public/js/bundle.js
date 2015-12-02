@@ -57,7 +57,7 @@
 	game.scenes = __webpack_require__(7);
 
 	game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
-	  __webpack_require__(117);
+	  __webpack_require__(119);
 	});
 
 	$(function () {
@@ -10186,7 +10186,7 @@
 	  configSinglePlayMode: __webpack_require__(20),
 	  playGameSingle: __webpack_require__(22),
 	  resultTimeAttack: __webpack_require__(114),
-	  selectMultiPlayMode: __webpack_require__(118),
+	  selectMultiPlayMode: __webpack_require__(117),
 	};
 
 
@@ -23471,6 +23471,28 @@
 /* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
+	var Scene = __webpack_require__(13);
+	var util = __webpack_require__(16);
+
+	var MultiPlayModeScene = function () {
+	  Scene.call(this, __webpack_require__(118));
+	};
+
+	util.inherits(MultiPlayModeScene, Scene);
+
+	module.exports = MultiPlayModeScene;
+
+
+/***/ },
+/* 118 */
+/***/ function(module, exports) {
+
+	module.exports = "<div id=multiplayicon></div><div id=battleform><button class=ok2 id=\"playbattle\"></div><div id=raceform><button class=ok2 id=\"playrace\"></div>";
+
+/***/ },
+/* 119 */
+/***/ function(module, exports, __webpack_require__) {
+
 	/* WEBPACK VAR INJECTION */(function($) {var sounds = __webpack_require__(115);
 
 	// register name
@@ -23677,28 +23699,6 @@
 	});
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
-
-/***/ },
-/* 118 */
-/***/ function(module, exports, __webpack_require__) {
-
-	var Scene = __webpack_require__(13);
-	var util = __webpack_require__(16);
-
-	var MultiPlayModeScene = function () {
-	  Scene.call(this, __webpack_require__(119));
-	};
-
-	util.inherits(MultiPlayModeScene, Scene);
-
-	module.exports = MultiPlayModeScene;
-
-
-/***/ },
-/* 119 */
-/***/ function(module, exports) {
-
-	module.exports = "<div id=multiplayicon></div><div id=battleform><button class=ok2 id=\"playbattle\"></div><div id=raceform><button class=ok2 id=\"playrace\"></div>";
 
 /***/ }
 /******/ ]);
