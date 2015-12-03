@@ -25,8 +25,9 @@ Object.defineProperties(p, {
   }
 });
 
-p.addScene = function (name, scene) {
-  this._scenes[name] = scene;
+p.addScene = function (id, scene) {
+  this._scenes[id] = scene;
+  scene._id = id;
 }
 
 p.transition = function (name, header, cb) {

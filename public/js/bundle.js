@@ -10136,8 +10136,9 @@
 	  }
 	});
 
-	p.addScene = function (name, scene) {
-	  this._scenes[name] = scene;
+	p.addScene = function (id, scene) {
+	  this._scenes[id] = scene;
+	  scene._id = id;
 	}
 
 	p.transition = function (name, header, cb) {
@@ -10961,6 +10962,7 @@
 	  this._view = view;
 	  this._game = null;
 	  this._events = {};
+	  this._id = null;
 	}, p = Scene.prototype;
 
 	Object.defineProperties(p, {
@@ -10970,6 +10972,9 @@
 	  },
 	  game: {
 	    get: function () { return this._game; }
+	  },
+	  id: {
+	    get: function () { return this._id; }
 	  }
 	});
 
