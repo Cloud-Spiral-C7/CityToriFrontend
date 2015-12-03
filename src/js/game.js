@@ -46,13 +46,15 @@ p.transition = function (name, header, cb) {
   	}, 500, "easeInQuad");
   }
 
+  if (this.onBeforeTransition) this.onBeforeTransition();
+
   var scene = this.scenes[name];
 
 	if (scene === undefined) {
 		return console.warn('Not implemented scene:', name);
 	}
 
-	var $main = $('#main_in');
+	var $main = $('#js-main-container');
   var $description = $('#description');
   var that = this;
 
@@ -66,6 +68,9 @@ p.transition = function (name, header, cb) {
     fadein($description);
 
 		$("#description").text(header);
+
+    if (that.onAfterTransition) that.onAfterTransition();
+
     if (cb) cb();
 	});
 }
