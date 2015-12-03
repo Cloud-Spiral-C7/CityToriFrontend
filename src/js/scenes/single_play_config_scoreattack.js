@@ -1,10 +1,10 @@
 var Scene = require('../scene');
 var util = require('../util');
 
-var SinglePlayConfigScene = function () {
+var SinglePlayConfigScoreAttackScene = function () {
   Scene.call(this, require('../../html/config_scoreattack.html'));
 };
 
-util.inherits(SinglePlayConfigScene, Scene);
+util.inherits(SinglePlayConfigScoreAttackScene, Scene);
 
-module.exports = SinglePlayConfigScene;
+module.exports = SinglePlayConfigScoreAttackScene;

@@ -11112,13 +11112,13 @@
 	var Scene = __webpack_require__(13);
 	var util = __webpack_require__(16);
 
-	var SinglePlayConfigScene = function () {
+	var SinglePlayConfigTimeAttackScene = function () {
 	  Scene.call(this, __webpack_require__(21));
 	};
 
-	util.inherits(SinglePlayConfigScene, Scene);
+	util.inherits(SinglePlayConfigTimeAttackScene, Scene);
 
-	module.exports = SinglePlayConfigScene;
+	module.exports = SinglePlayConfigTimeAttackScene;
 
 
 /***/ },
@@ -11134,13 +11134,13 @@
 	var Scene = __webpack_require__(13);
 	var util = __webpack_require__(16);
 
-	var SinglePlayConfigScene = function () {
+	var SinglePlayConfigScoreAttackScene = function () {
 	  Scene.call(this, __webpack_require__(23));
 	};
 
-	util.inherits(SinglePlayConfigScene, Scene);
+	util.inherits(SinglePlayConfigScoreAttackScene, Scene);
 
-	module.exports = SinglePlayConfigScene;
+	module.exports = SinglePlayConfigScoreAttackScene;
 
 
 /***/ },
