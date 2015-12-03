@@ -519,6 +519,14 @@ div#footer{
 	height: 100%;
 }
 
+.animsition, #js-main-container {
+	height: 100%;
+}
+
+#js-main-container {
+	position: relative;
+}
+
 .map-container, .navigation-container {
 	height: 100%;
 	float: left;
