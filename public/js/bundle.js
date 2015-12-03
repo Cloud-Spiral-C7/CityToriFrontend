@@ -44,33 +44,6 @@
 /* 0 */
 /***/ function(module, exports, __webpack_require__) {
 
-<<<<<<< Updated upstream
-	// entry point
-
-	var $ = __webpack_require__(1);
-	__webpack_require__(2);
-	__webpack_require__(3);
-	__webpack_require__(4);
-	__webpack_require__(5);
-
-	var Game = __webpack_require__(6);
-	var game = window.game = new Game
-	game.scenes = __webpack_require__(7);
-
-	game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
-	  __webpack_require__(119);
-	});
-
-	$(function () {
-	  $(".animsition").animsition({
-	    inClass: 'fade-in',
-	    outClass: 'fade-out',
-	    inDuration: 1000,
-	    outDuration: 1000,
-	    linkElement: '.animsition-link'
-	  });
-	});
-=======
 	// entry point
 
 	var $ = __webpack_require__(1);
@@ -96,7 +69,6 @@
 	    linkElement: '.animsition-link'
 	  });
 	});
->>>>>>> Stashed changes
 
 
 /***/ },
@@ -10207,17 +10179,6 @@
 /* 7 */
 /***/ function(module, exports, __webpack_require__) {
 
-<<<<<<< Updated upstream
-	module.exports = {
-	  title: __webpack_require__(8),
-	  selectPlayMode: __webpack_require__(15),
-	  selectSinglePlayMode: __webpack_require__(18),
-	  configSinglePlayMode: __webpack_require__(20),
-	  playGameSingle: __webpack_require__(22),
-	  resultTimeAttack: __webpack_require__(114),
-	  selectMultiPlayMode: __webpack_require__(117),
-	};
-=======
 	module.exports = {
 	  title: __webpack_require__(8),
 	  selectPlayMode: __webpack_require__(15),
@@ -10228,7 +10189,6 @@
 	  GameFinish: __webpack_require__(117),
 	  selectMultiPlayMode: __webpack_require__(119),
 	};
->>>>>>> Stashed changes
 
 
 /***/ },
@@ -11170,310 +11130,6 @@
 /* 22 */
 /***/ function(module, exports, __webpack_require__) {
 
-<<<<<<< Updated upstream
-	/* WEBPACK VAR INJECTION */(function($) {var moment = __webpack_require__(23);
-	__webpack_require__(111);
-
-	var util = __webpack_require__(16);
-	var Scene = __webpack_require__(13);
-	var api = __webpack_require__(112);
-
-	var GameScene = function () {
-	  Scene.call(this, __webpack_require__(113));
-
-	  var element = $('#map')[0];
-	  var that = this;
-
-	  this.on('shown', function () {
-	    api.initialValueIndex({roomId: $.cookie('roomId')}).done(function (data) {
-	      console.log(data);
-
-	      that.geocoder = new google.maps.Geocoder();
-	      that.map = new google.maps.Map(document.querySelector('#map'), {
-	        center: {lat: 35.681382, lng: 139.766084},
-	        zoom: 12,
-	        // maxZoom: 12,
-	        // minZoom: 12,
-	        disableDefaultUI: true,
-	        // mapTypeId: google.maps.MapTypeId.TERRAIN,
-	        styles: [
-	          {
-	            featureType: 'all',
-	            elementType: 'labels',
-	            stylers: [{ visibility: 'off' }]
-	          },
-	          {
-	            featureType: 'administrative.locality',
-	            elementType: 'labels',
-	            stylers: [{ visibility: 'on' }]
-	          },
-	        ]
-	      });
-
-	      that.popup = undefined;
-	      that.map.addListener('click', that.mapClicked.bind(that));
-	      $('#js-cancel-button').on('click', that.closeAnswerDialog.bind(that));
-	      that.currentTheme = { locationName: '最初のお題', phonetic: data.theme };
-	      that.placeTheme = document.querySelector('#js-place-theme');
-	      that.placeYours = document.querySelector('#js-place-yours');
-
-	      that.start();
-	    });
-	  });
-
-	}, p = GameScene.prototype;
-
-	util.inherits(GameScene, Scene);
-
-	Object.defineProperties(p, {
-	  'currentTheme': {
-	    get: function () { return this._currentTheme; },
-	    set: function (value) {
-	      this._currentTheme = value;
-	      document.querySelector('#js-place-theme > .name')
-	        .innerHTML = value.locationName;
-	      document.querySelector('#js-place-theme > .phonetic')
-	        .innerHTML = value.phonetic;
-	    }
-	  }
-	});
-
-	p.mapClicked = function (e) {
-	  var that = this;
-
-	  this.geocoder.geocode({location: e.latLng}, function (addrInfo) {
-	    console.debug(addrInfo);
-
-	    var availablePlaces = that.selectAvailablePlaces(addrInfo[0].address_components);
-
-	    that.getAvailableWords(availablePlaces, function (err, places) {
-	      console.debug(places);
-	      //
-	      // that.popup = new google.maps.InfoWindow({
-	      //   content: that.createInfoWindowContentElement(places),
-	      //   position: e.latLng
-	      // });
-
-	      that.openAnswerDialog(places);
-	      // that.popup.open(that.map);
-	    });
-	  });
-	};
-
-	p.openAnswerDialog = function (places) {
-	  var that = this;
-
-	  $('#js-answer-result').hide();
-	  $('#js-answer-candidates').html('');
-
-	  places.forEach(function (place) {
-	    var $listItem = $('<li><a href="#">' + place.locationName + '</a></li>');
-
-	    $listItem.on('click', function (e) {
-	      that.locationNameClicked(e, place)
-	    });
-
-	    $('#js-answer-candidates').append($listItem);
-	  });
-
-	  $('#js-game-answer-dialog').show();
-	}
-
-	p.closeAnswerDialog = function (places) {
-	  $('#js-game-answer-dialog').hide();
-	}
-
-	p.locationNameClicked = function (e, place) {
-	  this.answer(place);
-	};
-
-	p.createLocationLinkElement = function (place) {
-	  var that = this;
-	  var link = document.createElement('a');
-
-	  link.innerHTML = place.locationName;
-	  link.href = '#';
-	  link.style.color = '#000';
-	  link.dataset.locationName = place.locationName;
-	  link.dataset.phonetic = place.phonetic;
-	  link.addEventListener('click', function (e) {
-	    that.locationNameClicked(e, place)
-	  });
-
-	  return link;
-	};
-
-	p.createInfoWindowContentElement = function (places) {
-	  var that = this;
-	  var content = document.createElement('div');
-	  var list = document.createElement('ul');
-	  var p = document.createElement('p');
-
-	  content.appendChild(p);
-	  p.innerHTML = '回答を選んでください。';
-	  p.style.fontWeight = 'bold';
-
-	  places.forEach(function (place) {
-	    var listItem = document.createElement('li');
-	    var link = that.createLocationLinkElement(place);
-
-	    listItem.appendChild(link);
-	    list.appendChild(listItem);
-	  });
-
-	  content.appendChild(list);
-
-	  return content;
-	};
-
-	p.answer = function (place) {
-	  var that = this;
-
-	  api.answersCreate({roomId: $.cookie('roomId')}, {
-	    locationName: place.locationName,
-	    phonetic: place.phonetic,
-	    userId: $.cookie('userId')
-	  }).done(function (data) {
-	    console.debug(data);
-
-	    if (data.result.startsWith('NG')) return that.answerNG(place);
-
-	    that.answerOK(place, data.result == 'Finish');
-	    that.currentTheme = place;
-	  });
-
-	  return true;
-	};
-
-	p.start = function () {
-	  this._startTime = moment();
-	  this._updateTimeTextIntervalID = setInterval(this.updateTimeText.bind(this), 1);
-	};
-
-	p.updateTimeText = function () {
-	  var duration = moment.duration(moment().diff(this._startTime));
-	  var timeText = duration.format('h:mm:ss:SSS', { trim: false, forceLength: true });
-	  $('#js-game-time').text(timeText);
-	}
-
-	p.gameOver = function (place) {
-
-	};
-
-	p.answerOK = function (place, finished) {
-	  var that = this;
-
-	  $('#js-answer-result')
-	    .text('○')
-	    .removeClass('ng')
-	    .addClass('ok')
-	    .show();
-
-	  setTimeout(function() {
-	    if (finished) that.clearGame();
-	    that.closeAnswerDialog();
-	  }, 1500);
-	};
-
-	p.answerNG = function (place) {
-	  $('#js-answer-result')
-	    .text('×')
-	    .removeClass('ok')
-	    .addClass('ng')
-	    .show();
-
-	  setTimeout(function () {
-	    $('#js-answer-result').hide();
-	  }, 1500);
-	};
-
-	p.clearGame = function () {
-	  this._finishTime = moment();
-	  var duration = moment.duration(this._finishTime.diff(this._startTime));
-	  console.log(duration, duration.format('h時間m分s秒'));
-	  clearInterval(this._updateTimeTextIntervalID);
-
-	  this.game.transition('resultTimeAttack', "君のタイムは何位かな？");
-	  setTimeout(function(){
-		  var finishTime = duration._milliseconds / 1000;
-		  api.getRanking($.cookie("userId"), $.cookie("roomId"), finishTime, 0).done(function(data){
-			console.log(data);
-			var arraySize = Object.keys(data.ranking).length;
-			for (var i = 0; i < arraySize; i++) {
-				if(data.ranking[i].name == $.cookie("name") && data.ranking[i].score == finishTime){
-					$("#ranking").append("<div id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></div>");
-				}else{
-					$("#ranking").append("<span>" + (i + 1) + "位</br>" + data.ranking[i].name + "</br>" + data.ranking[i].score + " 秒</br><HR></span>");
-				}
-			}
-			var v = $("#myscore").position().top - (100 * $("#main_in").width() / 1500);
-			$("#rankingboard").scrollTop(v);
-	  });}, 500);
-	};
-
-	/**
-	 * 形態素解析APIを呼び出す (See: https://labs.goo.ne.jp/api/2015/334/)
-	 * @param {String} sentence - 解析対象の文
-	 * @returns {Object} - API呼び出し結果
-	 */
-	p.callAnalyseMorphApi = function (sentence) {
-	  return $.ajax({
-	    type: 'post',
-	    url: 'https://labs.goo.ne.jp/api/morph',
-	    data: {
-	      app_id: '6953432d0f5f68bbc04853cf917822f88548ceb4bec7e4e1370058c5cf6cf346',
-	      sentence: sentence,
-	    },
-	    dataType: 'json',
-	  });
-	};
-
-	/** 地名のリストから
-	 * @param {Array} 形態素解析で得られた文の単語リスト
-	 * @returns {Array} しりとりで利用可能な地名リスト
-	 */
-	p.getAvailableWords = function (places, done) {
-	  var availableWords = [];
-
-	  this.callAnalyseMorphApi(places.join('/')).done(function (data) {
-	    console.debug(data);
-
-	    data.word_list[0].forEach(function (word) {
-	      var type = word[1];
-	      if (type != '名詞') return;
-
-	      availableWords.push({
-	        locationName:  word[0],
-	        phonetic: util.katakanaToHiragana(word[2])
-	      });
-	    });
-
-	    done(null, availableWords);
-	  });
-	};
-
-	/** 住所のコンポーネントリストから、地名しりとりに利用可能な地名のみを選択
-	 * @param {Array} 住所のコンポーネントリスト
-	 * @returns {Array} しりとりで利用可能な地名リスト
-	 */
-	p.selectAvailablePlaces = function (addrComponents) {
-	  var availablePlaces = [];
-
-	  addrComponents.forEach(function (component) {
-	    if (component.types[0] === 'postal_code') return;
-	    if (component.types[0] === 'country') return;
-	    if (component.types[0] === 'sublocality_level_2') return;
-	    if (component.types[0] === 'sublocality_level_3') return;
-	    if (component.types[0] === 'sublocality_level_4') return;
-
-	    availablePlaces.push(component.long_name);
-	  });
-
-	  return availablePlaces.reverse();
-	};
-
-	module.exports = GameScene;
-=======
 	/* WEBPACK VAR INJECTION */(function($) {var moment = __webpack_require__(23);
 	__webpack_require__(111);
 
@@ -11693,7 +11349,7 @@
 	p.clearGame = function () {
 	  var duration = moment.duration(moment().diff(this._startTime));
 
-	  $.cookie('resultTime', duration.milliseconds());
+	  $.cookie('resultTime', duration._milliseconds);
 	  this.game.transition('GameFinish', '君のタイムは何位かな？');
 	  clearInterval(this._updateTimeTextIntervalID);
 	};
@@ -11760,7 +11416,6 @@
 	};
 
 	module.exports = GameScene;
->>>>>>> Stashed changes
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
@@ -23728,7 +23383,7 @@
 	  },
 
 	  getRanking: function (userId, roomId, resultTime, rankCount) {
-		return util.apiGet('/ranks?userId=' + userId + '&roomId=' + roomId + '&resultTime=' + resultTime + '&rankCount=' + rankCount);
+		   return util.apiGet('/ranks?userId=' + userId + '&roomId=' + roomId + '&resultTime=' + resultTime + '&rankCount=' + rankCount);
 	  }
 	};
 
@@ -23743,37 +23398,71 @@
 /* 114 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {var util = __webpack_require__(9);
+	/* WEBPACK VAR INJECTION */(function($) {var util = __webpack_require__(16);
 	var Scene = __webpack_require__(13);
 	var sounds = __webpack_require__(115);
+	var api = __webpack_require__(112);
+
 	var ResultTimeAttackScene = function () {
 	  Scene.call(this, __webpack_require__(116));
-	}
+	  this.on('shown', this.onshown);
+	}, p = ResultTimeAttackScene.prototype;
 
-	util.inherits(ResultTimeAttackScene, Scene)
+	util.inherits(ResultTimeAttackScene, Scene);
+
+	p.onshown = function () {
+	  this.setEventHandlers();
+	  this.fetchRankingData();
+	};
+
+	p.setEventHandlers = function () {
+	  // about back button
+	  $(document).on('mousedown', '#back', function() {
+	  	$(this).css({
+	  		background: $(this).css('background').replace('.', '_dummy.')
+	  	});
+	  	sounds.sound_button();
+	  });
+
+	  $(document).on('mouseup', '#back', function() {
+	  	$(this).css({
+	  		background: $(this).css('background').replace('_dummy.', '.')
+	  	});
+	  });
+
+	  $(document).on('mouseout', '#back', function() {
+	  	$(this).css({
+	  		background: $(this).css('background').replace('_dummy.', '.')
+	  	});
+	  });
+	};
+
+	p.fetchRankingData = function () {
+	  api.getRanking($.cookie('userId'), $.cookie('roomId'), $.cookie('resultTime') / 1000, 0).done(function(data) {
+	    console.log(data);
+	    var arraySize = Object.keys(data.ranking).length;
+
+	    for (var i = 0; i < arraySize; i++) {
+	      if (data.ranking[i].name == $.cookie('name')) {
+	        $('#ranking')
+	          .append(
+	            '<span id="myscore">- 今回の成績 -<br>' + (i + 1) + '位</br>' +
+	            data.ranking[i].name + '</br>' +
+	            data.ranking[i].score + ' 秒</br><hr></span>');
+	      } else {
+	        $('#ranking').append(
+	          '<span>' + (i + 1) + '位</br>' +
+	          data.ranking[i].name + '</br>' +
+	          data.ranking[i].score + ' 秒</br><hr></span>');
+	      }
+	    }
+
+	    var v = $('#myscore').position().top - (100 * $('#main_in').width() / 1500);
+	    $('#rankingboard').scrollTop(v);
+	  });
+	};
 
 	module.exports = ResultTimeAttackScene;
-
-	// about back button
-	$(document).on("mousedown", "#back", function(){
-		$(this).css({
-			"background": $(this).css("background").replace(".","_dummy.")	
-		});
-		sounds.sound_button();
-	});
-
-	$(document).on("mouseup", "#back", function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")	
-		});
-		game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
-	});
-
-	$(document).on("mouseout", "#back", function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
-		});
-	});
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
@@ -23801,18 +23490,6 @@
 /* 117 */
 /***/ function(module, exports, __webpack_require__) {
 
-<<<<<<< Updated upstream
-	var Scene = __webpack_require__(13);
-	var util = __webpack_require__(16);
-
-	var MultiPlayModeScene = function () {
-	  Scene.call(this, __webpack_require__(118));
-	};
-
-	util.inherits(MultiPlayModeScene, Scene);
-
-	module.exports = MultiPlayModeScene;
-=======
 	var Scene = __webpack_require__(13);
 	var util = __webpack_require__(16);
 
@@ -23833,225 +23510,18 @@
 	}
 
 	module.exports = GameFinishScene;
->>>>>>> Stashed changes
 
 
 /***/ },
 /* 118 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=multiplayicon></div><div id=battleform><button class=ok2 id=\"playbattle\"></div><div id=raceform><button class=ok2 id=\"playrace\"></div>";
+	module.exports = "<div id=game-finish-scene>終了!</div>";
 
 /***/ },
 /* 119 */
 /***/ function(module, exports, __webpack_require__) {
 
-<<<<<<< Updated upstream
-	/* WEBPACK VAR INJECTION */(function($) {var sounds = __webpack_require__(115);
-
-	// register name
-	function register(name){
-			$.ajax({
-				type:"post",
-				url:"http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/session",
-				data:JSON.stringify({"name":name}),
-				contentType:"application/json",
-				dataType:"json",
-				success:function(data){
-					console.log(data);
-					if(data.status == "OK"){
-						$.cookie("name", name);
-						$.cookie("userId", data.userId);
-						game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
-					}else{
-						$("#description").text("別の名前を入力してね！");
-						$("#name").select();
-					}
-				},
-				error:function(){
-					console.log("error");
-				}
-			});
-	};
-
-	// make room
-	function makeroom(userId, name, gameMode, wordNum, limitTime){
-		$.ajax({
-			type:"post",
-			url:"http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/rooms",
-			data:JSON.stringify({"userId":userId,"name":name,"gameMode":gameMode,"wordNum":wordNum,"limitTime":limitTime}),
-			contentType:"application/json",
-			dataType:"json",
-			success:function(data){
-				$.cookie("roomId", data.id);
-				$.cookie("wordNum", wordNum);
-				game.transition('playGameSingle', 'タイムアタック!');
-			},
-			error:function(){
-				console.log("error");
-			}
-		});
-	};
-
-	// send score and get ranking
-	function sendranking(){
-		var userId = $("#userId").text();
-		var roomId = $("#roomId").text();
-		var resultTime = parseFloat($("#resulttime").val());
-		var rankCount = parseInt($("#rankCount").val());
-		userId = "565d957a575db0e4f23e25b6";
-		roomId = "565d957b575db0e4f33e25b6";
-		resultTime = 24;
-		rankCount = 0;
-		$.ajax({
-			url: "http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/ranks",
-			data: {
-				userId: userId,
-				roomId: roomId,
-				resultTime: resultTime,
-				rankCount: rankCount,
-			},
-			success: function(json){
-				var arraySize = Object.keys(json.ranking).length;
-				for (var i = 0; i < arraySize; i++) {
-					if(json.ranking[i].name == "Mr. シティとり"){
-						$("#ranking").append("<span id=\"myscore\">- 今回の成績 -<br>" + (i + 1) + "位</br>" + json.ranking[i].name + "</br>" + json.ranking[i].score + " 秒</br><HR></span>");
-					}else{
-						$("#ranking").append("<span>" + (i + 1) + "位</br>" + json.ranking[i].name + "</br>" + json.ranking[i].score + " 秒</br><HR></span>");
-					}
-				}
-				$("#ranking").append("<br>");
-
-				for (var i=0; i < arraySize; i++){
-					if(json.ranking[i].name == "Mr. シティとり"){
-						v = i;
-						break;
-					}
-				}
-				var v = i * 131 * $("#main_in").width() / 1500;
-				$("#rankingboard").scrollTop(v);
-			},
-			error: function(){
-			console.log("error");
-			}
-		});
-	};
-
-
-	// about register button
-	$("#register_off").mousedown(function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_off","_on")
-		});
-		sounds.sound_button();
-	});
-
-	$("#register_off").mouseup(function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_on","_off")
-		});
-		if($("#name").val() != ""){
-			register($("#name").val());
-		}
-	});
-
-	$("#register_off").mouseout(function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_on","_off")
-		});
-	});
-
-	// about ok button
-	$(document).on("mousedown", ".ok", function(){
-		$(this).css({
-			"background": $(this).css("background").replace(".","_dummy.")
-		});
-		sounds.sound_button();
-	});
-
-	$(document).on("mouseup", ".ok", function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
-		});
-		if($(this).attr("id") == "playsingle"){
-			game.transition('selectSinglePlayMode', 'タイムアタックで遊ぶ？スコアアタックで遊ぶ？');
-		}else{
-			game.transition('selectMultiPlayMode', '遊ぶモードを選んでね');
-		}
-	});
-
-	$(document).on("mouseout", ".ok", function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
-		});
-	});
-
-	// about ok2 button
-	$(document).on("mousedown", ".ok2", function(){
-		$(this).css({
-			"background": $(this).css("background").replace(".","_dummy.")
-		});
-		sounds.sound_button();
-	});
-
-	$(document).on("mouseup", ".ok2", function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
-		});
-		if($(this).attr("id") == "playtimeattack"){
-			game.transition('configSinglePlayMode', '目標しりとり数を入力してね');
-		}else{
-			game.transition('configMultiplayPlayMode', 'ゲームモードを選択してね');
-		}
-	});
-
-	$(document).on("mouseout", ".ok2", function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
-		});
-	});
-
-	// about setting button
-	$(document).on("mousedown", "#setting", function(){
-		$(this).css({
-			"background": $(this).css("background").replace(".","_dummy.")
-		});
-		sounds.sound_button();
-	});
-
-	$(document).on("mouseup", "#setting", function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
-		});
-		if(parseInt($("#wordnum").val()) > 0){
-			makeroom($.cookie("userId"), $.cookie("name"), "Time", parseInt($("#wordnum").val()), 0);
-		}
-	});
-
-	$(document).on("mouseout", "#setting", function(){
-		$(this).css({
-			"background": $(this).css("background").replace("_dummy.",".")
-		});
-	});
-
-	// background scrool
-	$(function() {
-		var bgscx1 = 3500;
-		setInterval(function(){
-			bgscx1 += 1;
-			$("#main_cloud").css({
-				"background-position": bgscx1 + "px"
-			});
-		},150);
-		var bgscx2 = 1000;
-		setInterval(function(){
-			bgscx2 += 1;
-			$("#main_bird").css({
-				"background-position": bgscx2 + "px"
-			});
-		},75);
-	});
-=======
 	var Scene = __webpack_require__(13);
 	var util = __webpack_require__(16);
 
@@ -24278,7 +23748,6 @@
 			});
 		},75);
 	});
->>>>>>> Stashed changes
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
