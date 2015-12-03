@@ -53,8 +53,20 @@
 	__webpack_require__(5);
 
 	var Game = __webpack_require__(6);
+	var Scenes = __webpack_require__(7);
 	var game = window.game = new Game
-	game.scenes = __webpack_require__(7);
+
+	game.scenes = {
+	  title:                new Scenes.Title,
+	  selectPlayMode:       new Scenes.SelectPlayMode,
+	  selectSinglePlayMode: new Scenes.SelectSinglePlayMode,
+	  configTimeAttack:     new Scenes.ConfigTimeAttack,
+	  configScoreAttack:    new Scenes.ConfigScoreAttack,
+	  playGameSingle:       new Scenes.PlayGameSingle,
+	  resultTimeAttack:     new Scenes.ResultTimeAttack,
+	  gameFinish:           new Scenes.GameFinish,
+	  selectMultiPlayMode:  new Scenes.SelectMultiPlayMode,
+	};
 
 	game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
 	  __webpack_require__(123);
@@ -9999,10 +10011,10 @@
 				"height": (h -(2/3 * w))/2
 			});
 			$("#main").css({
-				"height": 2/3 * w		
+				"height": 2/3 * w
 			});
 			$("#main_in").css({
-				"width": w, 
+				"width": w,
 			})
 			$("#footer-bk").css({
 				"width": w,
@@ -10020,7 +10032,7 @@
 				"width": w,
 				"height": 100
 			});
-			$("#main").css({	
+			$("#main").css({
 				"height": h - 100 - 100
 			});
 			$("#main_in").css({
@@ -10028,7 +10040,7 @@
 			});
 			$("#footer-bk").css({
 				"width": w,
-				"height": 100	
+				"height": 100
 			});
 
 			$("#name").css({
@@ -10050,10 +10062,10 @@
 				"height": (h -(2/3 * w))/2
 			});
 			$("#main").css({
-				"height": 2/3 * w		
+				"height": 2/3 * w
 			});
 			$("#main_in").css({
-				"width": w, 
+				"width": w,
 			})
 			$("#footer-bk").css({
 				"width": w,
@@ -10070,8 +10082,8 @@
 			$("#header-bk").css({
 				"width": w,
 				"height": 100
-			});
-			$("#main").css({	
+			});1
+			$("#main").css({
 				"height": h - 100 - 100
 			});
 			$("#main_in").css({
@@ -10079,7 +10091,7 @@
 			});
 			$("#footer-bk").css({
 				"width": w,
-				"height": 100	
+				"height": 100
 			});
 
 			$("#name").css({
@@ -10090,7 +10102,6 @@
 			});
 		}
 	});
-
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
@@ -10145,20 +10156,18 @@
 	  	}, 500, "easeInQuad");
 	  }
 
-	  var Scene = this.scenes[name];
+	  var scene = this.scenes[name];
 
-		if (Scene === undefined) {
-			return console.warn('Not implemented panel:', name);
+		if (scene === undefined) {
+			return console.warn('Not implemented scene:', name);
 		}
 
 		var $main = $('#main_in');
 	  var $description = $('#description');
 	  var that = this;
-	  var scene = new Scene;
 
 	  scene._game = this;
 	  this.currentScene = scene;
-
 	  fadeout($description);
 		fadeout($main, function () {
 			$main.html(that.currentScene.view);
@@ -10180,15 +10189,15 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	  title: __webpack_require__(8),
-	  selectPlayMode: __webpack_require__(15),
-	  selectSinglePlayMode: __webpack_require__(18),
-	  configTimeAttack: __webpack_require__(20),
-	  configScoreAttack: __webpack_require__(22),
-	  playGameSingle: __webpack_require__(24),
-	  resultTimeAttack: __webpack_require__(117),
+	  Title: __webpack_require__(8),
+	  SelectPlayMode: __webpack_require__(15),
+	  SelectSinglePlayMode: __webpack_require__(18),
+	  ConfigTimeAttack: __webpack_require__(20),
+	  ConfigScoreAttack: __webpack_require__(22),
+	  PlayGameSingle: __webpack_require__(24),
+	  ResultTimeAttack: __webpack_require__(117),
 	  GameFinish: __webpack_require__(119),
-	  selectMultiPlayMode: __webpack_require__(121),
+	  SelectMultiPlayMode: __webpack_require__(121),
 	};
 
 
@@ -11379,8 +11388,8 @@
 	p.clearGame = function () {
 	  var duration = moment.duration(moment().diff(this._startTime));
 
-	  $.cookie('resultTime', duration.milliseconds());
-	  this.game.transition('GameFinish', '君のタイムは何位かな？');
+	  $.cookie('resultTime', duration._milliseconds);
+	  this.game.transition('gameFinish', '君のタイムは何位かな？');
 	  clearInterval(this._updateTimeTextIntervalID);
 	};
 

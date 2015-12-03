@@ -7,8 +7,20 @@ require('animsition');
 require('./title_layout');
 
 var Game = require('./game');
+var Scenes = require('./scenes');
 var game = window.game = new Game
-game.scenes = require('./scenes/');
+
+game.scenes = {
+  title:                new Scenes.Title,
+  selectPlayMode:       new Scenes.SelectPlayMode,
+  selectSinglePlayMode: new Scenes.SelectSinglePlayMode,
+  configTimeAttack:     new Scenes.ConfigTimeAttack,
+  configScoreAttack:    new Scenes.ConfigScoreAttack,
+  playGameSingle:       new Scenes.PlayGameSingle,
+  resultTimeAttack:     new Scenes.ResultTimeAttack,
+  gameFinish:           new Scenes.GameFinish,
+  selectMultiPlayMode:  new Scenes.SelectMultiPlayMode,
+};
 
 game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
   require('./title_function');
