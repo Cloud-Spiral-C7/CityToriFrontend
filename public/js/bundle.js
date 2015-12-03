@@ -10002,7 +10002,9 @@
 
 	/* WEBPACK VAR INJECTION */(function($) {
 	// initial layout
-	$(document).ready(function(){
+	$(document).ready(function() {
+		if (game.currentScene.id == 'playGameSingle') return;
+
 		var w = $(window).width();
 		var h = $(window).height();
 		if(w < h){
@@ -10054,6 +10056,8 @@
 
 	// layout when resized
 	$(window).resize(function(){
+		if (game.currentScene.id == 'playGameSingle') return;
+
 		var w = $(window).width();
 		var h = $(window).height();
 		if(w < h){
