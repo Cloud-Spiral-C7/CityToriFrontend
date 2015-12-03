@@ -25,8 +25,9 @@ Object.defineProperties(p, {
   }
 });
 
-p.addScene = function (name, scene) {
-  this._scenes[name] = scene;
+p.addScene = function (id, scene) {
+  this._scenes[id] = scene;
+  scene._id = id;
 }
 
 p.transition = function (name, header, cb) {
@@ -45,20 +46,18 @@ p.transition = function (name, header, cb) {
   	}, 500, "easeInQuad");
   }
 
-  var Scene = this.scenes[name];
+  var scene = this.scenes[name];
 
-	if (Scene === undefined) {
-		return console.warn('Not implemented panel:', name);
+	if (scene === undefined) {
+		return console.warn('Not implemented scene:', name);
 	}
 
 	var $main = $('#main_in');
   var $description = $('#description');
   var that = this;
-  var scene = new Scene;
 
   scene._game = this;
   this.currentScene = scene;
-
   fadeout($description);
 	fadeout($main, function () {
 		$main.html(that.currentScene.view);

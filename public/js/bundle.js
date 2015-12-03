@@ -53,8 +53,20 @@
 	__webpack_require__(5);
 
 	var Game = __webpack_require__(6);
+	var Scenes = __webpack_require__(7);
 	var game = window.game = new Game
-	game.scenes = __webpack_require__(7);
+
+	game.scenes = {
+	  title:                new Scenes.Title,
+	  selectPlayMode:       new Scenes.SelectPlayMode,
+	  selectSinglePlayMode: new Scenes.SelectSinglePlayMode,
+	  configTimeAttack:     new Scenes.ConfigTimeAttack,
+	  configScoreAttack:    new Scenes.ConfigScoreAttack,
+	  playGameSingle:       new Scenes.PlayGameSingle,
+	  gameFinish:           new Scenes.GameFinish,
+	  selectMultiPlayMode:  new Scenes.SelectMultiPlayMode,
+	  result:			    new Scenes.Result,
+	};
 
 	game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {
 	  __webpack_require__(123);
@@ -9999,10 +10011,10 @@
 				"height": (h -(2/3 * w))/2
 			});
 			$("#main").css({
-				"height": 2/3 * w		
+				"height": 2/3 * w
 			});
 			$("#main_in").css({
-				"width": w, 
+				"width": w,
 			})
 			$("#footer-bk").css({
 				"width": w,
@@ -10020,7 +10032,7 @@
 				"width": w,
 				"height": 100
 			});
-			$("#main").css({	
+			$("#main").css({
 				"height": h - 100 - 100
 			});
 			$("#main_in").css({
@@ -10028,7 +10040,7 @@
 			});
 			$("#footer-bk").css({
 				"width": w,
-				"height": 100	
+				"height": 100
 			});
 
 			$("#name").css({
@@ -10050,10 +10062,10 @@
 				"height": (h -(2/3 * w))/2
 			});
 			$("#main").css({
-				"height": 2/3 * w		
+				"height": 2/3 * w
 			});
 			$("#main_in").css({
-				"width": w, 
+				"width": w,
 			})
 			$("#footer-bk").css({
 				"width": w,
@@ -10070,8 +10082,8 @@
 			$("#header-bk").css({
 				"width": w,
 				"height": 100
-			});
-			$("#main").css({	
+			});1
+			$("#main").css({
 				"height": h - 100 - 100
 			});
 			$("#main_in").css({
@@ -10079,7 +10091,7 @@
 			});
 			$("#footer-bk").css({
 				"width": w,
-				"height": 100	
+				"height": 100
 			});
 
 			$("#name").css({
@@ -10090,7 +10102,6 @@
 			});
 		}
 	});
-
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
@@ -10125,8 +10136,9 @@
 	  }
 	});
 
-	p.addScene = function (name, scene) {
-	  this._scenes[name] = scene;
+	p.addScene = function (id, scene) {
+	  this._scenes[id] = scene;
+	  scene._id = id;
 	}
 
 	p.transition = function (name, header, cb) {
@@ -10145,20 +10157,18 @@
 	  	}, 500, "easeInQuad");
 	  }
 
-	  var Scene = this.scenes[name];
+	  var scene = this.scenes[name];
 
-		if (Scene === undefined) {
-			return console.warn('Not implemented panel:', name);
+		if (scene === undefined) {
+			return console.warn('Not implemented scene:', name);
 		}
 
 		var $main = $('#main_in');
 	  var $description = $('#description');
 	  var that = this;
-	  var scene = new Scene;
 
 	  scene._game = this;
 	  this.currentScene = scene;
-
 	  fadeout($description);
 		fadeout($main, function () {
 			$main.html(that.currentScene.view);
@@ -10180,15 +10190,15 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	module.exports = {
-	  title: __webpack_require__(8),
-	  selectPlayMode: __webpack_require__(15),
-	  selectSinglePlayMode: __webpack_require__(18),
-	  configTimeAttack: __webpack_require__(20),
-	  configScoreAttack: __webpack_require__(22),
-	  playGameSingle: __webpack_require__(24),
-	  resultTimeAttack: __webpack_require__(117),
+	  Title: __webpack_require__(8),
+	  SelectPlayMode: __webpack_require__(15),
+	  SelectSinglePlayMode: __webpack_require__(18),
+	  ConfigTimeAttack: __webpack_require__(20),
+	  ConfigScoreAttack: __webpack_require__(22),
+	  PlayGameSingle: __webpack_require__(24),
+	  Result: __webpack_require__(117),
 	  GameFinish: __webpack_require__(119),
-	  selectMultiPlayMode: __webpack_require__(121),
+	  SelectMultiPlayMode: __webpack_require__(121),
 	};
 
 
@@ -10952,6 +10962,7 @@
 	  this._view = view;
 	  this._game = null;
 	  this._events = {};
+	  this._id = null;
 	}, p = Scene.prototype;
 
 	Object.defineProperties(p, {
@@ -10961,6 +10972,9 @@
 	  },
 	  game: {
 	    get: function () { return this._game; }
+	  },
+	  id: {
+	    get: function () { return this._id; }
 	  }
 	});
 
@@ -11379,8 +11393,10 @@
 	p.clearGame = function () {
 	  var duration = moment.duration(moment().diff(this._startTime));
 
-	  $.cookie('resultTime', duration.milliseconds());
-	  this.game.transition('GameFinish', '君のタイムは何位かな？');
+	  //スコアアタックの場合は AnswerNum に回答数入れて，resultType に Score っていう文字列を入れておくれ（このコメントは後で消してください）
+	  $.cookie('resultTime', duration._milliseconds);
+	  $.cookie('resultType', 'Time');
+	  this.game.transition('gameFinish', '君のタイムは何位かな？');
 	  clearInterval(this._updateTimeTextIntervalID);
 	};
 
@@ -23412,6 +23428,7 @@
 	    return util.apiGet('/rooms/' + params.roomId + '/initialValue');
 	  },
 
+	  // API �̎d�l�̂��߁CresultTime�̃p�����[�^�ŃX�R�A�A�^�b�N���̌��ʂ�AnswerNum�𑗂��Ă܂�
 	  getRanking: function (userId, roomId, resultTime, rankCount, rankSort) {
 		   return util.apiGet('/ranks?userId=' + userId + '&roomId=' + roomId + '&resultTime=' + resultTime + '&rankCount=' + rankCount + '&rankSort=' + rankSort);
 	  }
@@ -23458,16 +23475,20 @@
 	var sounds = __webpack_require__(115);
 	var api = __webpack_require__(114);
 
-	var ResultTimeAttackScene = function () {
+	var ResultScene = function () {
 	  Scene.call(this, __webpack_require__(118));
 	  this.on('shown', this.onshown);
-	}, p = ResultTimeAttackScene.prototype;
+	}, p = ResultScene.prototype;
 
-	util.inherits(ResultTimeAttackScene, Scene);
+	util.inherits(ResultScene, Scene);
 
 	p.onshown = function () {
 	  this.setEventHandlers();
-	  this.fetchRankingData();
+	  if($.cookie("resultType") == "Time"){
+	    this.fetchTimeAttackRankingData();
+	  }else{
+		this.fetchScoreAttackRankingData();
+	  }
 	};
 
 	p.setEventHandlers = function () {
@@ -23496,18 +23517,17 @@
 	  });
 	};
 
-	p.fetchRankingData = function () {
+	p.fetchTimeAttackRankingData = function () {
 	  api.getRanking($.cookie('userId'), $.cookie('roomId'), $.cookie('resultTime') / 1000, 0, 1).done(function(data) {
 	    console.log(data);
 	    var arraySize = Object.keys(data.ranking).length;
 
 	    for (var i = 0; i < arraySize; i++) {
 	      if (data.ranking[i].name == $.cookie('name')) {
-	        $('#ranking')
-	          .append(
-	            '<div id="myscore">- 今回の成績 -<br>' + (i + 1) + '位</br>' +
-	            data.ranking[i].name + '</br>' +
-	            data.ranking[i].score + ' 秒</br><hr></div>');
+	        $('#ranking').append(
+	           '<div id="myscore">- 今回の成績 -<br>' + (i + 1) + '位</br>' +
+	           data.ranking[i].name + '</br>' +
+	           data.ranking[i].score + ' 秒</br><hr></div>');
 	      } else {
 	        $('#ranking').append(
 	          '<span>' + (i + 1) + '位</br>' +
@@ -23521,7 +23541,31 @@
 	  });
 	};
 
-	module.exports = ResultTimeAttackScene;
+	p.fetchScoreAttackRankingData = function () {
+	  api.getRanking($.cookie('userId'), $.cookie('roomId'), $.cookie('AnswerNum'), 0, -1).done(function(data) {
+	    console.log(data);
+	    var arraySize = Object.keys(data.ranking).length;
+
+	    for (var i = 0; i < arraySize; i++) {
+	      if (data.ranking[i].name == $.cookie('name')) {
+	        $('#ranking').append(
+	           '<div id="myscore">- 今回の成績 -<br>' + (i + 1) + '位</br>' +
+	           data.ranking[i].name + '</br>' +
+	           parseInt(data.ranking[i].score) + ' 個</br><hr></div>');
+	      } else {
+	        $('#ranking').append(
+	          '<span>' + (i + 1) + '位</br>' +
+	          data.ranking[i].name + '</br>' +
+	          parseInt(data.ranking[i].score) + ' 個</br><hr></span>');
+	      }
+	    }
+
+	    var v = $('#myscore').position().top - (100 * $('#main_in').width() / 1500);
+	    $('#rankingboard').scrollTop(v);
+	  });
+	};
+
+	module.exports = ResultScene;
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
 
@@ -23550,7 +23594,7 @@
 	  var that = this;
 
 	  setTimeout(function () {
-	    that.game.transition('resultTimeAttack', '君のタイムは何位かな？');
+	    that.game.transition('result', '君の成績は何位かな？');
 	  }, 1000);
 	}
 

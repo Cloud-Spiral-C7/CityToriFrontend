@@ -9,10 +9,10 @@ $(document).ready(function(){
 			"height": (h -(2/3 * w))/2
 		});
 		$("#main").css({
-			"height": 2/3 * w		
+			"height": 2/3 * w
 		});
 		$("#main_in").css({
-			"width": w, 
+			"width": w,
 		})
 		$("#footer-bk").css({
 			"width": w,
@@ -30,7 +30,7 @@ $(document).ready(function(){
 			"width": w,
 			"height": 100
 		});
-		$("#main").css({	
+		$("#main").css({
 			"height": h - 100 - 100
 		});
 		$("#main_in").css({
@@ -38,7 +38,7 @@ $(document).ready(function(){
 		});
 		$("#footer-bk").css({
 			"width": w,
-			"height": 100	
+			"height": 100
 		});
 
 		$("#name").css({
@@ -60,10 +60,10 @@ $(window).resize(function(){
 			"height": (h -(2/3 * w))/2
 		});
 		$("#main").css({
-			"height": 2/3 * w		
+			"height": 2/3 * w
 		});
 		$("#main_in").css({
-			"width": w, 
+			"width": w,
 		})
 		$("#footer-bk").css({
 			"width": w,
@@ -80,8 +80,8 @@ $(window).resize(function(){
 		$("#header-bk").css({
 			"width": w,
 			"height": 100
-		});
-		$("#main").css({	
+		});1
+		$("#main").css({
 			"height": h - 100 - 100
 		});
 		$("#main_in").css({
@@ -89,7 +89,7 @@ $(window).resize(function(){
 		});
 		$("#footer-bk").css({
 			"width": w,
-			"height": 100	
+			"height": 100
 		});
 
 		$("#name").css({
@@ -100,4 +100,3 @@ $(window).resize(function(){
 		});
 	}
 });
-
