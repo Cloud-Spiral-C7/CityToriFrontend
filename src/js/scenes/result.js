@@ -3,16 +3,20 @@ var Scene = require('../scene');
 var sounds = require('../sounds');
 var api = require('../api');
 
-var ResultTimeAttackScene = function () {
-  Scene.call(this, require('../../html/result_timeattack.html'));
+var ResultScene = function () {
+  Scene.call(this, require('../../html/result.html'));
   this.on('shown', this.onshown);
-}, p = ResultTimeAttackScene.prototype;
+}, p = ResultScene.prototype;
 
-util.inherits(ResultTimeAttackScene, Scene);
+util.inherits(ResultScene, Scene);
 
 p.onshown = function () {
   this.setEventHandlers();
-  this.fetchRankingData();
+  if($.cookie("resultType") == "Time"){
+    this.fetchTimeAttackRankingData();
+  }else{
+	this.fetchScoreAttackRankingData();
+  }
 };
 
 p.setEventHandlers = function () {
@@ -41,18 +45,17 @@ p.setEventHandlers = function () {
   });
 };
 
-p.fetchRankingData = function () {
+p.fetchTimeAttackRankingData = function () {
   api.getRanking($.cookie('userId'), $.cookie('roomId'), $.cookie('resultTime') / 1000, 0, 1).done(function(data) {
     console.log(data);
     var arraySize = Object.keys(data.ranking).length;
 
     for (var i = 0; i < arraySize; i++) {
       if (data.ranking[i].name == $.cookie('name')) {
-        $('#ranking')
-          .append(
-            '<div id="myscore">- 今回の成績 -<br>' + (i + 1) + '位</br>' +
-            data.ranking[i].name + '</br>' +
-            data.ranking[i].score + ' 秒</br><hr></div>');
+        $('#ranking').append(
+           '<div id="myscore">- 今回の成績 -<br>' + (i + 1) + '位</br>' +
+           data.ranking[i].name + '</br>' +
+           data.ranking[i].score + ' 秒</br><hr></div>');
       } else {
         $('#ranking').append(
           '<span>' + (i + 1) + '位</br>' +
@@ -66,4 +69,28 @@ p.fetchRankingData = function () {
   });
 };
 
-module.exports = ResultTimeAttackScene;
+p.fetchScoreAttackRankingData = function () {
+  api.getRanking($.cookie('userId'), $.cookie('roomId'), $.cookie('AnswerNum'), 0, -1).done(function(data) {
+    console.log(data);
+    var arraySize = Object.keys(data.ranking).length;
+
+    for (var i = 0; i < arraySize; i++) {
+      if (data.ranking[i].name == $.cookie('name')) {
+        $('#ranking').append(
+           '<div id="myscore">- 今回の成績 -<br>' + (i + 1) + '位</br>' +
+           data.ranking[i].name + '</br>' +
+           parseInt(data.ranking[i].score) + ' 個</br><hr></div>');
+      } else {
+        $('#ranking').append(
+          '<span>' + (i + 1) + '位</br>' +
+          data.ranking[i].name + '</br>' +
+          parseInt(data.ranking[i].score) + ' 個</br><hr></span>');
+      }
+    }
+
+    var v = $('#myscore').position().top - (100 * $('#main_in').width() / 1500);
+    $('#rankingboard').scrollTop(v);
+  });
+};
+
+module.exports = ResultScene;

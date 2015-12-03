@@ -17,9 +17,9 @@ game.scenes = {
   configTimeAttack:     new Scenes.ConfigTimeAttack,
   configScoreAttack:    new Scenes.ConfigScoreAttack,
   playGameSingle:       new Scenes.PlayGameSingle,
-  resultTimeAttack:     new Scenes.ResultTimeAttack,
   gameFinish:           new Scenes.GameFinish,
   selectMultiPlayMode:  new Scenes.SelectMultiPlayMode,
+  result:			    new Scenes.Result,
 };
 
 game.transition('title', '自分の名前を入力してゲームを始めよう！', function () {

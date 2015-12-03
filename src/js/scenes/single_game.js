@@ -224,7 +224,9 @@ p.answerNG = function (place) {
 p.clearGame = function () {
   var duration = moment.duration(moment().diff(this._startTime));
 
+  //スコアアタックの場合は AnswerNum に回答数入れて，resultType に Score っていう文字列を入れておくれ（このコメントは後で消してください）
   $.cookie('resultTime', duration._milliseconds);
+  $.cookie('resultType', 'Time');
   this.game.transition('gameFinish', '君のタイムは何位かな？');
   clearInterval(this._updateTimeTextIntervalID);
 };

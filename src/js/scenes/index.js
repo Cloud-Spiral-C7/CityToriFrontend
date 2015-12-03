@@ -5,7 +5,7 @@ module.exports = {
   ConfigTimeAttack: require('./single_play_config_timeattack'),
   ConfigScoreAttack: require('./single_play_config_scoreattack'),
   PlayGameSingle: require('./single_game'),
-  ResultTimeAttack: require('./result_timeattack'),
+  Result: require('./result'),
   GameFinish: require('./game_finish'),
   SelectMultiPlayMode: require('./multi_play_mode'),
 };
