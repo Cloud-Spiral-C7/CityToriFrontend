@@ -37,10 +37,12 @@ function makeroom(userId, name, gameMode, wordNum, limitTime){
 			$.cookie("roomId", data.id);
 			if(limitTime == 0){
 				//transition to timeattack
+				$.cookie("resultType", 'Time');
 				$.cookie("wordNum", wordNum);
 				game.transition('playGameSingle', 'タイムアタック!');
 			}else if(wordNum == 0){
 				//trainsition to scoreattack !!!!!!!!!!!!!!!!!!! need to change true link !!!!!!!!!!!!!!!!!!!!!!
+				$.cookie("resultType", 'Score');
 				$.cookie("limitTime", limitTime);
 				game.transition('playGameSingle', 'タイムアタック!');
 			}
