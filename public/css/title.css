@@ -368,7 +368,52 @@ input#wordnum{
 	outline : none;
 }
 
-button#setting{
+div#scoreattackicon{
+	background-image: url("../img/scoreattackicon.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% * 200 / 1500);
+	height: calc(100% * 200 / 1000);
+	position: absolute;
+	top: 22%;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
+div#settingform2{
+	background-image: url("../img/settingform2.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% * 450 / 1500);
+	height: calc(100% * 325 / 1000);
+	position: absolute;
+	top: 43%;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
+input#limittime{
+	background-position: center;
+	width: 40%;
+	height: 17%;
+	font-family: "m+1medium";
+	font-size: 1.0rem;
+	text-align: center;
+	-webkit-border-radius: 10px;
+	-moz-border-radius: 10px;
+	border-radius: 10;
+	position: absolute;
+	top: 39%;
+	margin: auto;
+	left: 0;
+	right: 0;
+	overflow: hidden;
+	outline : none;
+}
+
+button.setting{
 	background: url("../img/readybutton.png");
 	background-repeat: no-repeat;
 	background-size: 100%;
