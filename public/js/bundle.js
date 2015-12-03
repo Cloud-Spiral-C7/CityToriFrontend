@@ -10000,111 +10000,69 @@
 /* 5 */
 /***/ function(module, exports, __webpack_require__) {
 
-	/* WEBPACK VAR INJECTION */(function($) {
+	/* WEBPACK VAR INJECTION */(function($) {var performLayout = function () {
+			var w = $(window).width();
+			var h = $(window).height();
+
+			if(w < h){
+				$("#header-bk").css({
+					"width": w,
+					"height": (h -(2/3 * w))/2
+				});
+				$("#main").css({
+					"height": 2/3 * w
+				});
+				$("#main_in").css({
+					"width": w,
+				})
+				$("#footer-bk").css({
+					"width": w,
+					"height": (h -(10/15 * w))/2
+				});
+
+				$("#name").css({
+					"font-size": w * 0.02
+				});
+				$("#ranking").css({
+					"font-size": (175 * (w) / 1500) + "%"
+				});
+			}else{
+				$("#header-bk").css({
+					"width": w,
+					"height": 100
+				});1
+				$("#main").css({
+					"height": h - 100 - 100
+				});
+				$("#main_in").css({
+					"width": 3/2 * (h - 100 - 100)
+				});
+				$("#footer-bk").css({
+					"width": w,
+					"height": 100
+				});
+
+				$("#name").css({
+					"font-size": 3/2 * (h - 100 - 100) * 0.02
+				});
+				$("#ranking").css({
+					"font-size": (175 * (h - 100 - 100) / 1000) + "%"
+				});
+			}
+		};
+	//
 	// initial layout
 	$(document).ready(function() {
-		if (game.currentScene.id == 'playGameSingle') return;
-
-		var w = $(window).width();
-		var h = $(window).height();
-		if(w < h){
-			$("#header-bk").css({
-				"width": w,
-				"height": (h -(2/3 * w))/2
-			});
-			$("#main").css({
-				"height": 2/3 * w
-			});
-			$("#main_in").css({
-				"width": w,
-			})
-			$("#footer-bk").css({
-				"width": w,
-				"height": (h -(10/15 * w))/2
-			});
-
-			$("#name").css({
-				"font-size": w * 0.02
-			});
-			$("#ranking").css({
-				"font-size": (175 * (w) / 1500) + "%"
-			});
-		}else{
-			$("#header-bk").css({
-				"width": w,
-				"height": 100
-			});
-			$("#main").css({
-				"height": h - 100 - 100
-			});
-			$("#main_in").css({
-				"width": 3/2 * (h - 100 - 100)
-			});
-			$("#footer-bk").css({
-				"width": w,
-				"height": 100
-			});
-
-			$("#name").css({
-				"font-size": 3/2 * (h - 100 - 100) * 0.02
-			});
-			$("#ranking").css({
-				"font-size": (175 * (h - 100 - 100) / 1000) + "%"
-			});
-		}
+		game.onAfterTransition = function() {
+			if (game.currentScene.id == 'playGameSingle') return;
+			performLayout();
+		};
 	});
 
 	// layout when resized
 	$(window).resize(function(){
 		if (game.currentScene.id == 'playGameSingle') return;
-
-		var w = $(window).width();
-		var h = $(window).height();
-		if(w < h){
-			$("#header-bk").css({
-				"width": w,
-				"height": (h -(2/3 * w))/2
-			});
-			$("#main").css({
-				"height": 2/3 * w
-			});
-			$("#main_in").css({
-				"width": w,
-			})
-			$("#footer-bk").css({
-				"width": w,
-				"height": (h -(10/15 * w))/2
-			});
-
-			$("#name").css({
-				"font-size": w * 0.02
-			});
-			$("#ranking").css({
-				"font-size": (175 * (w) / 1500) + "%"
-			});
-		}else{
-			$("#header-bk").css({
-				"width": w,
-				"height": 100
-			});1
-			$("#main").css({
-				"height": h - 100 - 100
-			});
-			$("#main_in").css({
-				"width": 3/2 * (h - 100 - 100)
-			});
-			$("#footer-bk").css({
-				"width": w,
-				"height": 100
-			});
-
-			$("#name").css({
-				"font-size": 3/2 * (h - 100 - 100) * 0.02
-			});
-			$("#ranking").css({
-				"font-size": (175 * (h - 100 - 100) / 1000) + "%"
-			});
-		}
+		performLayout();
 	});
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
@@ -10161,13 +10119,15 @@
 	  	}, 500, "easeInQuad");
 	  }
 
+	  if (this.onBeforeTransition) this.onBeforeTransition();
+
 	  var scene = this.scenes[name];
 
 		if (scene === undefined) {
 			return console.warn('Not implemented scene:', name);
 		}
 
-		var $main = $('#main_in');
+		var $main = $('#js-main-container');
 	  var $description = $('#description');
 	  var that = this;
 
@@ -10181,6 +10141,9 @@
 	    fadein($description);
 
 			$("#description").text(header);
+
+	    if (that.onAfterTransition) that.onAfterTransition();
+
 	    if (cb) cb();
 		});
 	}
@@ -11021,7 +10984,7 @@
 /* 14 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=titlelogo></div><div id=registerform><input id=\"name\"><br><button id=register_on></button> <button id=register_off></button></div>";
+	module.exports = "<div id=main_in><div id=titlelogo></div><div id=registerform><input id=\"name\"><br><button id=register_on></button> <button id=register_off></button></div></div>";
 
 /***/ },
 /* 15 */
@@ -11099,7 +11062,7 @@
 /* 17 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=singleplayform><button class=ok id=playsingle></button></div><div id=multiplayform><button class=ok id=playmulti></button></div>";
+	module.exports = "<div id=main_in><div id=singleplayform><button class=ok id=playsingle></button></div><div id=multiplayform><button class=ok id=playmulti></button></div></div>";
 
 /***/ },
 /* 18 */
@@ -11121,7 +11084,7 @@
 /* 19 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=singleplayicon></div><div id=timeattackform><button class=ok2 id=\"playtimeattack\"></div><div id=scoreattackform><button class=ok2 id=\"playscoreattack\"></div>";
+	module.exports = "<div id=main_in><div id=singleplayicon></div><div id=timeattackform><button class=ok2 id=\"playtimeattack\"></div><div id=scoreattackform><button class=ok2 id=\"playscoreattack\"></div></div>";
 
 /***/ },
 /* 20 */
@@ -11143,7 +11106,7 @@
 /* 21 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=timeattackicon></div><div id=settingform><input type=number id=wordnum step=5 min=5 max=50 value=\"1\"><br><button class=setting id=\"configedtimeattack\"></div>";
+	module.exports = "<div id=main_in><div id=timeattackicon></div><div id=settingform><input type=number id=wordnum step=5 min=5 max=50 value=\"1\"><br><button class=setting id=\"configedtimeattack\"></div></div>";
 
 /***/ },
 /* 22 */
@@ -11165,7 +11128,7 @@
 /* 23 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=scoreattackicon></div><div id=settingform2><input type=number id=limittime step=15 min=15 max=600 value=\"15\"><br><button class=setting id=\"configedscoreattack\"></div>";
+	module.exports = "<div id=main_in><div id=scoreattackicon></div><div id=settingform2><input type=number id=limittime step=15 min=15 max=600 value=\"15\"><br><button class=setting id=\"configedscoreattack\"></div></div>";
 
 /***/ },
 /* 24 */
@@ -23547,7 +23510,7 @@
 /* 118 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=resultform><div id=rankingboard><div id=ranking></div></div><button id=back></button></div>";
+	module.exports = "<div id=main_in><div id=resultform><div id=rankingboard><div id=ranking></div></div><button id=back></button></div></div>";
 
 /***/ },
 /* 119 */
@@ -23579,7 +23542,7 @@
 /* 120 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=game-finish-scene>終了!</div>";
+	module.exports = "<div id=main_in><div id=game-finish-scene>終了!</div></div>";
 
 /***/ },
 /* 121 */
@@ -23601,7 +23564,7 @@
 /* 122 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=multiplayicon></div><div id=battleform><button class=ok2 id=\"playbattle\"></div><div id=raceform><button class=ok2 id=\"playrace\"></div>";
+	module.exports = "<div id=main_in><div id=multiplayicon></div><div id=battleform><button class=ok2 id=\"playbattle\"></div><div id=raceform><button class=ok2 id=\"playrace\"></div></div>";
 
 /***/ },
 /* 123 */
