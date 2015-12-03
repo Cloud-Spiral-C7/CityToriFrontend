@@ -35,8 +35,15 @@ function makeroom(userId, name, gameMode, wordNum, limitTime){
 		dataType:"json",
 		success:function(data){
 			$.cookie("roomId", data.id);
-			$.cookie("wordNum", wordNum);
-			game.transition('playGameSingle', 'タイムアタック!');
+			if(limitTime == 0){
+				//transition to timeattack
+				$.cookie("wordNum", wordNum);
+				game.transition('playGameSingle', 'タイムアタック!');
+			}else if(wordNum == 0){
+				//trainsition to scoreattack !!!!!!!!!!!!!!!!!!! need to change true link !!!!!!!!!!!!!!!!!!!!!!
+				$.cookie("limitTime", limitTime);
+				game.transition('playGameSingle', 'タイムアタック!');
+			}
 		},
 		error:function(){
 			console.log("error");
@@ -115,14 +122,14 @@ $("#register_off").mouseout(function(){
 // about ok button
 $(document).on("mousedown", ".ok", function(){
 	$(this).css({
-		"background": $(this).css("background").replace(".","_dummy.")
+		"background": $(this).css("background").replace(".png","_dummy.png")
 	});
 	sounds.sound_button();
 });
 
 $(document).on("mouseup", ".ok", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")
+		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
 	if($(this).attr("id") == "playsingle"){
 		game.transition('selectSinglePlayMode', 'タイムアタックで遊ぶ？スコアアタックで遊ぶ？');
@@ -133,24 +140,26 @@ $(document).on("mouseup", ".ok", function(){
 
 $(document).on("mouseout", ".ok", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")
+		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
 });
 
 // about ok2 button
 $(document).on("mousedown", ".ok2", function(){
 	$(this).css({
-		"background": $(this).css("background").replace(".","_dummy.")
+		"background": $(this).css("background").replace(".png","_dummy.png")
 	});
 	sounds.sound_button();
 });
 
 $(document).on("mouseup", ".ok2", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")
+		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
 	if($(this).attr("id") == "playtimeattack"){
-		game.transition('configSinglePlayMode', '目標しりとり数を入力してね');
+		game.transition('configTimeAttack', '目標しりとり数を入力してね');
+	}else if($(this).attr("id") == "playscoreattack"){
+		game.transition('configScoreAttack', '制限時間を入力してね');
 	}else{
 		game.transition('configMultiplayPlayMode', 'ゲームモードを選択してね');
 	}
@@ -158,30 +167,36 @@ $(document).on("mouseup", ".ok2", function(){
 
 $(document).on("mouseout", ".ok2", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")
+		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
 });
 
 // about setting button
-$(document).on("mousedown", "#setting", function(){
+$(document).on("mousedown", ".setting", function(){
 	$(this).css({
-		"background": $(this).css("background").replace(".","_dummy.")
+		"background": $(this).css("background").replace(".png","_dummy.png")
 	});
 	sounds.sound_button();
 });
 
-$(document).on("mouseup", "#setting", function(){
+$(document).on("mouseup", ".setting", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")
+		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
-	if(parseInt($("#wordnum").val()) > 0){
-		makeroom($.cookie("userId"), $.cookie("name"), "Time", parseInt($("#wordnum").val()), 0);
+	if($(this).attr("id") == "configedtimeattack"){
+		if(parseInt($("#wordnum").val()) > 0){
+			makeroom($.cookie("userId"), $.cookie("name"), "Time", parseInt($("#wordnum").val()), 0);
+		}
+	}else if($(this).attr("id") == "configedscoreattack"){
+		if(parseInt($("#limittime").val()) > 0){
+			makeroom($.cookie("userId"), $.cookie("name"), "Score", 0, parseInt($("#limittime").val()));
+		}
 	}
 });
 
-$(document).on("mouseout", "#setting", function(){
+$(document).on("mouseout", ".setting", function(){
 	$(this).css({
-		"background": $(this).css("background").replace("_dummy.",".")
+		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
 });
 
