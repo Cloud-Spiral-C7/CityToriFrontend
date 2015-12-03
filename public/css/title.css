@@ -526,41 +526,159 @@ div#footer{
 #js-main-container {
 	position: relative;
 }
-
-.map-container, .navigation-container {
-	height: 100%;
+.pull-left {
 	float: left;
 }
 
-.map-container {
-	position: relative;
-	width: 70%;
+.pull-right {
+	float: right;
 }
 
-.navigation-container {
-	width: 30%;
+.clearfix:after {
+	content: '';
+	display: block;
+	clear: both;
 }
 
-.map {
+.container {
 	height: 100%;
+	position: relative;
+	padding: 24px 56px 40px 56px;
 }
 
-.place {
-  margin: 0 -16px;
-  padding: 12px 16px;
-  border-top: 1px solid #ddd;
-  border-bottom: 1px solid #ddd;
+.game-header {
+	position: relative;
+	height: 84px;
+	z-index: 1;
 }
 
-.place > .name {
-  margin-bottom: 4px;
-  font-size: 16px;
-  line-height: 1;
+.game-header-shadow {
+	position: absolute;
+	top: 0;
+	left: 0;
+	background: linear-gradient(to bottom, rgba(0,0,0,0.3) 0%, rgba(0,0,0,0) 80px);
+	width: 100%;
+	height: 80px;
 }
 
-.place > .phonetic {
-  font-size: 32px;
-  line-height: 1;
+.game-map {
+	bottom: 0;
+	width: 100%;
+	height: calc(100% - 84px);
+	background-color: #ddd;
+	box-shadow: 0 4px 8px #888;
+}
+
+.game-answers {
+	position: absolute;
+	top: 57px;
+	width: calc(100% - 116px);
+	height: 58px;
+	margin: 0;
+	padding: 0;
+	text-align: right;
+	list-style-type: none;
+	letter-spacing:-0.4em;
+	white-space: nowrap;
+	overflow: scroll;
+}
+
+.game-answers > li {
+	display: inline-block;
+	position: relative;
+	margin-left: 24px;
+	height: 54px;
+	padding: 14px 24px;
+	border-radius: 27px;
+	font-size: 24px;
+	letter-spacing: normal;
+	line-height: 1;
+	background-color: #fff;
+	box-shadow: 0px 4px 0 #aaa;
+	color: rgba(0, 0, 0, 0.8)
+}
+
+.game-answers > li:before {
+	display: inline-block;
+	position: absolute;
+	content: '';
+	left: 100%;
+	top: 24px;
+	width: 24px;
+	height: 8px;
+	border-radius: 2px;
+	background-color: #663800;
+}
+
+.game-answers > li:last-child {
+	border-radius: 27px 0 0 27px;
+	padding-right: 12px;
+}
+
+.game-answers > li:last-child:before {
+	display: none;
+}
+
+.game-current-theme {
+	position: absolute;
+	top: 12px;
+	right: -20px;
+	width: 140px;
+	height: 140px;
+	padding: 28px 0;
+	z-index: 1;
+	font-size: 80px;
+	background: linear-gradient(to bottom, rgba(255,181,96,1) 0%,rgba(255,146,10,1) 100%);
+	box-shadow: 0px 6px 0 #e07d00;
+	border-radius: 70px;
+	color: #fff;
+	text-align: center;
+	line-height: 1;
+}
+
+.game-status {
+	position: relative;
+	padding-bottom: 4px;
+	border-bottom: 1px solid rgba(255, 255, 255, 0.7);
+}
+
+.game-mode-heading {
+	margin: 0;
+	font-size: 24px;
+	color: #fff;
+}
+
+.game-answers-cover {
+	position: absolute;
+	top: 72px;
+	left: 54px;
+	width: 20px;
+	height: 80px;
+	background: #99CCFE;
+	z-index: 1;
+	box-shadow: 10px 0 12px #99CCFE;
+}
+
+.game-status-item {
+	color: rgba(255, 255, 255, 0.9);
+	font-size: 24px;
+}
+
+.game-status-item.pull-right {
+	margin-right: 20px;
+}
+
+.game-status-item.pull-left {
+	margin-left: 20px;
+}
+
+.game-answer-count {
+	/*position: absolute;*/
+	margin-right: 112px !important;
+}
+
+.small {
+	font-size: 50%;
 }
 
 .game-dialog {

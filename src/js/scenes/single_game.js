@@ -9,6 +9,7 @@ var sounds = require('../sounds');
 var GameScene = function () {
   Scene.call(this, require('../../html/play_game_single.html'));
 
+
   var element = $('#map')[0];
   var that = this;
 
@@ -38,13 +39,15 @@ var GameScene = function () {
         ]
       });
 
+      that._answers = [];
+
       that.popup = undefined;
       that.map.addListener('click', that.mapClicked.bind(that));
       $('#js-cancel-button').on('click', that.closeAnswerDialog.bind(that));
-      that.currentTheme = { locationName: '最初のお題', phonetic: data.theme };
-      that.placeTheme = document.querySelector('#js-place-theme');
-      that.placeYours = document.querySelector('#js-place-yours');
-
+      $('#js-game-user-name').text($.cookie('name'));
+      that.currentTheme = { phonetic: data.theme };
+      that.updateAnswerCount();
+      that.updateGameModeText();
       that.start();
     });
   });
@@ -54,14 +57,20 @@ var GameScene = function () {
 util.inherits(GameScene, Scene);
 
 Object.defineProperties(p, {
-  'currentTheme': {
+  currentTheme: {
     get: function () { return this._currentTheme; },
     set: function (value) {
       this._currentTheme = value;
-      document.querySelector('#js-place-theme > .name')
-        .innerHTML = value.locationName;
-      document.querySelector('#js-place-theme > .phonetic')
-        .innerHTML = value.phonetic;
+      document.querySelector('#js-game-current-theme')
+        .innerHTML = value.phonetic[value.phonetic.length - 1];
+      //
+      // document.querySelector('#js-place-theme > .phonetic')
+      //   .innerHTML = value.phonetic;
+    }
+  },
+  mode: {
+    get: function () {
+      return $.cookie('resultType') == 'Score' ? 'score' : 'time';
     }
   }
 });
@@ -170,9 +179,20 @@ p.answer = function (place) {
 
     that.answerOK(place, data.result == 'Finish');
     that.currentTheme = place;
+    that.addAnswer(place);
   });
 
   return true;
+};
+
+p.addAnswer = function (place) {
+  this._answers.push(place);
+
+  var $answers = $('#js-game-answers');
+  $answers.append('<li>' + place.phonetic + '</li>');
+  $answers.scrollLeft($answers[0].scrollWidth);
+
+  this.updateAnswerCount();
 };
 
 p.start = function () {
@@ -184,6 +204,17 @@ p.updateTimeText = function () {
   var duration = moment.duration(moment().diff(this._startTime));
   var timeText = duration.format('h:mm:ss:SSS', { trim: false, forceLength: true });
   $('#js-game-time').text(timeText);
+};
+
+p.updateAnswerCount = function () {
+  var remainsCount = parseInt($.cookie('wordNum')) - this._answers.length;
+  $('#js-game-answer-count').html(
+    '<span class="small">残り </span>' + remainsCount.toString() +
+    '<span class="small"> 個!</span>');
+};
+
+p.updateGameModeText = function () {
+  $('#js-game-mode').text(this.mode == 'score' ? 'スコアアタック' : 'タイムアタック');
 }
 
 p.gameOver = function (place) {
