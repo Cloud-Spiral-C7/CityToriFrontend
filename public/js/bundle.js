@@ -11340,20 +11340,45 @@
 
 	p.start = function () {
 	  this._startTime = moment();
-	  this._updateTimeTextIntervalID = setInterval(this.updateTimeText.bind(this), 1);
+	  this._resultTime = null;
+	  this._updateTimeTextIntervalID = setInterval(this.updateTimeText.bind(this), 10);
 	};
 
 	p.updateTimeText = function () {
-	  var duration = moment.duration(moment().diff(this._startTime));
+	  // ゲーム開始からの経過時間
+	  var durationFromStart = moment.duration(moment().diff(this._startTime));
+	  var duration = durationFromStart;
+
+	  if (this.mode == 'score') {
+	    var limitTime = moment.duration(parseInt($.cookie('limitTime')), 'm');
+	    duration = limitTime.subtract(durationFromStart);
+	  }
+
+	  this._resultTime = duration;
+
 	  var timeText = duration.format('h:mm:ss:SSS', { trim: false, forceLength: true });
 	  $('#js-game-time').text(timeText);
+
+	  if (duration._milliseconds <= 0) {
+	    return this.clearGame();
+	  }
 	};
 
 	p.updateAnswerCount = function () {
-	  var remainsCount = parseInt($.cookie('wordNum')) - this._answers.length;
-	  $('#js-game-answer-count').html(
-	    '<span class="small">残り </span>' + remainsCount.toString() +
-	    '<span class="small"> 個!</span>');
+	  if (this.mode == 'time') {
+	    var remainsCount = parseInt($.cookie('wordNum')) - this._answers.length;
+	    $('#js-game-answer-count').html(
+	      '<span class="small">残り </span>' + remainsCount.toString() +
+	      '<span class="small"> 個!</span>');
+	  } else {
+	    var count = this._answers.length;
+	    if (count > 0) {
+	      $('#js-game-answer-count').html(count.toString() + '<span class="small">個目</span>');
+	    } else {
+	      $('#js-game-answer-count').html('　');
+	    }
+	  }
+
 	};
 
 	p.updateGameModeText = function () {
@@ -11396,11 +11421,9 @@
 	};
 
 	p.clearGame = function () {
-	  var duration = moment.duration(moment().diff(this._startTime));
+	  if (this.mode == 'score') $.cookie('AnswerNum', this._answers.length);
 
-	  //スコアアタックの場合は AnswerNum に回答数入れて，resultType に Score っていう文字列を入れておくれ（このコメントは後で消してください）
-	  $.cookie('resultTime', duration._milliseconds);
-	  $.cookie('resultType', 'Time');
+	  $.cookie('resultTime', this._resultTime._milliseconds);
 	  this.game.transition('gameFinish', '君のタイムは何位かな？');
 	  clearInterval(this._updateTimeTextIntervalID);
 	};
