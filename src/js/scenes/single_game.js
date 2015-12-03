@@ -225,7 +225,7 @@ p.clearGame = function () {
   var duration = moment.duration(moment().diff(this._startTime));
 
   $.cookie('resultTime', duration._milliseconds);
-  this.game.transition('GameFinish', '君のタイムは何位かな？');
+  this.game.transition('gameFinish', '君のタイムは何位かな？');
   clearInterval(this._updateTimeTextIntervalID);
 };
 
