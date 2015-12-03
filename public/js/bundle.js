@@ -11152,6 +11152,7 @@
 	var GameScene = function () {
 	  Scene.call(this, __webpack_require__(116));
 
+
 	  var element = $('#map')[0];
 	  var that = this;
 
@@ -11181,13 +11182,15 @@
 	        ]
 	      });
 
+	      that._answers = [];
+
 	      that.popup = undefined;
 	      that.map.addListener('click', that.mapClicked.bind(that));
 	      $('#js-cancel-button').on('click', that.closeAnswerDialog.bind(that));
-	      that.currentTheme = { locationName: '最初のお題', phonetic: data.theme };
-	      that.placeTheme = document.querySelector('#js-place-theme');
-	      that.placeYours = document.querySelector('#js-place-yours');
-
+	      $('#js-game-user-name').text($.cookie('name'));
+	      that.currentTheme = { phonetic: data.theme };
+	      that.updateAnswerCount();
+	      that.updateGameModeText();
 	      that.start();
 	    });
 	  });
@@ -11197,14 +11200,20 @@
 	util.inherits(GameScene, Scene);
 
 	Object.defineProperties(p, {
-	  'currentTheme': {
+	  currentTheme: {
 	    get: function () { return this._currentTheme; },
 	    set: function (value) {
 	      this._currentTheme = value;
-	      document.querySelector('#js-place-theme > .name')
-	        .innerHTML = value.locationName;
-	      document.querySelector('#js-place-theme > .phonetic')
-	        .innerHTML = value.phonetic;
+	      document.querySelector('#js-game-current-theme')
+	        .innerHTML = value.phonetic[value.phonetic.length - 1];
+	      //
+	      // document.querySelector('#js-place-theme > .phonetic')
+	      //   .innerHTML = value.phonetic;
+	    }
+	  },
+	  mode: {
+	    get: function () {
+	      return $.cookie('resultType') == 'Score' ? 'score' : 'time';
 	    }
 	  }
 	});
@@ -11313,20 +11322,67 @@
 
 	    that.answerOK(place, data.result == 'Finish');
 	    that.currentTheme = place;
+	    that.addAnswer(place);
 	  });
 
 	  return true;
 	};
 
+	p.addAnswer = function (place) {
+	  this._answers.push(place);
+
+	  var $answers = $('#js-game-answers');
+	  $answers.append('<li>' + place.phonetic + '</li>');
+	  $answers.scrollLeft($answers[0].scrollWidth);
+
+	  this.updateAnswerCount();
+	};
+
 	p.start = function () {
 	  this._startTime = moment();
-	  this._updateTimeTextIntervalID = setInterval(this.updateTimeText.bind(this), 1);
+	  this._resultTime = null;
+	  this._updateTimeTextIntervalID = setInterval(this.updateTimeText.bind(this), 10);
 	};
 
 	p.updateTimeText = function () {
-	  var duration = moment.duration(moment().diff(this._startTime));
+	  // ゲーム開始からの経過時間
+	  var durationFromStart = moment.duration(moment().diff(this._startTime));
+	  var duration = durationFromStart;
+
+	  if (this.mode == 'score') {
+	    var limitTime = moment.duration(parseInt($.cookie('limitTime')), 'm');
+	    duration = limitTime.subtract(durationFromStart);
+	  }
+
+	  this._resultTime = duration;
+
 	  var timeText = duration.format('h:mm:ss:SSS', { trim: false, forceLength: true });
 	  $('#js-game-time').text(timeText);
+
+	  if (duration._milliseconds <= 0) {
+	    return this.clearGame();
+	  }
+	};
+
+	p.updateAnswerCount = function () {
+	  if (this.mode == 'time') {
+	    var remainsCount = parseInt($.cookie('wordNum')) - this._answers.length;
+	    $('#js-game-answer-count').html(
+	      '<span class="small">残り </span>' + remainsCount.toString() +
+	      '<span class="small"> 個!</span>');
+	  } else {
+	    var count = this._answers.length;
+	    if (count > 0) {
+	      $('#js-game-answer-count').html(count.toString() + '<span class="small">個目</span>');
+	    } else {
+	      $('#js-game-answer-count').html('　');
+	    }
+	  }
+
+	};
+
+	p.updateGameModeText = function () {
+	  $('#js-game-mode').text(this.mode == 'score' ? 'スコアアタック' : 'タイムアタック');
 	}
 
 	p.gameOver = function (place) {
@@ -11365,11 +11421,9 @@
 	};
 
 	p.clearGame = function () {
-	  var duration = moment.duration(moment().diff(this._startTime));
+	  if (this.mode == 'score') $.cookie('AnswerNum', this._answers.length);
 
-	  //スコアアタックの場合は AnswerNum に回答数入れて，resultType に Score っていう文字列を入れておくれ（このコメントは後で消してください）
-	  $.cookie('resultTime', duration._milliseconds);
-	  $.cookie('resultType', 'Time');
+	  $.cookie('resultTime', this._resultTime._milliseconds);
 	  this.game.transition('gameFinish', '君のタイムは何位かな？');
 	  clearInterval(this._updateTimeTextIntervalID);
 	};
@@ -23438,7 +23492,7 @@
 /* 116 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=game-scene class=container><div class=map-container><div class=map id=map></div><div id=js-game-answer-dialog class=\"game-dialog clearfix\" style=\"display: none\"><a id=js-cancel-button class=game-dialog-close-btn href=#>×</a><div class=game-dialog-heading>クリックして地名を答えてね</div><ol id=js-answer-candidates class=answer-candidates></ol><div id=js-answer-result class=answer-result></div></div></div><div class=navigation-container><div class=navigation><h2>経過時間<h2><div id=js-game-time class=game-time></div><h2>現在のお題</h2><div id=js-place-theme class=place><div class=name>有楽 (町)</div><div class=phonetic>ゆうらく (ちょう)</div></div></h2></h2></div></div></div>";
+	module.exports = "<div id=game-scene class=container><div class=game-header-shadow></div><div class=game-header><div class=\"game-status clearfix\"><h1 id=js-game-mode class=\"game-mode-heading pull-left\">タイムアタック</h1><div class=\"game-status-item game-user pull-left\"><span id=js-game-user-name></span><span class=small>の挑戦!</span></div><div id=js-game-answer-count class=\"game-status-item game-answer-count pull-right\"></div><div class=\"game-status-item game-time pull-right\"><span class=small>経過時間</span> <span id=js-game-time></span></div></div><div id=js-game-current-theme class=game-current-theme></div><ul id=js-game-answers class=game-answers></ul></div><div id=js-game-answer-dialog class=\"game-dialog clearfix\" style=\"display: none\"><a id=js-cancel-button class=game-dialog-close-btn href=#>×</a><div class=game-dialog-heading>クリックして地名を答えてね</div><ol id=js-answer-candidates class=answer-candidates></ol><div id=js-answer-result class=answer-result></div></div><div class=game-map id=map></div></div>";
 
 /***/ },
 /* 117 */
@@ -23646,10 +23700,12 @@
 				$.cookie("roomId", data.id);
 				if(limitTime == 0){
 					//transition to timeattack
+					$.cookie("resultType", 'Time');
 					$.cookie("wordNum", wordNum);
 					game.transition('playGameSingle', 'タイムアタック!');
 				}else if(wordNum == 0){
 					//trainsition to scoreattack !!!!!!!!!!!!!!!!!!! need to change true link !!!!!!!!!!!!!!!!!!!!!!
+					$.cookie("resultType", 'Score');
 					$.cookie("limitTime", limitTime);
 					game.transition('playGameSingle', 'タイムアタック!');
 				}

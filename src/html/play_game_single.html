@@ -1,13 +1,8 @@
 <div id="game-scene" class="container">
+<!--
   <div class="map-container">
     <div class="map" id="map"></div>
-    <div id="js-game-answer-dialog" class="game-dialog clearfix" style="display: none">
-      <a id="js-cancel-button" class="game-dialog-close-btn" href="#">×</a>
-      <div class="game-dialog-heading">クリックして地名を答えてね</div>
 
-      <ol id="js-answer-candidates" class="answer-candidates"></ol>
-      <div id="js-answer-result" class="answer-result"></div>
-    </div>
   </div>
 
   <div class="navigation-container">
@@ -21,5 +16,38 @@
         <div class="phonetic">ゆうらく (ちょう)</div>
       </div>
     </div>
+  </div> -->
+  <!-- <div class="game-answers-cover"></div> -->
+  <div class="game-header-shadow"></div>
+  <div class="game-header">
+    <div class="game-status clearfix">
+      <h1 id="js-game-mode" class="game-mode-heading pull-left">タイムアタック</h1>
+
+      <div class="game-status-item game-user pull-left">
+        <span id="js-game-user-name"></span><span class="small"> の挑戦!</span>
+      </div>
+
+      <div id="js-game-answer-count" class="game-status-item game-answer-count pull-right">
+        <!-- 5<span class="small">個目</span> -->
+        <!-- <span class="small">残り </span>5<span class="small"> 個!</span> -->
+      </div>
+
+      <div class="game-status-item game-time pull-right">
+        <span class="small">経過時間 </span>
+        <span id="js-game-time"></span>
+      </div>
+    </div>
+
+    <div id="js-game-current-theme" class="game-current-theme"></div>
+
+    <ul id="js-game-answers" class="game-answers"></ul>
   </div>
+  <div id="js-game-answer-dialog" class="game-dialog clearfix" style="display: none">
+    <a id="js-cancel-button" class="game-dialog-close-btn" href="#">×</a>
+    <div class="game-dialog-heading">クリックして地名を答えてね</div>
+
+    <ol id="js-answer-candidates" class="answer-candidates"></ol>
+    <div id="js-answer-result" class="answer-result"></div>
+  </div>
+  <div class="game-map" id="map"></div>
 </div>
