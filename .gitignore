@@ -29,3 +29,6 @@ node_modules
 
 bower_components
 .DS_Store
+
+# troublesome when pull, push, commit
+public/js/bundle.js
