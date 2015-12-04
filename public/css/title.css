@@ -695,7 +695,9 @@ div#footer{
 
 .answer-candidates {
 	padding-left: 0;
-	list-style-position: inside;
+	list-style-type: none;
+	text-align: center;
+	font-size: 32px;
 }
 
 .answer-candidates > li {
