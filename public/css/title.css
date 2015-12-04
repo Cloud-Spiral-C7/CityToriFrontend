@@ -567,6 +567,11 @@ div#footer{
 	height: calc(100% - 84px);
 	background-color: #ddd;
 	box-shadow: 0 4px 8px #888;
+	transition: box-shadow 0.5s;
+}
+
+.game-map-danger {
+	box-shadow: 0 4px 290px #f00;
 }
 
 .game-answers {
@@ -695,7 +700,9 @@ div#footer{
 
 .answer-candidates {
 	padding-left: 0;
-	list-style-position: inside;
+	list-style-type: none;
+	text-align: center;
+	font-size: 32px;
 }
 
 .answer-candidates > li {
