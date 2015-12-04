@@ -35,7 +35,7 @@ p.setEventHandlers = function () {
   	$(this).css({
   		background: $(this).css('background').replace('_dummy.png', '.png')
   	});
-	that.game.transition('selectPlayMode', 'ようこそ「' + $.cookie('name') + '」 プレイ人数を選択してね！');
+	that.game.transition('title', '名前を入力してゲームを始めよう！');
   });
 
   $(document).on('mouseout', '#back', function() {
