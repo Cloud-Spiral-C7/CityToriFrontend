@@ -155,6 +155,7 @@ $(document).on("mousedown", ".ok2", function(){
 });
 
 $(document).on("mouseup", ".ok2", function(){
+
 	$(this).css({
 		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
@@ -182,6 +183,9 @@ $(document).on("mousedown", ".setting", function(){
 });
 
 $(document).on("mouseup", ".setting", function(){
+
+	sounds.sound_title_pause();
+
 	$(this).css({
 		"background": $(this).css("background").replace("_dummy.png",".png")
 	});

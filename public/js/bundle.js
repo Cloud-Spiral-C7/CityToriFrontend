@@ -10182,8 +10182,16 @@
 
 	var util = __webpack_require__(9);
 	var Scene = __webpack_require__(13);
+	var sounds = __webpack_require__(115);
+
 	var TitleScene = function () {
+
 	  Scene.call(this, __webpack_require__(14));
+
+	  this.on("shown",function(){
+		sounds.sound_title_play();
+	  });
+
 	}
 
 	util.inherits(TitleScene, Scene)
@@ -11113,7 +11121,7 @@
 /* 21 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=main_in><div id=timeattackicon></div><div id=settingform><input type=number id=wordnum step=5 min=5 max=50 value=\"1\"><br><button class=setting id=\"configedtimeattack\"></div></div>";
+	module.exports = "<div id=main_in><div id=timeattackicon></div><div id=settingform><input type=number id=wordnum step=3 min=3 max=30 value=\"3\"><br><button class=setting id=\"configedtimeattack\"></div></div>";
 
 /***/ },
 /* 22 */
@@ -11135,7 +11143,7 @@
 /* 23 */
 /***/ function(module, exports) {
 
-	module.exports = "<div id=main_in><div id=scoreattackicon></div><div id=settingform2><input type=number id=limittime step=15 min=15 max=600 value=\"15\"><br><button class=setting id=\"configedscoreattack\"></div></div>";
+	module.exports = "<div id=main_in><div id=scoreattackicon></div><div id=settingform2><input type=number id=limittime step=1 min=1 max=600 value=\"1\"><br><button class=setting id=\"configedscoreattack\"></div></div>";
 
 /***/ },
 /* 24 */
@@ -11157,6 +11165,10 @@
 	  var that = this;
 
 	  this.on('shown', function () {
+
+		sounds.sound_start();
+		sounds.sound_gameplay_play();
+
 	    api.initialValueIndex({roomId: $.cookie('roomId')}).done(function (data) {
 	      console.log(data);
 
@@ -11422,6 +11434,8 @@
 
 	p.clearGame = function () {
 	  if (this.mode == 'score') $.cookie('AnswerNum', this._answers.length);
+
+	  sounds.sound_gameplay_pause();
 
 	  $.cookie('resultTime', this._resultTime._milliseconds);
 	  this.game.transition('gameFinish', '君のタイムは何位かな？');
@@ -23484,6 +23498,33 @@
 			$("#sound_answer_miss").get(0).currentTime = 0;
 			$("#sound_answer_miss").get(0).play();
 		},
+		sound_start: function (){
+			$("#sound_start").get(0).currentTime = 0;
+			$("#sound_start").get(0).play();
+		},
+		sound_end: function (){
+			var that = this;
+
+			that.sound_start();
+			setTimeout(function(){
+				that.sound_start();
+			}, 100);
+		},
+		sound_title_play: function (){
+			$("#sound_title").get(0).currentTime = 0;
+			$("#sound_title").get(0).play();
+		},
+		sound_title_pause: function (){
+			$("#sound_title").get(0).pause();
+		},
+		sound_gameplay_play: function (){
+			$("#sound_gameplay").get(0).currentTime = 0;
+			$("#sound_gameplay").get(0).play();
+		},
+		sound_gameplay_pause: function (){
+			$("#sound_gameplay").get(0).pause();
+		},
+
 	};
 
 	/* WEBPACK VAR INJECTION */}.call(exports, __webpack_require__(1)))
@@ -23609,6 +23650,8 @@
 
 	var Scene = __webpack_require__(13);
 	var util = __webpack_require__(16);
+	var sounds = __webpack_require__(115);
+
 
 	var GameFinishScene = function () {
 	  Scene.call(this, __webpack_require__(120));
@@ -23619,6 +23662,9 @@
 	util.inherits(GameFinishScene, Scene);
 
 	p.onshown = function (e) {
+
+	  sounds.sound_end();
+
 	  var that = this;
 
 	  setTimeout(function () {
@@ -23818,6 +23864,7 @@
 	});
 
 	$(document).on("mouseup", ".ok2", function(){
+
 		$(this).css({
 			"background": $(this).css("background").replace("_dummy.png",".png")
 		});
@@ -23845,6 +23892,9 @@
 	});
 
 	$(document).on("mouseup", ".setting", function(){
+
+		sounds.sound_title_pause();
+
 		$(this).css({
 			"background": $(this).css("background").replace("_dummy.png",".png")
 		});

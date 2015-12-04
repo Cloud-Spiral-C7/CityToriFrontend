@@ -1,5 +1,7 @@
 var Scene = require('../scene');
 var util = require('../util');
+var sounds = require('../sounds');
+
 
 var GameFinishScene = function () {
   Scene.call(this, require('../../html/game_finish.html'));
@@ -10,6 +12,9 @@ var GameFinishScene = function () {
 util.inherits(GameFinishScene, Scene);
 
 p.onshown = function (e) {
+
+  sounds.sound_end();
+
   var that = this;
 
   setTimeout(function () {

@@ -14,6 +14,10 @@ var GameScene = function () {
   var that = this;
 
   this.on('shown', function () {
+
+	sounds.sound_start();
+	sounds.sound_gameplay_play();
+
     api.initialValueIndex({roomId: $.cookie('roomId')}).done(function (data) {
       console.log(data);
 
@@ -279,6 +283,8 @@ p.answerNG = function (place) {
 
 p.clearGame = function () {
   if (this.mode == 'score') $.cookie('AnswerNum', this._answers.length);
+
+  sounds.sound_gameplay_pause();
 
   $.cookie('resultTime', this._resultTime._milliseconds);
   this.game.transition('gameFinish', '君のタイムは何位かな？');

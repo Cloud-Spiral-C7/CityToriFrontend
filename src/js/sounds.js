@@ -15,4 +15,31 @@ module.exports = {
 		$("#sound_answer_miss").get(0).currentTime = 0;
 		$("#sound_answer_miss").get(0).play();
 	},
+	sound_start: function (){
+		$("#sound_start").get(0).currentTime = 0;
+		$("#sound_start").get(0).play();
+	},
+	sound_end: function (){
+		var that = this;
+
+		that.sound_start();
+		setTimeout(function(){
+			that.sound_start();
+		}, 100);
+	},
+	sound_title_play: function (){
+		$("#sound_title").get(0).currentTime = 0;
+		$("#sound_title").get(0).play();
+	},
+	sound_title_pause: function (){
+		$("#sound_title").get(0).pause();
+	},
+	sound_gameplay_play: function (){
+		$("#sound_gameplay").get(0).currentTime = 0;
+		$("#sound_gameplay").get(0).play();
+	},
+	sound_gameplay_pause: function (){
+		$("#sound_gameplay").get(0).pause();
+	},
+
 };
