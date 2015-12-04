@@ -35,7 +35,8 @@ p.setEventHandlers = function () {
   	$(this).css({
   		background: $(this).css('background').replace('_dummy.png', '.png')
   	});
-	that.game.transition('title', '名前を入力してゲームを始めよう！');
+//	that.game.transition('title', '名前を入力してゲームを始めよう！');
+	location.href = "/";
   });
 
   $(document).on('mouseout', '#back', function() {
