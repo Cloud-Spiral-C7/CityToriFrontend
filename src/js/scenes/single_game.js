@@ -216,8 +216,18 @@ p.updateTimeText = function () {
   var timeText = duration.format('h:mm:ss:SSS', { trim: false, forceLength: true });
   $('#js-game-time').text(timeText);
 
-  if (duration._milliseconds <= 0) {
-    return this.clearGame();
+  if (this.mode == 'score') {
+    var remainsTime = duration._milliseconds;
+    if (remainsTime <= 0) {
+      clearInterval(this._dangerInterval);
+      this.clearGame();
+    } else if (remainsTime < 20000) {
+      if (!this._dangerInterval) {
+        this._dangerInterval = setInterval(function () {
+          $('#map').toggleClass('game-map-danger');
+        }, remainsTime >= 13000 ? 1000 : 200);
+      }
+    }
   }
 };
 
