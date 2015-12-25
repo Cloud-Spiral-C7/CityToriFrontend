@@ -1,9 +1,7 @@
 module.exports = {
   Title: require('./title'),
   SelectPlayMode: require('./play_mode'),
-  SelectSinglePlayMode: require('./single_play_mode'),
-  ConfigTimeAttack: require('./single_play_config_timeattack'),
-  ConfigScoreAttack: require('./single_play_config_scoreattack'),
+  SelectLimitTimeForSinglePlay: require('./select_limit_time_for_single_play'),
   PlayGameSingle: require('./single_game'),
   Result: require('./result'),
   GameFinish: require('./game_finish'),

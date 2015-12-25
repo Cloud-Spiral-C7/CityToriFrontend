@@ -13,9 +13,7 @@ var game = window.game = new Game
 game.scenes = {
   title:                new Scenes.Title,
   selectPlayMode:       new Scenes.SelectPlayMode,
-  selectSinglePlayMode: new Scenes.SelectSinglePlayMode,
-  configTimeAttack:     new Scenes.ConfigTimeAttack,
-  configScoreAttack:    new Scenes.ConfigScoreAttack,
+  selectLimitTimeForSinglePlay: new Scenes.SelectLimitTimeForSinglePlay,
   playGameSingle:       new Scenes.PlayGameSingle,
   gameFinish:           new Scenes.GameFinish,
   selectMultiPlayMode:  new Scenes.SelectMultiPlayMode,

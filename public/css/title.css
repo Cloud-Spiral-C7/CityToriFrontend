@@ -235,33 +235,46 @@ div#singleplayicon{
 	width: calc(100% * 200 / 1500);
 	height: calc(100% * 200 / 1000);
 	position: absolute;
-	top: 22%;
+	top: 15%;
 	margin: auto;
 	left: 0;
 	right: 0;
 }
 
-div#timeattackform{
-	background-image: url("../img/timeattackform.png");
+div#oneminuteform{
+	background-image: url("../img/1minuteform.png");
 	background-repeat: no-repeat;
 	background-size: 100%;
 	width: calc(100% * 750 / 1500);
 	height: calc(100% * 150 / 1000);
 	position: absolute;
-	top: 43%;
+	top: 35%;
 	margin: auto;
 	left: 0;
 	right: 0;
 }
 
-div#scoreattackform{
-	background-image: url("../img/scoreattackform.png");
+div#threeminutesform{
+	background-image: url("../img/3minutesform.png");
 	background-repeat: no-repeat;
 	background-size: 100%;
 	width: calc(100% * 750 / 1500);
 	height: calc(100% * 150 / 1000);
 	position: absolute;
-	top: 58%;
+	top: 50%;
+	margin: auto;
+	left: 0;
+	right: 0;
+}
+
+div#fiveminutesform{
+	background-image: url("../img/5minutesform.png");
+	background-repeat: no-repeat;
+	background-size: 100%;
+	width: calc(100% * 750 / 1500);
+	height: calc(100% * 150 / 1000);
+	position: absolute;
+	top: 65%;
 	margin: auto;
 	left: 0;
 	right: 0;
@@ -315,7 +328,7 @@ button.ok2{
 	height: calc(100% * 75 / 150);
 	position: absolute;
 	top: 24.8%;
-	left: 64%;
+	left: 65.5%;
 	margin: auto;
 	border: 0;
 	cursor: pointer;
