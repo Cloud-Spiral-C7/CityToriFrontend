@@ -4,7 +4,7 @@ var sounds = require("./sounds");
 function register(name){
 		$.ajax({
 			type:"post",
-			url:"http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/session",
+			url:"http://ec2-52-192-125-118.ap-northeast-1.compute.amazonaws.com/citytori/api/session",
 			data:JSON.stringify({"name":name}),
 			contentType:"application/json",
 			dataType:"json",
@@ -27,9 +27,12 @@ function register(name){
 
 // make room
 function makeroom(userId, name, gameMode, wordNum, limitTime){
+
+	sounds.sound_title_pause();
+
 	$.ajax({
 		type:"post",
-		url:"http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/rooms",
+		url:"http://ec2-52-192-125-118.ap-northeast-1.compute.amazonaws.com/citytori/api/rooms",
 		data:JSON.stringify({"userId":userId,"name":name,"gameMode":gameMode,"wordNum":wordNum,"limitTime":limitTime}),
 		contentType:"application/json",
 		dataType:"json",
@@ -64,7 +67,7 @@ function sendranking(){
 	resultTime = 24;
 	rankCount = 0;
 	$.ajax({
-		url: "http://ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com/citytori/api/ranks",
+		url: "http://ec2-52-192-125-118.ap-northeast-1.compute.amazonaws.com/citytori/api/ranks",
 		data: {
 			userId: userId,
 			roomId: roomId,
@@ -134,7 +137,7 @@ $(document).on("mouseup", ".ok", function(){
 		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
 	if($(this).attr("id") == "playsingle"){
-		game.transition('selectSinglePlayMode', 'タイムアタックで遊ぶ？スコアアタックで遊ぶ？');
+		game.transition('selectLimitTimeForSinglePlay', 'スコアアタックの制限時間を選択してね！');
 	}else{
 		game.transition('selectMultiPlayMode', '遊ぶモードを選んでね');
 	}
@@ -159,10 +162,12 @@ $(document).on("mouseup", ".ok2", function(){
 	$(this).css({
 		"background": $(this).css("background").replace("_dummy.png",".png")
 	});
-	if($(this).attr("id") == "playtimeattack"){
-		game.transition('configTimeAttack', '目標しりとり数を入力してね');
-	}else if($(this).attr("id") == "playscoreattack"){
-		game.transition('configScoreAttack', '制限時間を入力してね');
+	if($(this).attr("id") == "playsingle1minute"){
+			makeroom($.cookie("userId"), $.cookie("name"), "Score", 0, 1);
+	}else if($(this).attr("id") == "playsingle3minutes"){
+			makeroom($.cookie("userId"), $.cookie("name"), "Score", 0, 3);
+	}else if($(this).attr("id") == "playsingle5minutes"){
+			makeroom($.cookie("userId"), $.cookie("name"), "Score", 0, 5);
 	}else{
 		game.transition('configMultiplayPlayMode', 'ゲームモードを選択してね');
 	}

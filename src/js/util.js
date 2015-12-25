@@ -1,6 +1,6 @@
 module.exports = {
   callApi: function (method, path, data) {
-    var hostname = 'ec2-52-192-36-83.ap-northeast-1.compute.amazonaws.com';
+    var hostname = 'ec2-52-192-125-118.ap-northeast-1.compute.amazonaws.com/';
     var url = 'http://' + hostname + '/citytori/api' + path;
 
     return $.ajax({
